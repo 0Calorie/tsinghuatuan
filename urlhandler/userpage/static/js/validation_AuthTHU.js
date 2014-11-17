@@ -183,6 +183,7 @@ function submitValidation(openid) {
                     showError('submitGroup', 'helpSubmit', "获取时间失败，请重试……");
                 }
             });
+        }
     }
     return false;
 }
