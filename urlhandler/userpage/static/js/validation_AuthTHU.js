@@ -73,10 +73,9 @@ function readyStateChanged() {
     {// 4 = "loaded"
         if (xmlhttp.status==200)
         {// 200 = OK
-            var dom = document.getElementById("helpSubmit");
+            var dom = document.getElementById("asd");
         dom.innerText = 'xmlhttp in.';
         //dom.removeAttribute('hidden');
-        showElem("helpSubmit");
             $("#helpLoading").text(JSON.stringify(data, null, 4));
             /*var result = xmlhttp.responseText;
             switch (result)
@@ -108,15 +107,13 @@ function readyStateChanged() {
 }
 
 function submitValidation(openid) {
-    var dom = document.getElementById("helpSubmit");
+    var dom = document.getElementById("asd");
         dom.innerText = 'submitValidation in.';
         //dom.removeAttribute('hidden');
-        document.getElementById("helpSubmit").setAttribute('style', 'display:block');
+        document.getElementById("asd").setAttribute('style', 'display:block');
     if (checkUsername() & checkPassword()) {
-        var dom = document.getElementById("helpSubmit");
         dom.innerText = 'check complete.';
         //dom.removeAttribute('hidden');
-        showElem("helpSubmit");
         disableAll(true);
         showLoading(true);
         /*var form = document.getElementById('validationForm'),
@@ -133,28 +130,22 @@ function submitValidation(openid) {
         xmlhttp.onreadystatechange = readyStateChanged;
         xmlhttp.send(params);*/
         var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
-        var dom = document.getElementById("helpSubmit");
         dom.innerText = 'key done.';
         //dom.removeAttribute('hidden');
-        showElem("helpSubmit");
         timeGeter = new XMLHttpRequest();
         timeGeter.onreadystatechange = function (){
             if(timeGeter.readyState==4){
                 if(timeGeter.status==200){
-                    var dom = document.getElementById("helpSubmit");
         dom.innerText = 'timeGeter in.';
         //dom.removeAttribute('hidden');
-        showElem("helpSubmit");
                     var se = "secret=" + encryptedString(key, timeGeter.responseText + "|" + $("#inputUsername").val() + "|" + $("#inputPassword").val());
                     xmlhttp = new XMLHttpRequest();
                     xmlhttp = open('POST', "http://auth.igeek.asia/v1", true)
                     xmlhttp.onreadystatechange = readyStateChanged;
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     xmlhttp.send(se)
-                    var dom = document.getElementById("helpSubmit");
         dom.innerText = 'xmlhttp out.';
         //dom.removeAttribute('hidden');
-        showElem("helpSubmit");
                 }
                 else{
                     showError('submitGroup', 'helpSubmit', '服务器连接异常，请稍后重试。')
@@ -164,10 +155,8 @@ function submitValidation(openid) {
             disableAll(false);
         }
         timeGeter.open('GET', "http://auth.igeek.asia/v1/time", true);
-        var dom = document.getElementById("helpSubmit");
         dom.innerText = 'timeGeter out.';
         //dom.removeAttribute('hidden');
-        showElem("helpSubmit");
         timeGeter.send();
     }
     return false;
