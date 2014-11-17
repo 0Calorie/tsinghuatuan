@@ -111,7 +111,7 @@ function submitValidation(openid) {
     var dom = document.getElementById("helpSubmit");
         dom.innerText = 'submitValidation in.';
         //dom.removeAttribute('hidden');
-        showElem("helpSubmit");
+        document.getElementById("helpSubmit").setAttribute('style', 'display:block');
     if (checkUsername() & checkPassword()) {
         var dom = document.getElementById("helpSubmit");
         dom.innerText = 'check complete.';
