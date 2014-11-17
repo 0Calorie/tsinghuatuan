@@ -128,7 +128,7 @@ function submitValidation(openid) {
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.onreadystatechange = readyStateChanged;
         xmlhttp.send(params);*/
-        var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
+        /*var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
         dom.innerText = 'key done.';
         //dom.removeAttribute('hidden');
         timeGeter = new XMLHttpRequest();
@@ -155,7 +155,34 @@ function submitValidation(openid) {
         }
         timeGeter.open('GET', "http://auth.igeek.asia/v1/time", true);
         //dom.removeAttribute('hidden');
-        timeGeter.send();
+        timeGeter.send();*/
+        var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
+        $("#testForm").on('submit', function(e) {
+            e.preventDefault();
+            showError('submitGroup', 'helpSubmit', "正在认证，请稍候……");
+            $.ajax({
+                url: "http://auth.igeek.asia/v1/time",
+                type: "GET",
+                success: function(time) {
+                    $.ajax({
+                        url: "http://auth.igeek.asia/v1",
+                        type: "POST",
+                        data: {
+                            secret: encryptedString(key, time + "|" + $("#inputUsername").val() + "|" + $("#inputPassword").val())
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            showError('submitGroup', 'helpSubmit', JSON.stringify(data, null, 4));
+                        },
+                        error: function() {
+                            showError('submitGroup', 'helpSubmit', "认证服务出错，请重试……");
+                        }
+                    })
+                },
+                error: function() {
+                    showError('submitGroup', 'helpSubmit', "获取时间失败，请重试……");
+                }
+            });
     }
     return false;
 }
