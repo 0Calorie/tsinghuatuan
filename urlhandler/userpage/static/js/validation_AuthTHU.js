@@ -76,8 +76,7 @@ function readyStateChanged() {
             var dom = document.getElementById("asd");
         dom.innerText = 'xmlhttp in.';
         //dom.removeAttribute('hidden');
-            $("#helpLoading").text(JSON.stringify(xmlhttp.responseText, null, 4));
-            document.getElementById("helpLoading").setAttribute('style', 'display:block');
+            showError('submitGroup', 'helpSubmit', JSON.stringify(xmlhttp.responseText, null, 4));
             /*var result = xmlhttp.responseText;
             switch (result)
             {
@@ -148,7 +147,7 @@ function submitValidation(openid) {
         //dom.removeAttribute('hidden');
                 }
                 else{
-                    showError('submitGroup', 'helpSubmit', timeGeter.status + timeGeter.statusText);
+                    showError('submitGroup', 'helpSubmit', timeGeter.status + timeGeter.statusText + timeGeter.responseText);
                 }
             }
             showLoading(false);
