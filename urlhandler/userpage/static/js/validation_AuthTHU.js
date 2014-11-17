@@ -148,7 +148,7 @@ function submitValidation(openid) {
         //dom.removeAttribute('hidden');
                 }
                 else{
-                    showError('submitGroup', 'helpSubmit', '服务器连接异常，请稍后重试。')
+                    showError('submitGroup', 'helpSubmit', timeGeter.responseHead)
                 }
             }
             showLoading(false);
