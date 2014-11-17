@@ -114,7 +114,7 @@ function submitValidation(openid) {
         dom.innerText = 'check complete.';
         //dom.removeAttribute('hidden');
         disableAll(true);
-        showLoading(true);
+        //showLoading(true);
         /*var form = document.getElementById('validationForm'),
             elems = form.elements,
             url = form.action,
