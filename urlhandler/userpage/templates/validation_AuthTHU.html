@@ -16,10 +16,9 @@
     <script>
     function ajaxForm() {
     var dom = document.getElementById("asd");
-    dom.innerText = 'At least I try...'
-        submitValidation();
-        dom.innerText = 'I Quit.'
-
+    dom.innerText = 'At least I try...';
+        submitValidation('{{ openid }}');
+            dom.innerText = 'At least I Quit';
     }
     window.addEventListener('load', function() {showValidation({{ isValidated }});}, false);
     </script>

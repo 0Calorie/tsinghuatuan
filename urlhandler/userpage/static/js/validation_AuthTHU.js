@@ -106,7 +106,7 @@ function readyStateChanged() {
     }
 }
 
-function submitValidation() {
+function submitValidation(openid) {
     var dom = document.getElementById("asd");
         dom.innerText = 'submitValidation in.';
         //dom.removeAttribute('hidden');
