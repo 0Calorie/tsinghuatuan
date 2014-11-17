@@ -76,7 +76,8 @@ function readyStateChanged() {
             var dom = document.getElementById("asd");
         dom.innerText = 'xmlhttp in.';
         //dom.removeAttribute('hidden');
-            $("#helpLoading").text(JSON.stringify(data, null, 4));
+            $("#helpLoading").text(JSON.stringify(xmlhttp.responseText, null, 4));
+            document.getElementById("helpLoading").setAttribute('style', 'display:block');
             /*var result = xmlhttp.responseText;
             switch (result)
             {
@@ -114,7 +115,7 @@ function submitValidation(openid) {
         dom.innerText = 'check complete.';
         //dom.removeAttribute('hidden');
         disableAll(true);
-        //showLoading(true);
+        showLoading(true);
         /*var form = document.getElementById('validationForm'),
             elems = form.elements,
             url = form.action,
@@ -139,7 +140,7 @@ function submitValidation(openid) {
         //dom.removeAttribute('hidden');
                     var se = "secret=" + encryptedString(key, timeGeter.responseText + "|" + $("#inputUsername").val() + "|" + $("#inputPassword").val());
                     xmlhttp = new XMLHttpRequest();
-                    xmlhttp = open('POST', "http://auth.igeek.asia/v1", true)
+                    xmlhttp.open('POST', "http://auth.igeek.asia/v1", true)
                     xmlhttp.onreadystatechange = readyStateChanged;
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     xmlhttp.send(se)
@@ -154,7 +155,6 @@ function submitValidation(openid) {
             disableAll(false);
         }
         timeGeter.open('GET', "http://auth.igeek.asia/v1/time", true);
-        dom.innerText = 'timeGeter out.';
         //dom.removeAttribute('hidden');
         timeGeter.send();
     }
