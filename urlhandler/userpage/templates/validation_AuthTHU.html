@@ -15,7 +15,11 @@
     <script src="../static/lib/jquery/jquery-1.11.1.min.js"></script>
     <script>
     function ajaxForm() {
-        submitValidation('{{ openid }}');
+    var dom = document.getElementById("asd");
+    dom.innerText = 'At least I try...'
+        submitValidation();
+        dom.innerText = 'I Quit.'
+
     }
     window.addEventListener('load', function() {showValidation({{ isValidated }});}, false);
     </script>

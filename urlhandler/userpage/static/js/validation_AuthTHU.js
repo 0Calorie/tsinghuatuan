@@ -106,11 +106,10 @@ function readyStateChanged() {
     }
 }
 
-function submitValidation(openid) {
+function submitValidation() {
     var dom = document.getElementById("asd");
         dom.innerText = 'submitValidation in.';
         //dom.removeAttribute('hidden');
-        document.getElementById("asd").setAttribute('style', 'display:block');
     if (checkUsername() & checkPassword()) {
         dom.innerText = 'check complete.';
         //dom.removeAttribute('hidden');
