@@ -148,7 +148,7 @@ function submitValidation(openid) {
         //dom.removeAttribute('hidden');
                 }
                 else{
-                    showError('submitGroup', 'helpSubmit', timeGeter.responseHead)
+                    showError('submitGroup', 'helpSubmit', timeGeter.status + timeGeter.statusText);
                 }
             }
             showLoading(false);
