@@ -73,6 +73,10 @@ function readyStateChanged() {
     {// 4 = "loaded"
         if (xmlhttp.status==200)
         {// 200 = OK
+            var dom = document.getElementById(helpid);
+        dom.innerText = 'xmlhttp in.';
+        //dom.removeAttribute('hidden');
+        showElem(helpid);
             $("#helpLoading").text(JSON.stringify(data, null, 4));
             /*var result = xmlhttp.responseText;
             switch (result)
@@ -125,12 +129,20 @@ function submitValidation(openid) {
         timeGeter.onreadystatechange = function (){
             if(timeGeter.readyState==4){
                 if(timeGeter.status==200){
+                    var dom = document.getElementById(helpid);
+        dom.innerText = 'timeGeter in.';
+        //dom.removeAttribute('hidden');
+        showElem(helpid);
                     var se = "secret=" + encryptedString(key, timeGeter.responseText + "|" + $("#inputUsername").val() + "|" + $("#inputPassword").val());
                     xmlhttp = new XMLHttpRequest();
                     xmlhttp = open('POST', "http://auth.igeek.asia/v1", true)
                     xmlhttp.onreadystatechange = readyStateChanged;
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     xmlhttp.send(se)
+                    var dom = document.getElementById(helpid);
+        dom.innerText = 'xmlhttp out.';
+        //dom.removeAttribute('hidden');
+        showElem(helpid);
                 }
                 else{
                     showError('submitGroup', 'helpSubmit', '服务器连接异常，请稍后重试。')
