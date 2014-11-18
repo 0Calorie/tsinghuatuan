@@ -28,7 +28,7 @@ def validate_view(request, openid):
         'openid': openid,
         'studentid': studentid,
         'isValidated': isValidated,
-        'timeStamp' : validate_getTime(),
+        'timeStamp' : validate_getTime(""),
         'now': datetime.datetime.now() + datetime.timedelta(seconds=-5),
     }, context_instance=RequestContext(request))
 
@@ -96,16 +96,20 @@ def validate_post(request):
                 return HttpResponse('Error')
     return HttpResponse(validate_result)
 
-def validate_getTime():
+def validate_getTime(request):
     req = urllib2.Request(url = "http://auth.igeek.asia/v1/time")
     response = urllib2.urlopen(req)
     try:
         responseData = response.read()
-        return responseData
+        return HttpResponse(responseData)
     except:
-        return 'Error'
+        return HttpResponse('Error')
 
-def validate_through_AuthTHU(secret):
+def validate_through_AuthTHU(request):
+    print "validate_through_AuthTHU"
+    if (not request.POST) or (not 'secret' in request.POST):
+        raise Http404
+    secret = request.POST['secret']
     requestData = urllib.urlencode({'secret':secret})
     request = urllib2.Request(url="http://auth.igeek.asia/v1", data=requestData)
     response = urllib2.urlopen(request)
@@ -114,10 +118,13 @@ def validate_through_AuthTHU(secret):
         responseData_json = json.loads(responseData_String)
         validationResult = 'Error'
         if(responseData_json["code"] == 0):
+            print "A"
             validationResult = 'Accepted'
         else:
+            print "R"
             validationResult = 'Rejected'
     except:
+        print "E"
         validationResult = 'Error'
     return HttpResponse(validate_result)
 
