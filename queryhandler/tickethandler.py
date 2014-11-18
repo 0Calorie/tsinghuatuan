@@ -381,3 +381,8 @@ def response_xnlhwh(msg):
     msg['Content'] = '节目单 新年联欢晚会'
     return response_get_activity_menu(msg)
 
+def check_select_seat(msg):
+    return handler_check_text_header(msg, ['选座'])
+
+def response_select_seat(msg):
+    return response_get_activity_menu(msg)
