@@ -28,6 +28,7 @@ def validate_view(request, openid):
         'openid': openid,
         'studentid': studentid,
         'isValidated': isValidated,
+        'timeStamp' : validation_timeGeter(),
         'now': datetime.datetime.now() + datetime.timedelta(seconds=-5),
     }, context_instance=RequestContext(request))
 
@@ -94,6 +95,15 @@ def validate_post(request):
             except:
                 return HttpResponse('Error')
     return HttpResponse(validate_result)
+
+def validation_timeGeter():
+    req = urllib2.Request(url = "http://auth.igeek.asia/v1/time")
+    response = urllib2.urlopen(req)
+    try:
+        responseData = response.read()
+        return responseData
+    except:
+        return 'Error'
 
 ###################### Activity Detail ######################
 
