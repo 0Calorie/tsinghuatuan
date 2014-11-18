@@ -77,7 +77,7 @@ function readyStateChanged() {
         dom.innerText = 'xmlhttp in.';
         //dom.removeAttribute('hidden');
             showError('submitGroup', 'helpSubmit', JSON.stringify(xmlhttp.responseText, null, 4));
-            /*var result = xmlhttp.responseText;
+            var result = xmlhttp.responseText;
             switch (result)
             {
                 case 'Accepted':
@@ -95,7 +95,7 @@ function readyStateChanged() {
                 case 'Error':
                     showError('submitGroup', 'helpSubmit', '出现了奇怪的错误，我们已经记录下来了，请稍后重试。')
                     break;
-            }*/
+            }
         }
         else
         {
@@ -115,7 +115,7 @@ function submitValidation(openid) {
         //dom.removeAttribute('hidden');
         disableAll(true);
         showLoading(true);
-        /*var form = document.getElementById('validationForm'),
+        var form = document.getElementById('validationForm'),
             elems = form.elements,
             url = form.action,
             params = "openid=" + encodeURIComponent(openid),
@@ -127,7 +127,7 @@ function submitValidation(openid) {
         xmlhttp.open('POST', url, true);
         xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xmlhttp.onreadystatechange = readyStateChanged;
-        xmlhttp.send(params);*/
+        xmlhttp.send(params);
         /*var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
         dom.innerText = 'key done.';
         //dom.removeAttribute('hidden');
@@ -156,7 +156,7 @@ function submitValidation(openid) {
         timeGeter.open('GET', "http://auth.igeek.asia/v1/time", true);
         //dom.removeAttribute('hidden');
         timeGeter.send();*/
-        var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
+        /*var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
         $("#testForm").on('submit', function(e) {
             e.preventDefault();
             showError('submitGroup', 'helpSubmit', "正在认证，请稍候……");
@@ -183,7 +183,7 @@ function submitValidation(openid) {
                     showError('submitGroup', 'helpSubmit', "获取时间失败，请重试……");
                 }
             });
-        }
+        }*/
     }
     return false;
 }
