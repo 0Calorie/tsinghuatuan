@@ -27,7 +27,7 @@ WEIXIN_CUSTOM_MENU_TEMPLATE = {
             "sub_button": [
                 {
                     "type": "click",
-                    "name": "文艺",
+                    "name": "逗逼",
                     "key": WEIXIN_EVENT_KEYS['info_activity'],
                     "sub_button": []
                 },
