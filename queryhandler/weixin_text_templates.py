@@ -238,4 +238,24 @@ def get_text_desc_activity_menu(activity):
 def get_text_no_activity_menu():
     return '您好，该活动未提供节目单。'
 
+def get_text_usage_select_seat():
+    return '您好，格式不正确！请输入“选座 活动代称”。\n如：“选座 马兰花开”'
 
+def get_text_no_ticket_to_select_seat():
+    return '很抱歉，你没有抢到票，不能进行选座'
+
+def get_text_no_need_to_select_seat():
+    return '你好，该活动不需要抢票'
+
+def get_text_select_seat_over(activity, seat):
+    return '你好，选座已结束，你被随机分配到了作为' + get_text_seat_standartd(seat)
+
+def get_text_seat_standartd(seat):
+    return 'aa'
+
+def get_text_select_seat_future(activity, now):
+    slstart = activity.start_selectseat
+    return '你好，选座还没开始，距离选座开始还有' + time_chs_format(slstart - now)
+
+def get_text_select_seat(activity, user):
+    return '你好，你的选座已经开始，请到' + get_text_link(s_reverse_validate(1) , '这里') + '进行选座'

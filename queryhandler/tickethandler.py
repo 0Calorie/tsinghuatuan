@@ -385,4 +385,30 @@ def check_select_seat(msg):
     return handler_check_text_header(msg, ['选座'])
 
 def response_select_seat(msg):
-    return response_get_activity_menu(msg)
+    fromuser = get_msg_from(msg)
+    user = get_user(fromuser)
+    if user is None:
+        return get_reply_text_xml(msg, get_text_unbinded_book_ticket(fromuser))
+    received_msg = get_msg_content(msg).split()
+    if len(received_msg) > 1:
+        key = received_msg[1]
+    else:
+        return get_reply_text_xml(msg, get_text_usage_select_seat())
+
+    now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
+    activities = Activity.objects.filter(status=1, EndTime__gte=now, StartTime__lte=now, key=key)#tempory 选择活动
+    if not activities.exists():         #活动不存在
+        return get_reply_text_xml(msg, get_text_no_such_activity(''))
+    else:
+        activity = activities[0]
+        tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1)#tempory 查看是否抢到票
+        if not tickets.exists():        #没有抢到票
+            return get_reply_text_xml(msg, get_text_no_ticket_to_select_seat())
+        if activity.seat_status == 0:    #活动不需要抢票
+            return get_reply_text_xml(msg, get_text_no_need_to_select_seat())
+        if activity.end_selectseat < now:
+            seat = Seats.objects.filter(stu_id=user.stu_id, activity=activity)[0]
+            return get_reply_text_xml(msg, get_text_select_seat_over(activity, seat))
+        if activity.start_selectseat > now:
+            return get_reply_text_xml(msg, get_text_select_seat_future(activity, now))
+        return get_reply_text_xml(msg, get_text_select_seat(activity, user))
