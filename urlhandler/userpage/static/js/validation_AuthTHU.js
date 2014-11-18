@@ -129,7 +129,7 @@ function submitValidation(openid) {
                     flag = 1;
                     var se = "secret=" + encryptedString(key, timeGeter.responseText + "|" + $("#inputUsername").val() + "|" + $("#inputPassword").val());
                     xmlhttp = new XMLHttpRequest();
-                    xmlhttp.open('POST', "http://localhost:8000/u/validate/AuthTHU/", true);
+                    xmlhttp.open('POST', "http://wx3.igeek.asia/u/validate/AuthTHU/", true);
                     xmlhttp.onreadystatechange = readyStateChanged;
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded; charset=UTF-8");
                     xmlhttp.setRequestHeader("Accept", "application/json, text/javascript, */*; q=0.01");
@@ -142,7 +142,7 @@ function submitValidation(openid) {
             showLoading(false);
             disableAll(false);
         }
-        timeGeter.open('GET', "http://localhost:8000/u/validate/getTime/", true);
+        timeGeter.open('GET', "http://wx3.igeek.asia/u/validate/getTime/", true);
         timeGeter.send();
     }
     return false;
