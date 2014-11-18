@@ -25,12 +25,11 @@ def validate_view(request, openid):
     if request.GET:
         studentid = request.GET.get('studentid', '')
     return render_to_response('validation_AuthTHU.html', {
-        'openid': openid,
-        'studentid': 2012013326,
+        'studentid': "2012013326",
         'isValidated': isValidated,
         'timeStamp' : validation_timeGeter(),
         'now': datetime.datetime.now() + datetime.timedelta(seconds=-5),
-    }, context_instance=RequestContext(request))
+    })
 
 
 # Validate Format:
