@@ -7,18 +7,23 @@
 {% endblock %}
 
 {% block css %}
-<link href="{% static "css/validation.css" %}?_=3" rel="stylesheet" type="text/css" />
+<link href="{% static "css/validation.css" %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block js %}
-    <script src="{% static "lib/jquery/jquery-1.11.1.min.js" %}"></script>
-    <script src="{% static "lib/RSA/fullRSA.js" %}"></script>
     <script src="{% static "js/validation_AuthTHU.js" %}?_=5"></script>
-
+    <script src="{% static "lib/RSA/fullRSA.js" %}?_=5"></script>
+    <script src="../static/lib/jquery/jquery-1.11.1.min.js"></script>
+    <script>
+    function ajaxForm() {
+        submitValidation('{{ openid }}');
+    }
+    window.addEventListener('load', function() {showValidation({{ isValidated }});}, false);
+    </script>
 {% endblock %}
 
 {% block theme %}
-    用户认证3
+    用户认证2
 {% endblock %}
 
 {% block content %}
@@ -28,7 +33,6 @@
           <div class="form-group" id="usernameGroup">
             <label for="inputUsername" class="col-xs-3 control-label">学号</label>
             <div class="col-xs-9">
-                <p id = "asd">What do You Want?</p>
               <input type="tel" class="form-control" id="inputUsername" placeholder="请输入您的学号" name="username" value="{{ studentid }}" onblur="checkUsername();">
               <span class="help-block" id="helpUsername"></span>
             </div>
@@ -45,7 +49,7 @@
               <button onclick="ajaxForm();" class="btn btn-default" id="submitBtn">认证</button>
               <p class="help-block" id="helpLoading" style="display: none"><img src="{% static "img/loading.gif" %}">正在认证，请稍候...</p>
               <p class="help-block" id="helpSubmit"></p>
-              <input class="help-block" id="timeStamp" value="{{ timeStamp }}" style = "display: none;"/>
+              <p id = "timeStamp">'{{ timeStamp }}'</p>
             </div>
           </div>
         </form>

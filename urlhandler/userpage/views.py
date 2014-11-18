@@ -5,7 +5,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from urlhandler.models import User, Activity, Ticket
 from urlhandler.settings import STATIC_URL
-import urllib, urllib2
+import urllib, urllib2, json
 import datetime
 from django.utils import timezone
 
@@ -25,11 +25,12 @@ def validate_view(request, openid):
     if request.GET:
         studentid = request.GET.get('studentid', '')
     return render_to_response('validation_AuthTHU.html', {
-        'studentid': "2012013326",
+        'openid': openid,
+        'studentid': studentid,
         'isValidated': isValidated,
-        'timeStamp' : validation_timeGeter(),
+        'timeStamp' : validate_getTime(),
         'now': datetime.datetime.now() + datetime.timedelta(seconds=-5),
-    })
+    }, context_instance=RequestContext(request))
 
 
 # Validate Format:
@@ -95,7 +96,7 @@ def validate_post(request):
                 return HttpResponse('Error')
     return HttpResponse(validate_result)
 
-def validation_timeGeter():
+def validate_getTime():
     req = urllib2.Request(url = "http://auth.igeek.asia/v1/time")
     response = urllib2.urlopen(req)
     try:
@@ -103,6 +104,22 @@ def validation_timeGeter():
         return responseData
     except:
         return 'Error'
+
+def validate_through_AuthTHU(secret):
+    requestData = urllib.urlencode({'secret':secret})
+    request = urllib2.Request(url="http://auth.igeek.asia/v1", data=requestData)
+    response = urllib2.urlopen(request)
+    try:
+        responseData_String = response.read()
+        responseData_json = json.loads(responseData_String)
+        validationResult = 'Error'
+        if(responseData_json["code"] == 0):
+            validationResult = 'Accepted'
+        else:
+            validationResult = 'Rejected'
+    except:
+        validationResult = 'Error'
+    return HttpResponse(validate_result)
 
 ###################### Activity Detail ######################
 

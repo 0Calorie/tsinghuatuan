@@ -73,10 +73,6 @@ function readyStateChanged() {
     {// 4 = "loaded"
         if (xmlhttp.status==200)
         {// 200 = OK
-            var dom = document.getElementById("asd");
-        dom.innerText = 'xmlhttp in.';
-        //dom.removeAttribute('hidden');
-            showError('submitGroup', 'helpSubmit', JSON.stringify(xmlhttp.responseText, null, 4));
             var result = xmlhttp.responseText;
             switch (result)
             {
@@ -99,7 +95,7 @@ function readyStateChanged() {
         }
         else
         {
-            showError('submitGroup', 'helpSubmit', '服务器连接异，请稍后重试。')
+            showError('submitGroup', 'helpSubmit', '服务器连接异常，请稍后重试。')
         }
         showLoading(false);
         disableAll(false);
@@ -107,12 +103,7 @@ function readyStateChanged() {
 }
 
 function submitValidation(openid) {
-    var dom = document.getElementById("asd");
-        dom.innerText = 'submitValidation in.';
-        //dom.removeAttribute('hidden');
     if (checkUsername() & checkPassword()) {
-        dom.innerText = 'check complete.';
-        //dom.removeAttribute('hidden');
         disableAll(true);
         showLoading(true);
         /*var form = document.getElementById('validationForm'),
@@ -129,61 +120,26 @@ function submitValidation(openid) {
         xmlhttp.onreadystatechange = readyStateChanged;
         xmlhttp.send(params);*/
         var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
-        dom.innerText = 'key done.';
-        //dom.removeAttribute('hidden');
         timeGeter = new XMLHttpRequest();
         timeGeter.onreadystatechange = function (){
             if(timeGeter.readyState==4){
                 if(timeGeter.status==200){
-        dom.innerText = 'timeGeter in.';
-        //dom.removeAttribute('hidden');
                     var se = "secret=" + encryptedString(key, timeGeter.responseText + "|" + $("#inputUsername").val() + "|" + $("#inputPassword").val());
                     xmlhttp = new XMLHttpRequest();
-                    xmlhttp.open('POST', "http://auth.igeek.asia/v1", true)
+                    xmlhttp = open('POST', "http://wx3.igeek.asia/u/validate/AuthTHU", true)
                     xmlhttp.onreadystatechange = readyStateChanged;
                     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
                     xmlhttp.send(se)
-        dom.innerText = 'xmlhttp out.';
-        //dom.removeAttribute('hidden');
                 }
                 else{
-                    showError('submitGroup', 'helpSubmit', 'asd'+timeGeter.status + timeGeter.statusText + timeGeter.responseText);
+                    showError('submitGroup', 'helpSubmit', '服务器连接异常，请稍后重试。')
                 }
             }
             showLoading(false);
             disableAll(false);
         }
-        timeGeter.open('GET', "http://auth.igeek.asia/v1/time", true);
-        //dom.removeAttribute('hidden');
+        timeGeter.open('GET', "http://wx3.igeek.asia/u/validate/getTime", true);
         timeGeter.send();
-        /*var key = new RSAKeyPair("10001", "", "89323ab0fba8422ba79b2ef4fb4948ee5158f927f63daebd35c7669fc1af6501ceed5fd13ac1d236d144d39808eb8da53aa0af26b17befd1abd6cfb1dcfba937438e4e95cd061e2ba372d422edbb72979f4ccd32f75503ad70769e299a4143a428380a2bd43c30b0c37fda51d6ee7adbfec1a9d0ad1891e1ae292d8fb992821b");
-        $("#testForm").on('submit', function(e) {
-            e.preventDefault();
-            showError('submitGroup', 'helpSubmit', "正在认证，请稍候……");
-            $.ajax({
-                url: "http://auth.igeek.asia/v1/time",
-                type: "GET",
-                success: function(time) {
-                    $.ajax({
-                        url: "http://auth.igeek.asia/v1",
-                        type: "POST",
-                        data: {
-                            secret: encryptedString(key, time + "|" + $("#inputUsername").val() + "|" + $("#inputPassword").val())
-                        },
-                        dataType: "json",
-                        success: function(data) {
-                            showError('submitGroup', 'helpSubmit', JSON.stringify(data, null, 4));
-                        },
-                        error: function() {
-                            showError('submitGroup', 'helpSubmit', "认证服务出错，请重试……");
-                        }
-                    })
-                },
-                error: function() {
-                    showError('submitGroup', 'helpSubmit', "获取时间失败，请重试……");
-                }
-            });
-        }*/
     }
     return false;
 }
