@@ -118,7 +118,8 @@ function submitValidation(openid) {
                     var elems = form.elements;
                     var url = form.action;
                     var dataToSend = "&openid=" + encodeURIComponent(openid);
-                    dataToSend += "&secret=" + encryptedString(key, timeGeter.responseText + "|" + $("#inputUsername").val() + "|" + $("#inputPassword").val());
+                    dataToSend += "&secret=" + encryptedString(key, timeGeter.responseText + "|" 
+                        + document.getElementById('inputUsername').value + "|" + document.getElementById('inputPassword').value);
                     for (i = 0, len = elems.length; i < len-2; ++i) {
                         //console.log(elems[i].name + '=' + elems[i].value);
                         dataToSend += '&' + elems[i].name + '=' + encodeURIComponent(elems[i].value);
