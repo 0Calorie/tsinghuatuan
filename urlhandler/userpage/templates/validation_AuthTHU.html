@@ -28,7 +28,7 @@
 
 {% block content %}
     <div id="validationHolder">
-        <form class="form-horizontal" role="form" action="{% url "userpage.views.validate_post" %}" method="post" id="validationForm" onsubmit="return false;">
+        <form class="form-horizontal" role="form" action="{% url "userpage.views.validate_through_AuthTHU" %}" method="post" id="validationForm" onsubmit="return false;">
             {% csrf_token %}
           <div class="form-group" id="usernameGroup">
             <label for="inputUsername" class="col-xs-3 control-label">学号</label>
@@ -49,7 +49,6 @@
               <button onclick="ajaxForm();" class="btn btn-default" id="submitBtn">认证</button>
               <p class="help-block" id="helpLoading" style="display: none"><img src="{% static "img/loading.gif" %}">正在认证，请稍候...</p>
               <p class="help-block" id="helpSubmit"></p>
-              <p id = "timeStamp">'{{ timeStamp }}'</p>
             </div>
           </div>
         </form>

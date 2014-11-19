@@ -28,7 +28,6 @@ def validate_view(request, openid):
         'openid': openid,
         'studentid': studentid,
         'isValidated': isValidated,
-        'timeStamp' : validate_getTime(""),
         'now': datetime.datetime.now() + datetime.timedelta(seconds=-5),
     }, context_instance=RequestContext(request))
 
@@ -106,10 +105,11 @@ def validate_getTime(request):
         return HttpResponse('Error')
 
 def validate_through_AuthTHU(request):
-    print "validate_through_AuthTHU"
-    if (not request.POST) or (not 'secret' in request.POST):
+    if (not request.POST) or (not 'secret' in request.POST) or (not 'openid' in request.POST) or (not 'username' in request.POST):
         raise Http404
     secret = request.POST['secret']
+    studentID = request.POST['username']
+    weixinOpenID = request.POST['openid']
     requestData = urllib.urlencode({'secret':secret})
     request = urllib2.Request(url="http://auth.igeek.asia/v1", data=requestData)
     response = urllib2.urlopen(request)
@@ -118,15 +118,35 @@ def validate_through_AuthTHU(request):
         responseData_json = json.loads(responseData_String)
         validationResult = 'Error'
         if(responseData_json["code"] == 0):
-            print "A"
             validationResult = 'Accepted'
+            validationResult = validation_addNewbieToDataBase(weixinOpenID, studentID)
         else:
-            print "R"
             validationResult = 'Rejected'
     except:
-        print "E"
         validationResult = 'Error'
-    return HttpResponse(validate_result)
+    return HttpResponse(validationResult)
+
+def validation_addNewbieToDataBase(weixinOpenID, studentID):
+    try:
+        User.objects.filter(stu_id=studentID).update(status=0)
+        User.objects.filter(weixin_id=weixinOpenID).update(status=0)
+    except:
+        return 'Error_DB1'
+    try:
+        currentUser = User.objects.get(stu_id=studentID)
+        currentUser.weixin_id = weixinOpenID
+        currentUser.status = 1
+        try:
+            currentUser.save()
+        except:
+            return 'Error_DB2'
+    except:
+        try:
+            newuser = User.objects.create(weixin_id=weixinOpenID, stu_id=studentID, status=1)
+            newuser.save()
+        except:
+            return 'Error_DB3'
+    return 'Accepted'
 
 ###################### Activity Detail ######################
 
