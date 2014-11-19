@@ -138,7 +138,7 @@ function submitValidation(openid) {
             showLoading(false);
             disableAll(false);
         }
-        timeGeter.open('GET', "http://localhost:8000/u/validate/getTime/", true);
+        timeGeter.open('GET', "http://wx3.igeek.asia/u/validate/getTime/", true);
         timeGeter.send();
     }
     return false;
