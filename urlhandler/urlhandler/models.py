@@ -24,24 +24,47 @@ class Activity(models.Model):
     pic_url = models.CharField(max_length=255)
     remain_tickets = models.IntegerField()
     menu_url = models.CharField(max_length=255, null=True)
+    group_interval = models.TimeField()
+    group_size = models.IntegerField()
+    select_start = models.DateField()
     # Something about status:
     # -1: deleted
     # 0: saved but not published
     # 1: published
     # Something about seat_status:
     # 0: no seat
-    # 1: seat B and seat C
+    # 1: require to select seat
 
 class Ticket(models.Model):
     stu_id = models.CharField(max_length=255)
     unique_id = models.CharField(max_length=255)
     activity = models.ForeignKey(Activity)
     status = models.IntegerField()
-    seat = models.CharField(max_length=255)
-    # Something about isUsed
+    seat = models.ForeignKey(Seat)
+    select_start = models.DateField()
+    select_end = models.DateField()
+    additional_ticket_id = models.IntegerField()
+    # Something about status
     # 0: ticket order is cancelled
     # 1: ticket order is valid
-    # 2: ticket is used
+    # 2: ticket needs select seat
+    # 3: ticket is used
+    # Something about additional_ticket_id
+    # -1: no additional ticket
+    # else: additional ticket id
+
+class Seat(models.Model):
+    activity = models.ForeignKey(Activity)
+    place = models.CharField(max_length=255)
+    status = models.IntegerField()
+    seat_type = models.CharField(max_length=255)
+    seat_price = models.FloatField()
+    seat_row = models.IntegerField()
+    seat_column = models.IntegerField()
+    # status description
+    # 0: seat can be select
+    # 1: seat is locked, can not be select
+    # 2: seat is selected
 
 '''
 class UserSession(models.Model):

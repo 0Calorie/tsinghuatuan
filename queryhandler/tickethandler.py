@@ -396,19 +396,20 @@ def response_select_seat(msg):
         return get_reply_text_xml(msg, get_text_usage_select_seat())
 
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
-    activities = Activity.objects.filter(status=1, EndTime__gte=now, StartTime__lte=now, key=key)#tempory 选择活动
+    activities = Activity.objects.filter(status=1, end_time__gte=now, key=key)#tempory 选择活动
     if not activities.exists():         #活动不存在
         return get_reply_text_xml(msg, get_text_no_such_activity(''))
     else:
         activity = activities[0]
-        tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1)#tempory 查看是否抢到票
+        tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status__gte=0)#tempory 查看是否抢到票
         if not tickets.exists():        #没有抢到票
             return get_reply_text_xml(msg, get_text_no_ticket_to_select_seat())
-        if activity.seat_status == 0:    #活动不需要抢票
+        if activity.seat_status == 0:    #活动不需要选座
             return get_reply_text_xml(msg, get_text_no_need_to_select_seat())
-        if activity.end_selectseat < now:
-            seat = Seats.objects.filter(stu_id=user.stu_id, activity=activity)[0]
-            return get_reply_text_xml(msg, get_text_select_seat_over(activity, seat))
-        if activity.start_selectseat > now:
-            return get_reply_text_xml(msg, get_text_select_seat_future(activity, now))
-        return get_reply_text_xml(msg, get_text_select_seat(activity, user))
+        ticket = tickets[0]
+        if ticket.select_end < now:     #选座已结束
+            seat = ticket.seat
+            return get_reply_text_xml(msg, get_text_select_seat_over(ticket, seat))
+        if ticket.select_start > now:   #选座未开始
+            return get_reply_text_xml(msg, get_text_select_seat_future(ticket, now))
+        return get_reply_text_xml(msg, get_text_select_seat(fromuser,ticket))

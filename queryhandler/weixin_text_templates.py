@@ -253,9 +253,9 @@ def get_text_select_seat_over(activity, seat):
 def get_text_seat_standartd(seat):
     return 'aa'
 
-def get_text_select_seat_future(activity, now):
-    slstart = activity.start_selectseat
+def get_text_select_seat_future(ticket, now):
+    slstart = ticket.select_start
     return '你好，选座还没开始，距离选座开始还有' + time_chs_format(slstart - now)
 
-def get_text_select_seat(activity, user):
-    return '你好，你的选座已经开始，请到' + get_text_link(s_reverse_validate(1) , '这里') + '进行选座'
+def get_text_select_seat(openid,ticket):
+    return '你好，你的选座已经开始，请到' + get_text_link(s_reverse_select_seat(openid,ticket.unique_id) , '这里') + '进行选座'
