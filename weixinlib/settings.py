@@ -14,6 +14,7 @@ WEIXIN_EVENT_KEYS = {
     'ticket_book_what': 'TSINGHUA_BOOK_WHAT',
     'ticket_get': 'TSINGHUA_TICKET',
     'account_bind': 'TSINGHUA_BIND',
+    'ticket_select_seat': 'TSINGHUA_SELECT',
     'help': 'TSINGHUA_HELP',
     'ticket_no_book_recommand': 'TSINGHUA_NO_BOOK_ACTS',
     'ticket_book_header': 'TSINGHUA_BOOK_',
@@ -78,6 +79,12 @@ WEIXIN_CUSTOM_MENU_TEMPLATE = {
                 #    "key": "TSINGHUA_PATH",
                 #    "sub_button": []
                 #},
+                {
+                    "type": "click",
+                    "name": "选座",
+                    "key": WEIXIN_EVENT_KEYS['ticket_select_seat'],
+                    "sub_button": []
+                },
                 {
                     "type": "click",
                     "name": "绑定",

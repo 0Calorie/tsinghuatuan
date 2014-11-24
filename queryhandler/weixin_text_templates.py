@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 from userpage.safe_reverse import *
 from queryhandler.settings import QRCODE_URL
 
@@ -25,8 +25,8 @@ def get_text_two_digit(num):
 def get_text_time_standard(dt):
     weekdays = ['一', '二', '三', '四', '五', '六', '日']
     return str(dt.year) + '年' + get_text_two_digit(dt.month) + '月' \
-        + get_text_two_digit(dt.day) + '日 周' + weekdays[dt.isoweekday() - 1] + ' ' \
-        + get_text_two_digit(dt.hour) + ':' + get_text_two_digit(dt.minute)
+           + get_text_two_digit(dt.day) + '日 周' + weekdays[dt.isoweekday() - 1] + ' ' \
+           + get_text_two_digit(dt.hour) + ':' + get_text_two_digit(dt.minute)
 
 
 def get_text_ticket_pic(ticket):
@@ -47,7 +47,7 @@ def get_text_help_title():
 
 def get_text_help_description(isvalidated):
     return '不想错过园子里精彩的资讯？又没时间没心情到处搜罗信息？想要参加高大上的活动却不想提前数小时排队？' \
-           '微信“紫荆之声”帮您便捷解决这些问题！快来看看“紫荆之声”怎么使用吧！'\
+           '微信“紫荆之声”帮您便捷解决这些问题！快来看看“紫荆之声”怎么使用吧！' \
            + ('\n您尚未绑定学号，回复“绑定”进行相关操作:)' if not isvalidated else '')
 
 
@@ -93,7 +93,8 @@ def get_text_seat_desc_BC(seat):
 
 
 def get_text_one_ticket_description(ticket, now):
-    tmp = '活动开始前45分钟凭本电子票入场。\n活动时间：' + get_text_time_standard(ticket.activity.start_time) + '\n活动地点：' + ticket.activity.place
+    tmp = '活动开始前45分钟凭本电子票入场。\n活动时间：' + get_text_time_standard(
+        ticket.activity.start_time) + '\n活动地点：' + ticket.activity.place
     if ticket.activity.seat_status == 1:
         tmp += ('\n' + get_text_seat_desc_BC(ticket.seat))
     if ticket.activity.book_end > now:
@@ -135,7 +136,7 @@ def get_text_no_ticket_in_act(activity, now):
     tmp = '您好，没有找到您的票:('
     bkend = activity.book_end
     if bkend > now:
-        tmp += '\n该活动距离抢票结束还有' + time_chs_format(bkend - now) + '，快回复“抢票 ' + activity.key + '”试试运气吧！'\
+        tmp += '\n该活动距离抢票结束还有' + time_chs_format(bkend - now) + '，快回复“抢票 ' + activity.key + '”试试运气吧！' \
                + get_text_link(s_reverse_activity_detail(activity.id), '详情')
     return tmp
 
@@ -152,8 +153,13 @@ def get_text_fail_book_ticket(activity, now):
     return '很抱歉，已经没有余票了，过一段时间再来试试吧:)\n该活动距离抢票结束还有' + time_chs_format(activity.book_end - now)
 
 
-def get_text_success_book_ticket():
-    return '恭喜您，抢票成功！\n'
+def get_text_success_book_ticket(ticket):
+    response = '恭喜您，抢票成功！\n'
+    if ticket.seat_status >= 0:
+        response += '请在' + get_text_time_standard(ticket.select_start) + '到' + get_text_time_standard(
+            ticket.select_end) + '之间进行选座 \n'
+        response += '否则，系统将为你随机分配座位哟~ \n'
+    return response
 
 
 def get_text_book_ticket_future(activity, now):
@@ -238,24 +244,42 @@ def get_text_desc_activity_menu(activity):
 def get_text_no_activity_menu():
     return '您好，该活动未提供节目单。'
 
+
 def get_text_usage_select_seat():
     return '您好，格式不正确！请输入“选座 活动代称”。\n如：“选座 马兰花开”'
 
-def get_text_no_ticket_to_select_seat():
-    return '很抱歉，你没有抢到票，不能进行选座'
+
+def get_text_no_ticket_to_select_seat(activity):
+    return '很抱歉，你没有抢到' + activity.name + '的票，不能进行选座'
+
+
+def get_text_no_ticket_need_select_seat():
+    return '你好，目前没有需要你选座的活动'
+
 
 def get_text_no_need_to_select_seat():
     return '你好，该活动不需要抢票'
 
-def get_text_select_seat_over(activity, seat):
-    return '你好，选座已结束，你被随机分配到了作为' + get_text_seat_standartd(seat)
 
-def get_text_seat_standartd(seat):
-    return 'aa'
+def get_text_select_seat_over(seat):
+    return '你好，选座已结束，你被随机分配到了座位' + seat.description
+
 
 def get_text_select_seat_future(ticket, now):
     slstart = ticket.select_start
     return '你好，选座还没开始，距离选座开始还有' + time_chs_format(slstart - now)
 
-def get_text_select_seat(openid,ticket):
-    return '你好，你的选座已经开始，请到' + get_text_link(s_reverse_select_seat(openid,ticket.unique_id) , '这里') + '进行选座'
+
+def get_text_select_seat(openid, ticket):
+    return '你好，你的选座已经开始，请到' + get_text_link(s_reverse_select_seat(openid, ticket.unique_id), '这里') + '进行选座'
+
+
+def get_text_unbinded_select_seat(openid):
+    return get_text_unbinded_template('选座', openid)
+
+
+def get_text_show_all_seat_selection(openid, tickets):
+    response = "你好，以下活动需要你现在选座\n"
+    for ticket in tickets:
+        response += '请到'+get_text_link(s_reverse_select_seat(openid, ticket.unique_id), '这里')+'进行'+ticket.activity.name+'的选座\n'
+    return response

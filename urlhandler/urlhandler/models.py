@@ -16,6 +16,7 @@ class Activity(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     place = models.CharField(max_length=255)
+    place_url = models.CharField(max_length=255)
     book_start = models.DateTimeField()
     book_end = models.DateTimeField()
     seat_status = models.IntegerField(default=0)
@@ -37,10 +38,12 @@ class Activity(models.Model):
 
 class Seat(models.Model):
     activity = models.ForeignKey(Activity)
+    description = models.CharField(max_length=255)
     place = models.CharField(max_length=255)
     status = models.IntegerField()
     seat_type = models.CharField(max_length=255)
     seat_price = models.FloatField()
+    seat_floor = models.CharField(max_length=255)
     seat_row = models.IntegerField()
     seat_column = models.IntegerField()
     # status description
@@ -53,6 +56,7 @@ class Ticket(models.Model):
     unique_id = models.CharField(max_length=255)
     activity = models.ForeignKey(Activity)
     status = models.IntegerField()
+    seat_status = models.IntegerField()
     seat = models.ForeignKey(Seat)
     select_start = models.DateField()
     select_end = models.DateField()
@@ -60,8 +64,11 @@ class Ticket(models.Model):
     # Something about status
     # 0: ticket order is cancelled
     # 1: ticket order is valid
-    # 2: ticket needs select seat
-    # 3: ticket is used
+    # 2: ticket is used
+    # Something about status
+    # -1: no seat
+    # 0: have not yet selected seat
+    # 1: have selected seat
     # Something about additional_ticket_id
     # -1: no additional ticket
     # else: additional ticket id

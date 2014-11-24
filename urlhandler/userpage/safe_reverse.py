@@ -21,5 +21,6 @@ def s_reverse_help():
 def s_reverse_activity_menu(actid):
     return SITE_DOMAIN + reverse('userpage.views.activity_menu_view', kwargs={'actid': actid})
 
+
 def s_reverse_select_seat(openid, uid):
     return SITE_DOMAIN + reverse('userpage.views.choose_seat_view', kwargs={'openid':openid, 'uid': uid})
