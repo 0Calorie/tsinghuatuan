@@ -35,6 +35,19 @@ class Activity(models.Model):
     # 0: no seat
     # 1: require to select seat
 
+class Seat(models.Model):
+    activity = models.ForeignKey(Activity)
+    place = models.CharField(max_length=255)
+    status = models.IntegerField()
+    seat_type = models.CharField(max_length=255)
+    seat_price = models.FloatField()
+    seat_row = models.IntegerField()
+    seat_column = models.IntegerField()
+    # status description
+    # 0: seat can be select
+    # 1: seat is locked, can not be select
+    # 2: seat is selected
+
 class Ticket(models.Model):
     stu_id = models.CharField(max_length=255)
     unique_id = models.CharField(max_length=255)
@@ -53,18 +66,6 @@ class Ticket(models.Model):
     # -1: no additional ticket
     # else: additional ticket id
 
-class Seat(models.Model):
-    activity = models.ForeignKey(Activity)
-    place = models.CharField(max_length=255)
-    status = models.IntegerField()
-    seat_type = models.CharField(max_length=255)
-    seat_price = models.FloatField()
-    seat_row = models.IntegerField()
-    seat_column = models.IntegerField()
-    # status description
-    # 0: seat can be select
-    # 1: seat is locked, can not be select
-    # 2: seat is selected
 
 '''
 class UserSession(models.Model):
