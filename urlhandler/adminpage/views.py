@@ -177,10 +177,10 @@ def activity_create(activity):
 
     preDict['status'] = 1 if ('publish' in activity) else 0
     preDict['remain_tickets'] = preDict['total_tickets']
-    preDict['group_interval'] = 30
+    preDict['group_interval'] = 30000
     preDict['menu_url'] = preDict['name']
     preDict['group_size'] = 2
-    preDict['select_start'] = datetime.strptime("2014-11-27 10:12:34", '%Y-%m-%d %H:%M:%S')
+    preDict['select_start'] = datetime.now()
 
     newact = Activity.objects.create(**preDict)
     return newact
