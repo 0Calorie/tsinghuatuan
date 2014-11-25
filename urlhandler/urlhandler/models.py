@@ -9,6 +9,7 @@ class User(models.Model):
     status = models.IntegerField()
     seed = models.FloatField(default=1024)
 
+
 class Activity(models.Model):
     name = models.CharField(max_length=255)
     key = models.CharField(max_length=255)
@@ -25,7 +26,7 @@ class Activity(models.Model):
     pic_url = models.CharField(max_length=255)
     remain_tickets = models.IntegerField()
     menu_url = models.CharField(max_length=255, null=True)
-    group_interval = models.TimeField()
+    group_interval = models.DateTimeField()
     group_size = models.IntegerField()
     select_start = models.DateField()
     # Something about status:
@@ -35,6 +36,7 @@ class Activity(models.Model):
     # Something about seat_status:
     # 0: no seat
     # 1: require to select seat
+
 
 class Seat(models.Model):
     activity = models.ForeignKey(Activity)
@@ -50,6 +52,7 @@ class Seat(models.Model):
     # 0: seat can be select
     # 1: seat is locked, can not be select
     # 2: seat is selected
+
 
 class Ticket(models.Model):
     stu_id = models.CharField(max_length=255)
