@@ -36,7 +36,7 @@ def is_authenticated(openid):
     return get_user(openid) is not None
 
 
-#check help command
+# check help command
 def check_help_or_subscribe(msg):
     return handler_check_text(msg, ['帮助', 'help']) or handler_check_event_click(msg, [
         WEIXIN_EVENT_KEYS['help']]) or handler_check_events(msg, ['scan', 'subscribe'])
@@ -244,7 +244,7 @@ def book_ticket(user, key, now):
             ticket.seat = None,
             ticket.select_start = select_start,
             ticket.select_end = select_start + datetime.timedelta(0, activity.group_interval)
-            ticket.additional_ticket_id=-1
+            ticket.additional_ticket_id = -1
             ticket.save()
             return ticket
         else:
@@ -402,7 +402,8 @@ def response_xnlhwh(msg):
 
 
 def check_select_seat(msg):
-    return handler_check_text(msg, ['选座']) or handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_select_seat']])
+    return handler_check_text_header(msg, ['选座']) or handler_check_text(msg, ['选座']) or handler_check_event_click(msg, [
+        WEIXIN_EVENT_KEYS['ticket_select_seat']])
 
 
 def response_select_seat(msg):
@@ -435,9 +436,11 @@ def response_select_seat(msg):
             return get_reply_text_xml(msg, get_text_select_seat(fromuser, ticket))
     else:
         activities = Activity.objects.filter(status=1, end_time__gte=now)
+        print 'haha'
         all_tickets = []
         for activity in activities:
-            tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0, select_start__lt=now, select_end__gt=now)
+            tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0,
+                                            select_start__lt=now, select_end__gt=now)
             if tickets.exists():
                 all_tickets.append(tickets[0])
 
