@@ -414,6 +414,7 @@ def response_select_seat(msg):
         return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
     received_msg = get_msg_content(msg).split()
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
+    print 'heihei'
 
     if len(received_msg) > 1:
         key = received_msg[1]
@@ -435,8 +436,8 @@ def response_select_seat(msg):
                 return get_reply_text_xml(msg, get_text_select_seat_future(ticket, now))
             return get_reply_text_xml(msg, get_text_select_seat(fromuser, ticket))
     else:
-        activities = Activity.objects.filter(status=1, end_time__gte=now)
         print 'haha'
+        activities = Activity.objects.filter(status=1, end_time__gte=now)
         all_tickets = []
         for activity in activities:
             tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0,
