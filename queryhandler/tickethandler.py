@@ -412,10 +412,12 @@ def response_select_seat(msg):
     user = get_user(fromuser)
     if user is None:
         return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
-    print 'heihei1'
-    received_msg = get_msg_content(msg).split()
+
+    received_msg = []
+    if msg['MsgType'] == 'text':
+        received_msg = get_msg_content(msg).split()
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
-    print 'heihei'
+    print 'finally found u'
 
     if len(received_msg) > 1:
         key = received_msg[1]
