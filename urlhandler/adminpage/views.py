@@ -3,7 +3,7 @@
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.forms.models import model_to_dict
-from datetime import datetime
+from datetime import *
 import json
 import time
 from django.http import HttpResponseRedirect
@@ -177,7 +177,7 @@ def activity_create(activity):
 
     preDict['status'] = 1 if ('publish' in activity) else 0
     preDict['remain_tickets'] = preDict['total_tickets']
-    preDict['group_interval'] = datetime.strptime("30", '%M')
+    preDict['group_interval'] = time(0, 30, 0)
     preDict['menu_url'] = preDict['name']
     preDict['group_size'] = 123
     preDict['select_start'] = datetime.strptime("2014-11-27 10:12:34", '%Y-%m-%d %H:%M:%S')
