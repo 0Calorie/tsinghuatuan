@@ -230,7 +230,7 @@ def book_ticket(user, key, now):
                 unique_id=random_string,
                 status=1,
                 seat_status=activity.seat_status - 1,
-                seat=None,
+                seat_id=-1,
                 select_start=select_start,
                 select_end=select_start + datetime.timedelta(activity.group_interval)
             )

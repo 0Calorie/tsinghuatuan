@@ -60,7 +60,7 @@ class Ticket(models.Model):
     activity = models.ForeignKey(Activity)
     status = models.IntegerField()
     seat_status = models.IntegerField()
-    seat = models.ForeignKey(Seat)
+    seat_id = models.IntegerField()
     select_start = models.DateField()
     select_end = models.DateField()
     additional_ticket_id = models.IntegerField()
