@@ -407,7 +407,7 @@ def check_select_seat(msg):
 
 
 def response_select_seat(msg):
-    global tickets
+    print 'nimabi'
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
