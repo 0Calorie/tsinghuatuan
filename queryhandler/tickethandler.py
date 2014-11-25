@@ -215,7 +215,7 @@ def book_ticket(user, key, now):
         '''
 
         select_start = now
-        select_time_interval = time(0, activity.group_interval)
+        select_time_interval = datetime.time(0, activity.group_interval, 0)
         if activity.seat_status == 1:
             booked_tickets = activity.total_tickets - activity.remain_tickets
             group_index = booked_tickets / activity.group_size
