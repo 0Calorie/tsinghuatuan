@@ -406,6 +406,7 @@ def check_select_seat(msg):
 
 
 def response_select_seat(msg):
+    global tickets
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
@@ -428,7 +429,7 @@ def response_select_seat(msg):
             ticket = tickets[0]
             if ticket.select_end < now:  #选座已结束
                 seat = ticket.seat
-                return get_reply_text_xml(msg, get_text_select_seat_over(ticket, seat))
+                return get_reply_text_xml(msg, get_text_select_seat_over(seat))
             if ticket.select_start > now:  #选座未开始
                 return get_reply_text_xml(msg, get_text_select_seat_future(ticket, now))
             return get_reply_text_xml(msg, get_text_select_seat(fromuser, ticket))
@@ -436,10 +437,9 @@ def response_select_seat(msg):
         activities = Activity.objects.filter(status=1, end_time__gte=now)
         all_tickets = []
         for activity in activities:
-            tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0,
-                                            select_start__lt=now, select_end__gt=now)
-        if tickets.exists():
-            all_tickets.append(tickets[0])
+            tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0, select_start__lt=now, select_end__gt=now)
+            if tickets.exists():
+                all_tickets.append(tickets[0])
 
         if len(all_tickets) == 0:
             return get_reply_text_xml(msg, get_text_no_ticket_need_select_seat())

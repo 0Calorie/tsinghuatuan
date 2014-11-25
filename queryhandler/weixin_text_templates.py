@@ -279,7 +279,7 @@ def get_text_unbinded_select_seat(openid):
 
 
 def get_text_show_all_seat_selection(openid, tickets):
-    response = "你好，以下活动需要你现在选座\n"
+    response = "你好，现在你可以为以下活动选座\n"
     for ticket in tickets:
         response += '请到'+get_text_link(s_reverse_select_seat(openid, ticket.unique_id), '这里')+'进行'+ticket.activity.name+'的选座\n'
     return response
