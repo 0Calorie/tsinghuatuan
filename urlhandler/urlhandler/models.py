@@ -26,7 +26,7 @@ class Activity(models.Model):
     pic_url = models.CharField(max_length=255)
     remain_tickets = models.IntegerField()
     menu_url = models.CharField(max_length=255, null=True)
-    group_interval = models.IntegerField()
+    group_interval = models.DateTimeField()
     group_size = models.IntegerField()
     select_start = models.DateTimeField()
     # Something about status:
