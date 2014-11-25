@@ -407,7 +407,6 @@ def check_select_seat(msg):
 
 
 def response_select_seat(msg):
-    print 'nimabi'
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
@@ -417,7 +416,6 @@ def response_select_seat(msg):
     if msg['MsgType'] == 'text':
         received_msg = get_msg_content(msg).split()
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
-    print 'finally found u'
 
     if len(received_msg) > 1:
         key = received_msg[1]
@@ -432,14 +430,13 @@ def response_select_seat(msg):
             if activity.seat_status == 0:  #活动不需要选座
                 return get_reply_text_xml(msg, get_text_no_need_to_select_seat())
             ticket = tickets[0]
-            if ticket.select_end < now:  #选座已结束
+            if ticket.select_end < now.date():  #选座已结束
                 seat = ticket.seat
                 return get_reply_text_xml(msg, get_text_select_seat_over(seat))
-            if ticket.select_start > now:  #选座未开始
+            if ticket.select_start > now.date():  #选座未开始
                 return get_reply_text_xml(msg, get_text_select_seat_future(ticket, now))
             return get_reply_text_xml(msg, get_text_select_seat(fromuser, ticket))
     else:
-        print 'haha'
         activities = Activity.objects.filter(status=1, end_time__gte=now)
         all_tickets = []
         for activity in activities:
