@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 import random
 import string
-import datetime
+from datetime import *
 from urlhandler.models import *
 from queryhandler.settings import QRCODE_URL
 from django.db.models import F
@@ -220,7 +220,7 @@ def book_ticket(user, key, now):
             group_index = booked_tickets / activity.group_size
             select_start = activity.select_start
             for i in xrange(group_index):
-                select_start += datetime.timedelta(0, activity.group_interval)
+                select_start += timedelta(0, activity.group_interval)
 
         if not tickets.exists():
             Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 1)
@@ -232,7 +232,7 @@ def book_ticket(user, key, now):
                 seat_status=activity.seat_status - 1,
                 seat=None,
                 select_start=select_start,
-                select_end=select_start + datetime.timedelta(0, activity.group_interval),
+                select_end=select_start + timedelta(0, activity.group_interval),
                 additional_ticket_id=-1
             )
             return ticket
@@ -243,7 +243,7 @@ def book_ticket(user, key, now):
             ticket.seat_status = activity.seat_status - 1
             ticket.seat = None,
             ticket.select_start = select_start,
-            ticket.select_end = select_start + datetime.timedelta(0, activity.group_interval)
+            ticket.select_end = select_start + timedelta(0, activity.group_interval)
             ticket.additional_ticket_id = -1
             ticket.save()
             return ticket
