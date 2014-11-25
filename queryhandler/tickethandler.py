@@ -215,12 +215,13 @@ def book_ticket(user, key, now):
         '''
 
         select_start = now
+        select_time_interval = time(0, activity.group_interval)
         if activity.seat_status == 1:
             booked_tickets = activity.total_tickets - activity.remain_tickets
             group_index = booked_tickets / activity.group_size
             select_start = activity.select_start
             for i in xrange(group_index):
-                select_start += activity.group_interval
+                select_start += select_time_interval
 
         if not tickets.exists():
             Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 1)
@@ -232,7 +233,7 @@ def book_ticket(user, key, now):
                 seat_status=activity.seat_status - 1,
                 seat=None,
                 select_start=select_start,
-                select_end=select_start + activity.group_interval
+                select_end=select_start + select_time_interval
             )
             return ticket
         elif tickets[0].status == 0:
