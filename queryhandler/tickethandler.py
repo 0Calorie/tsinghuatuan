@@ -1,4 +1,4 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import random
 import string
 import datetime
@@ -31,7 +31,7 @@ def get_reply_single_ticket(msg, ticket, now, ext_desc=''):
     ))
 
 
-#check user is authenticated or not
+# check user is authenticated or not
 def is_authenticated(openid):
     return get_user(openid) is not None
 
@@ -184,7 +184,8 @@ def response_book_ticket(msg):
 
 def book_ticket(user, key, now):
     with transaction.atomic():
-        activities = Activity.objects.select_for_update().filter(status=1, book_end__gte=now, book_start__lte=now, key=key)
+        activities = Activity.objects.select_for_update().filter(status=1, book_end__gte=now, book_start__lte=now,
+                                                                 key=key)
 
         if not activities.exists():
             return None
@@ -215,31 +216,31 @@ def book_ticket(user, key, now):
 
         select_start = now
         if activity.seat_status == 1:
-            booked_tickets = activity.total_tickets-activity.remain_tickets
-            group_index = booked_tickets/activity.group_size
-            select_start = activity.select_start+group_index*activity.group_interval
+            booked_tickets = activity.total_tickets - activity.remain_tickets
+            group_index = booked_tickets / activity.group_size
+            select_start = activity.select_start + group_index * activity.group_interval
 
         if not tickets.exists():
-            Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets')-1)
+            Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 1)
             ticket = Ticket.objects.create(
                 stu_id=user.stu_id,
                 activity=activity,
                 unique_id=random_string,
                 status=1,
-                seat_status=activity.seat_status-1,
-                seat=None,
-                select_start=select_start,
-                select_end=select_start+activity.group_interval
+                ##seat_status=activity.seat_status - 1,
+                ##seat=None,
+                ##select_start=select_start,
+                ##select_end=select_start + activity.group_interval
             )
             return ticket
         elif tickets[0].status == 0:
-            Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets')-1)
+            Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 1)
             ticket = tickets[0]
             ticket.status = 1
-            ticket.seat_status = activity.seat_status-1
+            ticket.seat_status = activity.seat_status - 1
             ticket.seat = None,
             ticket.select_start = select_start,
-            ticket.select_end = select_start+activity.group_interval
+            ticket.select_end = select_start + activity.group_interval
             ticket.save()
             return ticket
         else:
@@ -270,11 +271,11 @@ def response_cancel_ticket(msg):
         activity = activities[0]
         if activity.book_end >= now:
             tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1)
-            if tickets.exists():   # user has already booked the activity
+            if tickets.exists():  # user has already booked the activity
                 ticket = tickets[0]
                 ticket.status = 0
                 ticket.save()
-                Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets')+1)
+                Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') + 1)
                 return get_reply_text_xml(msg, get_text_success_cancel_ticket())
             else:
                 return get_reply_text_xml(msg, get_text_fail_cancel_ticket())
@@ -284,7 +285,7 @@ def response_cancel_ticket(msg):
 
 #check book event
 def check_book_event(msg):
-    if msg['MsgType'] == 'event' and msg['Event']=='CLICK':
+    if msg['MsgType'] == 'event' and msg['Event'] == 'CLICK':
         cmd_list = msg['EventKey'].split('_')
         if len(cmd_list) == 3:
             if cmd_list[0] == 'TSINGHUA' and cmd_list[1] == 'BOOK' and cmd_list[2].isdigit():
@@ -397,7 +398,7 @@ def response_xnlhwh(msg):
 
 
 def check_select_seat(msg):
-    return handler_check_text_header(msg, ['选座']) or handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_select_seat']])
+    return handler_check_text(msg, ['选座']) or handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_select_seat']])
 
 
 def response_select_seat(msg):
@@ -410,28 +411,29 @@ def response_select_seat(msg):
 
     if len(received_msg) > 1:
         key = received_msg[1]
-        activities = Activity.objects.filter(status=1, end_time__gte=now, key=key)#tempory 选择活动
-        if not activities.exists():         #活动不存在
+        activities = Activity.objects.filter(status=1, end_time__gte=now, key=key)  #tempory 选择活动
+        if not activities.exists():  #活动不存在
             return get_reply_text_xml(msg, get_text_no_such_activity(''))
         else:
             activity = activities[0]
-            tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status__gte=0)#tempory 查看是否抢到票
-            if not tickets.exists():        #没有抢到票
+            tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status__gte=0)  #tempory 查看是否抢到票
+            if not tickets.exists():  #没有抢到票
                 return get_reply_text_xml(msg, get_text_no_ticket_to_select_seat(activity))
-            if activity.seat_status == 0:    #活动不需要选座
+            if activity.seat_status == 0:  #活动不需要选座
                 return get_reply_text_xml(msg, get_text_no_need_to_select_seat())
             ticket = tickets[0]
-            if ticket.select_end < now:     #选座已结束
+            if ticket.select_end < now:  #选座已结束
                 seat = ticket.seat
                 return get_reply_text_xml(msg, get_text_select_seat_over(ticket, seat))
-            if ticket.select_start > now:   #选座未开始
+            if ticket.select_start > now:  #选座未开始
                 return get_reply_text_xml(msg, get_text_select_seat_future(ticket, now))
-            return get_reply_text_xml(msg, get_text_select_seat(fromuser,ticket))
+            return get_reply_text_xml(msg, get_text_select_seat(fromuser, ticket))
     else:
         activities = Activity.objects.filter(status=1, end_time__gte=now)
         all_tickets = []
         for activity in activities:
-            tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0, select_start__lt=now,select_end__gt=now)
+            tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0,
+                                            select_start__lt=now, select_end__gt=now)
         if tickets.exists():
             all_tickets.append(tickets[0])
 
