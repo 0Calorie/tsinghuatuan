@@ -28,7 +28,7 @@ class Activity(models.Model):
     menu_url = models.CharField(max_length=255, null=True)
     group_interval = models.DateTimeField()
     group_size = models.IntegerField()
-    select_start = models.DateField()
+    select_start = models.DateTimeField()
     # Something about status:
     # -1: deleted
     # 0: saved but not published
