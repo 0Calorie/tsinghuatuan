@@ -1,7 +1,8 @@
 # -*- coding:utf-8 -*-
 import random
 import string
-from datetime import *
+import datetime
+from datetime import timedelta
 from urlhandler.models import *
 from queryhandler.settings import QRCODE_URL
 from django.db.models import F
