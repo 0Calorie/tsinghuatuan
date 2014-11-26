@@ -392,6 +392,16 @@ def response_book_event(msg):
 
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
 
+    authorizations = Authorization.objects.select_for_update().filter(status=1, authorized_person_stu_id=user.stu_id)
+    if authorizations.exists():
+        authorization = authorizations[0]
+        if authorization.apply_time + authorization_duration < now:
+            authorization.status = 2
+            authorization.save()
+        if authorization.status == 1:
+            return get_reply_text_xml(msg,
+                                      get_text_already_authorized_can_not_book_ticket(authorization.authorizer_stu_id))
+
     cmd_list = get_msg_event_key(msg).split('_')
     activity_id = int(cmd_list[2])
     activities = Activity.objects.filter(id=activity_id, status=1, end_time__gt=now)
@@ -408,7 +418,16 @@ def response_book_event(msg):
         return get_reply_single_ticket(msg, tickets[0], now, get_text_existed_book_event())
     if activity.book_end < now:
         return get_reply_text_xml(msg, get_text_timeout_book_event())
-    ticket = book_ticket(user, activity.key, now)
+    authorizations = Authorization.objects.select_for_update().filter(status=1, authorizer_stu_id=user.stu_id)
+    auth = False
+    if authorizations.exists():
+        authorization = authorizations[0]
+        if authorization.apply_time + authorization_duration < now:
+            authorization.status = 2
+            authorization.save()
+        if authorization.status == 1:
+            auth = True
+    ticket = book_ticket(user, activity.key, now, auth)
     if ticket is None:
         return get_reply_text_xml(msg, get_text_fail_book_ticket(activities[0], now))
     else:
