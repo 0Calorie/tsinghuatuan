@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="{% static "css/chooseSeatBase.css"%}?_=4" rel="stylesheet" type="text/css" />
+    <title>清华紫荆之声</title>
+    <script src="{% static "lib/jquery/jquery-1.11.1.min.js" %}"></script>
+<!--<script>
+           var actID = {{id}};
+           var seatNum = {{ seatNum }};
+           var ticketNum = {{ticketNum}};
+           var allSeat = [
+               {% for seat in allSeat %}
+                  { 'floor' : {{seat.s_floor}},
+                    'column': {{seat.s_column}},
+                    'row' : {{seat.s_row}},
+                    'price': {{seat.s_price}},
+                    'state' :{{seat.s_status}},
+                    'place' : "{{seat.s_place}}",
+                  }{% if forloop.last %}{% else %},{% endif %}
+               {% endfor %}
+           ];
+           //座位所在地点
+           var place = "{{place}}";
+           $("#place")[0].innerText = "你有"+seatNum+"个座位可选~";
+           $("#aid").attr("value", actID);
+           $("#submitForm").attr("action", "/saveSeat/"+actID+"/");
+       </script>-->
+    <script src="{% static "js/userSelectSeat.js" %}"></script>
+    </head>
+<body>
+<div id="wrap">
+<header>
+        What do you want?
+</header>
+<hr/>
+<div id="mainbody">
+  <div id="mainContent" style="position:relative;width:100%;">
+    <div style="position:relative;margin-left: 20%;">
+      <div  id="selectRegion">
+          <div class = "regionSelectDiv" onclick="showSeat(1);">A区</div>
+          <div class = "regionSelectDiv" onclick="showSeat(2);">B区</div>
+          <div class = "regionSelectDiv" onclick="showSeat(3);">C区</div>
+      </div>
+    </div>
+    <div id="activityName"></div>
+  </div>
+  <div id="seat" style="display:none;position:absolute;width:100%;background-color: rgba(50,50,50,1);z-index:999;min-height:85%;">
+     <h2 id="place" style =" margin-top:5%; color: red; text-align:center;"></h2>
+  </div>
+  <div id="successHolder" style="display: none">
+      <img src="{% static "img/success.png" %}" />
+  </div>
+</div>
+
+</div>
+<footer id="footer">
+    <hr />
+    0Cal<br>
+    &copy; 2014
+</footer>
+</body>
+</html>
