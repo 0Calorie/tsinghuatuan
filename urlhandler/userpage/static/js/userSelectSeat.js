@@ -34,10 +34,11 @@ function showSeat(num) {
     var newTables = document.createElement('div');
     newTables.id = 'section';
     newTables.setAttribute('class', 'sectionDiv');
+    var toBeClone = document.getElementById('seat2');
     for (i = 0; i < row; i++) {
         var line = document.createElement('div');
         line.setAttribute('class', 'aRowOfSeats');
-            var a = document.createElement('div');
+            var a = toBeClone.cloneNode(true);
             a.innerHTML = (i + 1);
             a.setAttribute('class', 'rowHeader');
             $(line).append(a);
@@ -52,7 +53,6 @@ function showSeat(num) {
                         row: i + 1,
                         column: j + 1
                     });
-                    $(a).css("background", "url(/static/img/seat2.png) no-repeat center");
                     $(a).css("background-size", "contain");
                     $(a).css("text-align", "center");
 
@@ -170,6 +170,8 @@ function refreshIsHit() {
 
 function chooseSeat() {
     var theChosen = $(this.event.srcElement)[0];
+    var toBeClone_Empty = document.getElementById('seat3');
+    var toBeClone_Chosen = document.getElementById('seat2');
     if (chosenSeat != null) {
         chosenSeat.style.background = "url(/static/img/seat2.png) no-repeat center";
         chosenSeat.style.backgroundSize = "contain";
