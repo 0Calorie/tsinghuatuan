@@ -81,11 +81,12 @@ class Ticket(models.Model):
     # 0: ticket order is cancelled
     # 1: ticket order is valid
     # 2: ticket is used
-    # Something about status
+    # Something about seat_status
     # -1: no seat
     # 0: have not yet selected seat
     # 1: have selected seat
     # Something about additional_ticket_id
+    # -2: is additional ticket
     # -1: no additional ticket
     # else: additional ticket id
 

@@ -347,5 +347,10 @@ def get_text_can_not_authorize_yourself():
 def get_text_check_authorization(stu_id):
     return '你好，你“约”的对象是'+stu_id
 
+
 def get_text_no_check_authorization():
     return '你好，目前你没有“约”'
+
+
+def get_text_already_authorized_can_not_book_ticket(stu_id):
+    return '对不起，你已经和'+stu_id+'“约约约”了，不能进行抢票\n'+stu_id+'会帮你抢票的哟'

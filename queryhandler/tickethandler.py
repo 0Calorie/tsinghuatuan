@@ -58,7 +58,7 @@ def check_bookable_activities(msg):
     return handler_check_text(msg, ['抢啥']) or handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_book_what']])
 
 
-#get bookable activities
+# get bookable activities
 def response_bookable_activities(msg):
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
     activities_book_not_end = Activity.objects.filter(status=1, book_end__gte=now).order_by('book_start')
@@ -91,7 +91,7 @@ def check_exam_tickets(msg):
     return handler_check_text(msg, ['查票']) or handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_get']])
 
 
-#get list of tickets
+# get list of tickets
 def response_exam_tickets(msg):
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
@@ -167,8 +167,15 @@ def response_book_ticket(msg):
         return get_reply_text_xml(msg, get_text_usage_book_ticket())
 
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
-    ##authorizations = Authorization.objects.select_for_update.filter(status=1, authorized_person_stu_id=user.stu_id)
-
+    authorizations = Authorization.objects.select_for_update.filter(status=1, authorized_person_stu_id=user.stu_id)
+    if authorizations.exists():
+        authorization = authorizations[0]
+        if authorization.apply_time + authorization_duration < now:
+            authorization.status = 2
+            authorization.save()
+        if authorization.status == 1:
+            return get_reply_text_xml(msg,
+                                      get_text_already_authorized_can_not_book_ticket(authorization.authorizer_stu_id))
 
     activities = Activity.objects.filter(status=1, book_end__gte=now, book_start__lte=now, key=key)
     if not activities.exists():
@@ -180,14 +187,23 @@ def response_book_ticket(msg):
         tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activities[0], status__gt=0)
         if tickets.exists():
             return get_reply_text_xml(msg, get_text_existed_book_ticket(tickets[0]))
-        ticket = book_ticket(user, key, now)
+        authorizations = Authorization.objects.select_for_update.filter(status=1, authorizer_stu_id=user.stu_id)
+        auth = False
+        if authorizations.exists():
+            authorization = authorizations[0]
+            if authorization.apply_time + authorization_duration < now:
+                authorization.status = 2
+                authorization.save()
+            if authorization.status == 1:
+                auth = True
+        ticket = book_ticket(user, key, now, auth)
         if ticket is None:
             return get_reply_text_xml(msg, get_text_fail_book_ticket(activities[0], now))
         else:
             return get_reply_single_ticket(msg, ticket, now, get_text_success_book_ticket(ticket))
 
 
-def book_ticket(user, key, now):
+def book_ticket(user, key, now, auth):
     with transaction.atomic():
         activities = Activity.objects.select_for_update().filter(status=1, book_end__gte=now, book_start__lte=now,
                                                                  key=key)
@@ -200,11 +216,15 @@ def book_ticket(user, key, now):
         if activity.remain_tickets <= 0:
             return None
 
+        if auth and activity.remain_tickets <= 1:
+            return None
+
         random_string = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
         while Ticket.objects.filter(unique_id=random_string).exists():
             random_string = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
 
-        tickets = Ticket.objects.select_for_update().filter(stu_id=user.stu_id, activity=activity)
+        tickets = Ticket.objects.select_for_update().filter(stu_id=user.stu_id, activity=activity,
+                                                            additinal_ticket_id__gt=-2)
         if tickets.exists() and tickets[0].status != 0:
             return None
 
@@ -228,30 +248,82 @@ def book_ticket(user, key, now):
                 select_start += timedelta(0, activity.group_interval)
 
         if not tickets.exists():
-            Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 1)
-            ticket = Ticket.objects.create(
-                stu_id=user.stu_id,
-                activity=activity,
-                unique_id=random_string,
-                status=1,
-                seat_status=activity.seat_status - 1,
-                seat=None,
-                select_start=select_start,
-                select_end=select_start + timedelta(0, activity.group_interval),
-                additional_ticket_id=-1
-            )
-            return ticket
+            if not auth:
+                Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 1)
+                ticket = Ticket.objects.create(
+                    stu_id=user.stu_id,
+                    activity=activity,
+                    unique_id=random_string,
+                    status=1,
+                    seat_status=activity.seat_status - 1,
+                    seat=None,
+                    select_start=select_start,
+                    select_end=select_start + timedelta(0, activity.group_interval),
+                    additional_ticket_id=-1
+                )
+                return ticket
+            else:
+                Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 2)
+                ticket1 = Ticket.objects.create(
+                    stu_id=user.stu_id,
+                    activity=activity,
+                    unique_id=random_string,
+                    status=1,
+                    seat_status=activity.seat_status - 1,
+                    seat=None,
+                    select_start=select_start,
+                    select_end=select_start + timedelta(0, activity.group_interval),
+                    additional_ticket_id=-2
+                )
+                random_string2 = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+                while Ticket.objects.filter(unique_id=random_string2).exists():
+                    random_string2 = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
+                ticket2 = Ticket.objects.create(
+                    stu_id=user.stu_id,
+                    activity=activity,
+                    unique_id=random_string2,
+                    status=1,
+                    seat_status=activity.seat_status - 1,
+                    seat=None,
+                    select_start=select_start,
+                    select_end=select_start + timedelta(0, activity.group_interval),
+                    additional_ticket_id=ticket1.id
+                )
+                return ticket2
         elif tickets[0].status == 0:
-            Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 1)
-            ticket = tickets[0]
-            ticket.status = 1
-            ticket.seat_status = activity.seat_status - 1
-            ticket.seat = None
-            ticket.select_start = select_start
-            ticket.select_end = select_start + timedelta(0, activity.group_interval)
-            ticket.additional_ticket_id = -1
-            ticket.save()
-            return ticket
+            if not auth:
+                Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 1)
+                ticket = tickets[0]
+                ticket.status = 1
+                ticket.seat_status = activity.seat_status - 1
+                ticket.seat = None
+                ticket.select_start = select_start
+                ticket.select_end = select_start + timedelta(0, activity.group_interval)
+                ticket.additional_ticket_id = -1
+                ticket.save()
+                return ticket
+            else:
+                Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') - 2)
+                ticket1 = Ticket.objects.create(
+                    stu_id=user.stu_id,
+                    activity=activity,
+                    unique_id=random_string,
+                    status=1,
+                    seat_status=activity.seat_status - 1,
+                    seat=None,
+                    select_start=select_start,
+                    select_end=select_start + timedelta(0, activity.group_interval),
+                    additional_ticket_id=-2
+                )
+                ticket = tickets[0]
+                ticket.status = 1
+                ticket.seat_status = activity.seat_status - 1
+                ticket.seat = None
+                ticket.select_start = select_start
+                ticket.select_end = select_start + timedelta(0, activity.group_interval)
+                ticket.additional_ticket_id = ticket1.id
+                ticket.save()
+                return ticket
         else:
             return None
 
@@ -281,10 +353,10 @@ def response_cancel_ticket(msg):
         if activity.book_end >= now:
             tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1)
             if tickets.exists():  # user has already booked the activity
-                ticket = tickets[0]
-                ticket.status = 0
-                ticket.save()
-                Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') + 1)
+                for ticket in tickets:
+                    ticket.status = 0
+                    ticket.save()
+                    Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') + 1)
                 return get_reply_text_xml(msg, get_text_success_cancel_ticket())
             else:
                 return get_reply_text_xml(msg, get_text_fail_cancel_ticket())
@@ -446,7 +518,7 @@ def response_select_seat(msg):
         all_tickets = []
         for activity in activities:
             tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0,
-                                            select_start__lt=now, select_end__gt=now)
+                                            select_start__lt=now, select_end__gt=now, additonal_ticket_id__gt=-2)
             if tickets.exists():
                 all_tickets.append(tickets[0])
 
@@ -545,7 +617,7 @@ def response_accept_authorization(msg):
         if not m:
             return get_reply_text_xml(msg, get_text_invalid_receive_authorization())
         authorizations = Authorization.objects.filter(authorizer_stu_id=key,
-                                                     authorized_person_stu_id=user.stu_id, status=0)
+                                                      authorized_person_stu_id=user.stu_id, status=0)
         if not authorizations.exists():  #查看委托请求是否已经发出
             return get_reply_text_xml(msg, get_text_no_authorization(key))
         else:
@@ -609,11 +681,10 @@ def response_accept_authorization(msg):
 
 
 def check_cancel_authorization(msg):
-    return handler_check_text(msg,['不约'])
+    return handler_check_text(msg, ['不约'])
 
 
 def response_cancel_authorization(msg):
-
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
@@ -626,23 +697,23 @@ def response_cancel_authorization(msg):
         authorizer = authorizers[0]
         authorizer.status = 2
         authorizer.save()
-        return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorizer.authorized_person_stu_id))
+        return get_reply_text_xml(msg, get_text_cancel_authorization_success(authorizer.authorized_person_stu_id))
     else:
         authorizeds = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
         if authorizeds.exists():
             authorized = authorizeds[0]
             authorized.status = 2
             authorized.save()
-            return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorized.authorizer_stu_id))
+            return get_reply_text_xml(msg, get_text_cancel_authorization_success(authorized.authorizer_stu_id))
         else:
-            return get_reply_text_xml(msg,get_text_cancel_no_authorization())
+            return get_reply_text_xml(msg, get_text_cancel_no_authorization())
 
 
 def check_check_authorization(msg):
-    return handler_check_text(msg,['约谁'])
+    return handler_check_text(msg, ['约谁'])
+
 
 def response_check_authorization(msg):
-
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
@@ -650,10 +721,10 @@ def response_check_authorization(msg):
 
     authorizers = Authorization.objects.select_for_update().filter(authorizer_stu_id=user.stu_id, status=1)
     if authorizers.exists():
-        return get_reply_text_xml(msg,get_text_check_authorization(authorizers[0].authorized_person_stu_id))
+        return get_reply_text_xml(msg, get_text_check_authorization(authorizers[0].authorized_person_stu_id))
     else:
         authorizeds = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
         if authorizeds.exists():
-            return get_reply_text_xml(msg,get_text_check_authorization(authorizeds[0].authorizer_stu_id))
+            return get_reply_text_xml(msg, get_text_check_authorization(authorizeds[0].authorizer_stu_id))
         else:
-            return get_reply_text_xml(msg,get_text_no_check_authorization())
+            return get_reply_text_xml(msg, get_text_no_check_authorization())
