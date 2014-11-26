@@ -552,7 +552,7 @@ def response_select_seat(msg):
         all_tickets = []
         for activity in activities:
             tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1, seat_status=0,
-                                            select_start__lt=now, select_end__gt=now, additonal_ticket_id__gt=-2)
+                                            select_start__lt=now, select_end__gt=now, additional_ticket_id__gt=-2)
             if tickets.exists():
                 all_tickets.append(tickets[0])
 
