@@ -454,7 +454,7 @@ def response_select_seat(msg):
 
 
 def check_authorize(msg):
-    return handler_check_text_header(msg, ['授权'])
+    return handler_check_text_header(msg, ['约吗'])
 
 
 authorization_duration = timedelta(10)
@@ -521,7 +521,7 @@ def response_authorize(msg):
 
 
 def check_accept_authorization(msg):
-    return handler_check_text_header(msg, ['接受'])
+    return handler_check_text_header(msg, ['约约约'])
 
 
 def response_accept_authorization(msg):
@@ -541,7 +541,7 @@ def response_accept_authorization(msg):
         authorizations = Authorization.objects.filter(authorizer_stu_id=key,
                                                      authorized_person_stu_id=user.stu_id, status=0)
         if not authorizations.exists():  #查看委托请求是否已经发出
-            return get_reply_text_xml(msg, get_text_no_authorization())
+            return get_reply_text_xml(msg, get_text_no_authorization(key))
         else:
             authorization = authorizations[0]
             valid_time = authorization.apply_time + timedelta(0, 3600)

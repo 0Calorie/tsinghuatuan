@@ -291,42 +291,42 @@ def get_text_unbinded_authorize(openid):
 
 
 def get_text_usage_authorize():
-    return '您好，格式不正确！请输入“授权 被授权人学号”。\n如：“授权 2012011000”'
+    return '您好，格式不正确！请输入“约吗 被授权人学号”。\n如：“约吗 2012011000”'
 
 
 def get_text_unable_to_authorize():
-    return '你好，你已有授权关系，现在不能申请授权:('
+    return '对不起，你已经有约啦，不能再约另一个:('
 
 
 def get_text_authorization_update_time(stu_id, invalid_time):
-    response = '你好，你与' + stu_id + "原来已有授权关系，现已为你更新授权关系\n" + '授权关系将在' + get_text_time_standard(
+    response = '你好，你已经与' + stu_id + "约过，现已为你更新“约”的失效时间\n" + '你们的“约”将在' + get_text_time_standard(
         invalid_time) + '或第一次成功抢票后失效'
     return response
 
 
 def get_text_apply_authorization(stu_id):
-    return '你好，你已成功申请授权\n'+'授权将在'+stu_id+'回复“接受 你的学号”后生效'
+    return '你好，你已成功申请与'+stu_id+'的“约”\n'+'你们的“约”将在'+stu_id+'回复“约约约 你的学号”后生效\n'+'请在一个小时内回复“约约约”，否则这个“约”将失效'
 
 
-def get_text_no_authorization():
-    return '你好，该委托不存在'
+def get_text_no_authorization(stu_id):
+    return '你好，你想多了，'+stu_id+'根本没有约你'
 
 
 def get_text_authorization_timeout():
-    return '你好，该委托请求已经超时'
+    return '你好，该“约”的请求已经超时'
 
 
 def get_text_already_authorization():
-    return '你好，你尚有有效委托，接受委托失败'
+    return '你好，你现在有别的“约”，“约约约”失败'
 
 
 def get_text_request_already_authorization():
-    return '你好，对方已有有效委托，接受委托失败'
+    return '你好，对方已经由别的“约”了，“约约约”失败'
 
 
 def get_text_authorization_success():
-    return '恭喜您，接受委托成功'
+    return '恭喜您，“约约约”成功'
 
 
 def get_text_invalid_receive_authorization():
-    return '你好，格式不正确，请输入“接受 对方学号”。\n如：“接受 2012012333”'
+    return '你好，格式不正确，请输入“约约约 对方学号”。\n如：“约约约 2012012333”'
