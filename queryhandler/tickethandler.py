@@ -167,7 +167,7 @@ def response_book_ticket(msg):
         return get_reply_text_xml(msg, get_text_usage_book_ticket())
 
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
-    authorizations = Authorization.objects.select_for_update.filter(status=1, authorized_person_stu_id=user.stu_id)
+    authorizations = Authorization.objects.select_for_update().filter(status=1, authorized_person_stu_id=user.stu_id)
     if authorizations.exists():
         authorization = authorizations[0]
         if authorization.apply_time + authorization_duration < now:
@@ -187,7 +187,7 @@ def response_book_ticket(msg):
         tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activities[0], status__gt=0)
         if tickets.exists():
             return get_reply_text_xml(msg, get_text_existed_book_ticket(tickets[0]))
-        authorizations = Authorization.objects.select_for_update.filter(status=1, authorizer_stu_id=user.stu_id)
+        authorizations = Authorization.objects.select_for_update().filter(status=1, authorizer_stu_id=user.stu_id)
         auth = False
         if authorizations.exists():
             authorization = authorizations[0]
@@ -201,7 +201,7 @@ def response_book_ticket(msg):
             return get_reply_text_xml(msg, get_text_fail_book_ticket(activities[0], now))
         else:
             if auth:
-                authorizations = Authorization.objects.select_for_update.filter(status=1, authorizer_stu_id=user.stu_id)
+                authorizations = Authorization.objects.select_for_update().filter(status=1, authorizer_stu_id=user.stu_id)
                 authorization = authorizations[0]
                 authorization.status = 2
                 authorization.save()
