@@ -35,7 +35,7 @@
                         row:i/2+1,
                         column:j/2+1
                     });
-                    $(a).css("background","url(/static/img/seat-default.png) no-repeat");
+                    $(a).css("background","url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat");
                     $(a).css("background-size","contain");
                     }
                     else if(i==2&&(j==5||j==13))
