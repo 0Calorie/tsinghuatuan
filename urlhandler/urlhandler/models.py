@@ -37,7 +37,7 @@ class Activity(models.Model):
     # 1: published
     # Something about seat_status:
     # 0: no seat
-    # 1: require to select seat
+    # else: place 
 
 
 class Seat(models.Model):
