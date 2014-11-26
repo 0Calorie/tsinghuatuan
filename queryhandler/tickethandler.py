@@ -229,7 +229,7 @@ def book_ticket(user, key, now, auth):
             random_string = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(32)])
 
         tickets = Ticket.objects.select_for_update().filter(stu_id=user.stu_id, activity=activity,
-                                                            additinal_ticket_id__gt=-2)
+                                                            additional_ticket_id__gt=-2)
         if tickets.exists() and tickets[0].status != 0:
             return None
 
