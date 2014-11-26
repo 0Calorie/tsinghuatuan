@@ -431,7 +431,12 @@ def response_book_event(msg):
     if ticket is None:
         return get_reply_text_xml(msg, get_text_fail_book_ticket(activities[0], now))
     else:
-        return get_reply_single_ticket(msg, ticket, now, get_text_success_book_ticket())
+        if auth:
+                authorizations = Authorization.objects.select_for_update().filter(status=1, authorizer_stu_id=user.stu_id)
+                authorization = authorizations[0]
+                authorization.status = 2
+                authorization.save()
+        return get_reply_single_ticket(msg, ticket, now, get_text_success_book_ticket(ticket))
 
 
 #check unsubscribe event
