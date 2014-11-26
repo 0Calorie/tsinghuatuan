@@ -77,6 +77,17 @@ class Ticket(models.Model):
     # else: additional ticket id
 
 
+class Authorization(models.Model):
+    authorizer_stu_id = models.IntegerField()
+    authorized_person_stu_id = models.IntegerField()
+    status = models.IntegerField()
+    apply_time = models.DateTimeField()
+    # Something about status
+    # 0: authorization is applied but not accepted
+    # 1: authorization is valid
+    # 2: authorization is invalid
+
+
 '''
 class UserSession(models.Model):
     stu_id = models.CharField(max_length=255)
