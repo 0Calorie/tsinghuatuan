@@ -602,6 +602,11 @@ def response_accept_authorization(msg):
         return get_reply_text_xml(msg, get_text_invalid_receive_authorization())  #命令格式不正确
 
 
+def check_cancel_authorization(msg):
+    return handler_check_text(msg,['不约'])
+
+
+
 def response_cancel_authorization(msg):
 
     fromuser = get_msg_from(msg)
