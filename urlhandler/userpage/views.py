@@ -183,7 +183,7 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
 
     return 'Valid'
 
-def chooseSeat_view(request, openid, uid):
+def choose_seat_view(request, openid, uid):
     isValid = 'Valid'
     # has been validated?
     if User.objects.filter(weixin_id=weixinOpenID, status=1).exists():
