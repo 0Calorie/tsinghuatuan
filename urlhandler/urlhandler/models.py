@@ -78,8 +78,8 @@ class Ticket(models.Model):
 
 
 class Authorization(models.Model):
-    authorizer_stu_id = models.IntegerField()
-    authorized_person_stu_id = models.IntegerField()
+    authorizer_stu_id = models.CharField(max_length=255)
+    authorized_person_stu_id = models.CharField(max_length=255)
     status = models.IntegerField()
     apply_time = models.DateTimeField()
     # Something about status
