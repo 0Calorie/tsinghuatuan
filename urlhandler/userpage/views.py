@@ -3,12 +3,12 @@
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from urlhandler.models import User, Activity, Ticket
+from urlhandler.models import User, Activity, Ticket#, Seat
 from urlhandler.settings import STATIC_URL
 import urllib, urllib2, json
 import datetime
 from django.utils import timezone
-
+from django.forms.models import model_to_dict
 
 def home(request):
     return render_to_response('mobile_base.html')
@@ -62,7 +62,6 @@ def validate_through_learn(userid, userpass):
 def validate_through_student(userid, userpass):
     return 'Error'
 
-
 def validate_post(request):
     if (not request.POST) or (not 'openid' in request.POST) or \
             (not 'username' in request.POST) or (not 'password' in request.POST):
@@ -95,6 +94,9 @@ def validate_post(request):
                 return HttpResponse('Error')
     return HttpResponse(validate_result)
 
+# Starting from here (plus validation_view above), is the new version of validation system.
+# The main difference is that the website used for validation was changed from learn.tsinghua.edu.cn to auth.igeek.asia
+# and this lead to changes of implementation details.
 def validate_getTime(request):
     req = urllib2.Request(url = "http://auth.igeek.asia/v1/time")
     response = urllib2.urlopen(req)
@@ -147,6 +149,138 @@ def validation_addNewbieToDataBase(weixinOpenID, studentID):
         except:
             return 'Error_DB3'
     return 'Accepted'
+
+def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
+    # has been validated?
+    if not(User.objects.filter(weixin_id=weixinOpenID, status=1).exists()):
+        return 'Not_Validated'
+    else:
+        currentUser = User.objects.get(weixin_id=weixinOpenID, status=1)
+
+    # has ticket? if objects.get get nothing, will itsTickets be null or an exception will be raised ?
+    if not (Ticket.objects.filter(StudentID=currentUser.stu_id, activity=activityID).exists()):
+        return 'No_Ticket'
+    else:
+        try:
+            itsTickets = Ticket.objects.get(studentID = currentUser.stu_id, activity=activityID);
+        except:
+            return 'Error_DB1'
+
+    # check if this activity allow seats choosing
+    try:
+        theActivity = Activity.objects.get(id = activityID)
+    except:
+        return 'Error_DB2'
+    if theActivity.seat_status != 1:
+        return 'No_Seat_Choosing'
+
+    # can that ticket choose its seat now?
+    if (itsTickets.select_start > datetime.datetime.now() or itsTickets[0].select_end < datetime.datetime.now()):
+        return 'Not_Now'
+    # has this ticket choose its seat before
+    if itsTickets.seat != None:
+        return 'Has_Chosen'
+
+    return 'Valid'
+
+def chooseSeat_view(request):#(request, weixinOpenID, activityID):
+    return render_to_response('userSelectSeat.html')
+    isValid = 'Valid'
+    # has been validated?
+    if User.objects.filter(weixin_id=weixinOpenID, status=1).exists():
+        try:
+            currentUser = User.objects.get(weixin_id=weixinOpenID)
+        except:
+            return render_to_response('mobile_base.html')#should return error page
+    else:
+        return render_to_response('mobile_base.html')
+
+    # has ticket? if objects.get get nothing, will itsTickets be null or an exception will be raised ?
+    if Ticket.objects.filter(StudentID=currentUser.stu_id, activity=activityID).exists():
+        try:
+            itsTickets = Ticket.objects.get(studentID = currentUser.stu_id, activity=activityID)
+        except:
+            return render_to_response('mobile_base.html')
+    else:
+        return render_to_response('mobile_base.html')
+
+    # check if this activity allow seats choosing. if yes, then get activity's seat picture
+    try:
+        theActivity = Activity.objects.get(id = activityID)
+    except:
+        return render_to_response('mobile_base.html')
+    if theActivity.seat_status != 1:
+        return render_to_response('mobile_base.html')
+
+    # can that ticket choose its seat now?  has this ticket choose its seat before?
+    if (itsTickets.select_start > datetime.datetime.now() or itsTickets.select_end < datetime.datetime.now()):
+        isValid = 'Not_Now'
+    if itsTickets.seat_status != None:
+        isValid = 'Has_Chosen'
+    ticketPack = dict()
+    ticketPack['ticketID'] = itsTickets.unique_id
+    ticketPack['numOfSeatToChoose'] = itsTickets.additional_ticket_id
+
+
+    # get current seat status
+    seats = []
+    seatmodels = Seat.objects.filter(s_activity_id = activityID)
+    for seat in seatmodels:
+        seats += [model_to_dict(seat)]
+    seatNum = len(seatmodels)
+    seatPack = dict()
+    seatPack['seatNum'] = seatNum
+    seatPack['seats'] = seats
+
+    return render_to_response('userSelectSeat.html', {
+        'validity' : isValid,
+        'activityID' : activityID,
+        'ticketPack' : ticketPack,
+        'seatPack' : seatPack
+    }, context_instance=RequestContext(request))
+
+    ## remember to check everything did above whatever the requested action is!!!
+
+def chooseSeat_confirmIsHit(request, weixinOpenID, activityID, ticketID, seatRow, seatColumn):
+    #check validity
+    validityStatus = chooseSeat_standardValidationChecker(weixinOpenID, activityID)
+    if validityStatus != 'Valid':
+        return HttpResponse('Error_Validity')
+
+    try:
+        theTicket = Ticket.objects.get(unique_id = ticketID)
+    except:
+        return HttpResponse('No_Such_Ticket')
+
+    try:
+        theSeat = Seat.objects.get(activity = activityID, seat_row = seatRow, seat_column = seatColumn)
+    except:
+        return HttpResponse('Error_DB1')
+    if theSeat.status != 0:
+        return HttpResponse('Selected')
+
+    try:
+        Seat.objects.filter(activity = activityID, seat_row = seatRow, seat_column = seatColumn).update(status = 2)
+        Ticket.objects.get(unique_id = ticketID).update(seat = theSeat)
+    except:
+        return HttpResponse('Error_DB2')
+    return HttpResponse('OK')
+
+def chooseSeat_refreshIsHit(request, weixinOpenID, activityID):
+    # check validity
+    validityStatus = chooseSeat_standardValidationChecker(weixinOpenID, activityID)
+    if validityStatus != 'Valid':
+        return HttpResponse('Error_Validity')
+
+    seats = []
+    seatmodels = Seat.objects.filter(s_activity_id = activityID)
+    for seat in seatmodels:
+        seats += [model_to_dict(seat)]
+    seatNum = len(seatmodels)
+    seatPack = dict()
+    seatPack['seatNum'] = seatNum
+    seatPack['seats'] = seats
+    return HttpResponse(seatPack)
 
 ###################### Activity Detail ######################
 
