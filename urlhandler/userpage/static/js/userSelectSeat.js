@@ -1,4 +1,3 @@
-{% load staticfiles %}
 var price = new Array(20,40,60);
 var priceColor = new Array("url(/static/img/seat1.png) no-repeat","url(/static/img/seat3.png) no-repeat","url(/static/img/seat4.png) no-repeat");
 var defaultSeat = "url(/static/img/seat-default.png) no-repeat";
@@ -52,7 +51,7 @@ function showSeat(num) {
                         price: 0,
                         row: i + 1,
                         column: j + 1
-                    });"{% static "
+                    });
                     $(a).css("background", "url(/static/img/seat2.png) no-repeat center");
                     $(a).css("background-size", "contain");
                     $(a).css("text-align", "center");
