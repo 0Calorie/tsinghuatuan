@@ -9,6 +9,7 @@ class User(models.Model):
     status = models.IntegerField()
     seed = models.FloatField(default=1024)
 
+
 class Activity(models.Model):
     name = models.CharField(max_length=255)
     key = models.CharField(max_length=255)
@@ -19,17 +20,17 @@ class Activity(models.Model):
     place_url = models.CharField(max_length=255)
     book_start = models.DateTimeField()
     book_end = models.DateTimeField()
-    select_start= models.DateTimeField(null = True)
-    select_end = models.DateTimeField(null = True)
+    select_start= models.DateTimeField(null=True)
+    select_end = models.DateTimeField(null=True)
     seat_status = models.IntegerField(default=0)
-    total_tickets = models.IntegerField(default = 0)
-    status = models.IntegerField(default = 0)
+    total_tickets = models.IntegerField(default=0)
+    status = models.IntegerField(default=0)
     pic_url = models.CharField(max_length=255)
     remain_tickets = models.IntegerField()
     menu_url = models.CharField(max_length=255, null=True)
     group_interval = models.IntegerField()
-    group_size = models.IntegerField(default = 0, null = True)
-    total_price = models.CharField(max_length=255,null = True)
+    group_size = models.IntegerField(default=0, null=True)
+    total_price = models.CharField(max_length=255, null=True)
     # Something about status:
     # -1: deleted
     # 0: saved but not published
@@ -37,6 +38,7 @@ class Activity(models.Model):
     # Something about seat_status:
     # 0: no seat
     # 1: require to select seat
+
 
 class Seat(models.Model):
     activity = models.ForeignKey(Activity)
@@ -64,6 +66,7 @@ class Seat(models.Model):
     s_column = models.IntegerField()
 '''
 
+
 class Ticket(models.Model):
     stu_id = models.CharField(max_length=255)
     unique_id = models.CharField(max_length=255)
@@ -71,8 +74,8 @@ class Ticket(models.Model):
     status = models.IntegerField()
     seat_status = models.IntegerField()
     seat = models.ForeignKey(Seat)
-    select_start = models.DateField()
-    select_end = models.DateField()
+    select_start = models.DateTimeField()
+    select_end = models.DateTimeField()
     additional_ticket_id = models.IntegerField()
     # Something about status
     # 0: ticket order is cancelled
@@ -85,3 +88,14 @@ class Ticket(models.Model):
     # Something about additional_ticket_id
     # -1: no additional ticket
     # else: additional ticket id
+
+
+class Authorization(models.Model):
+    authorizer_stu_id = models.CharField(max_length=255)
+    authorized_person_stu_id = models.CharField(max_length=255)
+    status = models.IntegerField()
+    apply_time = models.DateTimeField()
+    # Something about status
+    # 0: authorization is applied but not accepted
+    # 1: authorization is valid
+    # 2: authorization is invalid
