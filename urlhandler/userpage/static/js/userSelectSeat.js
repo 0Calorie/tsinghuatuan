@@ -53,6 +53,7 @@ function showSeat(num) {
                         row: i + 1,
                         column: j + 1
                     });
+                    $(a).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat center")
                     $(a).css("background-size", "contain");
                     $(a).css("text-align", "center");
 
@@ -173,10 +174,10 @@ function chooseSeat() {
     var toBeClone_Empty = document.getElementById('seat3');
     var toBeClone_Chosen = document.getElementById('seat2');
     if (chosenSeat != null) {
-        chosenSeat.style.background = "url(/static/img/seat2.png) no-repeat center";
+        chosenSeat.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat center";
         chosenSeat.style.backgroundSize = "contain";
     }
-    theChosen.style.background = "url(/static/img/seat3.png) no-repeat center";
+    theChosen.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat3.png) no-repeat center";
     theChosen.style.backgroundSize = "contain";
     chosenSeat = theChosen;
     chosenSeatID = theChosen.id;
@@ -195,7 +196,7 @@ function layer2()
         $("#"+id).attr("status", status);
         if(status!=0)
         {
-            $("#"+id).css("background-color", "red");
+            $("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
         }       
     }
 }

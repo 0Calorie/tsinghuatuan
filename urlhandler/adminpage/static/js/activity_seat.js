@@ -91,13 +91,13 @@ $('#firstfloor').append(tables);
 
 
 //var price = new Array(0,40,60,80,100,120);
-var priceColor = new Array("url(/static/img/seat1.png) no-repeat",
-                           "url(/static/img/seat3.png) no-repeat",
-                           "url(/static/img/seat4.png) no-repeat",
-                           "url(/static/img/seat5.png) no-repeat",
-                           "url(/static/img/seat6.png) no-repeat",
-                           "url(/static/img/seat7.png) no-repeat");
-var defaultSeat = "url(/static/img/seat-default.png) no-repeat";
+var priceColor = new Array("url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat1.png) no-repeat",
+                           "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat3.png) no-repeat",
+                           "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat",
+                           "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat5.png) no-repeat",
+                           "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat6.png) no-repeat",
+                           "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat7.png) no-repeat");
+var defaultSeat = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat";
 $("#selectPrice").ready(function() {
     var tr = document.createElement('tr');
     for(var i=0;i<price.length;i++)
