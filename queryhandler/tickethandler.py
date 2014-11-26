@@ -2,6 +2,7 @@
 import random
 import string
 import datetime
+import re
 from datetime import timedelta
 from urlhandler.models import *
 from queryhandler.settings import QRCODE_URL
@@ -43,7 +44,7 @@ def check_help_or_subscribe(msg):
         WEIXIN_EVENT_KEYS['help']]) or handler_check_events(msg, ['scan', 'subscribe'])
 
 
-#get help information
+# get help information
 def response_help_or_subscribe_response(msg):
     return get_reply_single_news_xml(msg, get_item_dict(
         title=get_text_help_title(),
@@ -52,7 +53,7 @@ def response_help_or_subscribe_response(msg):
     ))
 
 
-#check book command
+# check book command
 def check_bookable_activities(msg):
     return handler_check_text(msg, ['抢啥']) or handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_book_what']])
 
@@ -450,3 +451,151 @@ def response_select_seat(msg):
             return get_reply_text_xml(msg, get_text_no_ticket_need_select_seat())
         else:
             return get_reply_text_xml(msg, get_text_show_all_seat_selection(fromuser, all_tickets))
+
+
+def check_authorize(msg):
+    return handler_check_text_header(msg, ['授权'])
+
+
+authorization_duration = timedelta(10)
+
+
+def response_authorize(msg):
+    fromuser = get_msg_from(msg)
+    user = get_user(fromuser)
+    if user is None:
+        return get_reply_text_xml(msg, get_text_unbinded_authorize(fromuser))
+
+    received_msg = get_msg_content(msg).split()
+    if len(received_msg) > 1:
+        key = received_msg[1]
+    else:
+        return get_reply_text_xml(msg, get_text_usage_authorize())
+
+    m = re.match(r'\d{10}$', key)
+    if not m:
+        return get_reply_text_xml(msg, get_text_usage_authorize())
+
+    now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
+
+    able_to_authorize = True
+
+    authorizations = Authorization.objects.select_for_update().filter(authorizer_stu_id=user.stu_id)
+    for authorization in authorizations:
+        if authorization.apply_time + authorization_duration < now:
+            authorization.status = 2
+            authorization.save()
+        if authorization.status == 1 and authorization.authorized_person_stu_id != key:
+            able_to_authorize = False
+
+    authorizations = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id)
+    for authorization in authorizations:
+        if authorization.apply_time + authorization_duration < now:
+            authorization.status = 2
+            authorization.save()
+        if authorization.status == 1:
+            able_to_authorize = False
+
+    if not able_to_authorize:
+        return get_reply_text_xml(msg, get_text_unable_to_authorize())
+    else:
+        authorizations = Authorization.objects.select_for_update().filter(authorized_person_stu_id=key,
+                                                                          authorizer_stu_id=user.stu_id)
+        if not authorizations.exists():
+            authorization = Authorization.objects.create(
+                authorizer_stu_id=user.stu_id,
+                authorized_person_stu_id=key,
+                status=0,
+                apply_time=now
+            )
+            return get_reply_text_xml(msg, get_text_apply_authorization(key))
+        else:
+            authorization = authorizations[0]
+            if authorization.status == 1:
+                authorization.apply_time = now
+                return get_reply_text_xml(msg, get_text_authorization_update_time(key, now + authorization_duration))
+            else:
+                authorization.status = 0
+                authorization.apply_time = now
+                return get_reply_text_xml(msg, get_text_apply_authorization(key))
+
+
+def check_accept_authorization(msg):
+    return handler_check_text_header(msg, ['接受'])
+
+
+def response_accept_authorization(msg):
+    fromuser = get_msg_from(msg)
+    user = get_user(fromuser)
+    if user is None:
+        return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
+
+    received_msg = get_msg_content(msg).split()
+    now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
+
+    if len(received_msg) > 1:
+        key = received_msg[1]
+        m = re.match(r'\d{10}$', key)
+        if not m:
+            return get_reply_text_xml(msg, get_text_invalid_receive_authorization())
+        authorization = Authorization.objects.filter(authorizer_stu_id=key,
+                                                     authorized_person_stu_id=user.stu_id, status=0)
+        if not authorization.exists():  #查看委托请求是否已经发出
+            return get_reply_text_xml(msg, get_text_no_authorization())
+        else:
+            valid_time = authurization.apply_time + timedelta(0, 3600)
+            if now > valid_time:  #查看接受委托时间是否已经超时
+                return get_reply_text_xml(msg, get_text_authorization_timeout())
+
+            #对要接受委托的用户检查是否有接受委托资格
+            user_authorizer = Authorization.objects.select_for_update().filter(authorizer_stu_id=user.stu_id)
+            user_authorized = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id)
+            if user_authorizer.exists():  #该用户发出过请求
+                for each in user_authorizer:
+                    if each.status == 1:  #该委托目前状态有效
+                        valid_time = each.apply_time + authorization_duration
+                        if now > valid_time:  #该委托失效，将状态改为2
+                            each.status = 2
+                            each.save()
+                        else:  #该委托没有失效，用户则不能接受委托
+                            return get_reply_text_xml(msg, get_text_already_authorization())
+            if user_authorized.exists():
+                for each in user_authorized:
+                    if each.status == 1:
+                        valid_time = each.apply_time + authorization_duration
+                        if now > valid_time:
+                            each.status = 2
+                            each.save()
+                        else:
+                            return get_reply_text_xml(msg, get_text_already_authorization())
+
+            #对发出委托请求的用户判断是否有发出委托资格
+            receive_authorizer = Authorization.objects.select_for_update().filter(authorizer_stu_id=key)
+            receive_authorized = Authorization.objects.select_for_update().filter(authorized_person_stu_id=key)
+
+            if receive_authorizer.exists():
+                for each in receive_authorizer:
+                    if each.status == 1:  #该委托目前状态有效
+                        valid_time = each.apply_time + authorization_duration
+                        if now > valid_time:  #该委托失效，将状态改为2
+                            each.status = 2
+                            each.save()
+                        else:  #该委托没有失效，用户则不能接受委托
+                            return get_reply_text_xml(msg, get_text_request_already_authorization())
+            if receive_authorized.exists():
+                for each in receive_authorized:
+                    if each.status == 1:  #该委托目前状态有效
+                        valid_time = each.apply_time + authorization_duration
+                        if now > valid_time:  #该委托失效，将状态改为2
+                            each.status = 2
+                            each.save()
+                        else:  #该委托没有失效，用户则不能接受委托
+                            return get_reply_text_xml(msg, get_text_request_already_authorization())
+
+            #双方均有委托资格
+            authorization.status = 1
+            authorization.apply_time = now
+            authorization.save()
+            return get_reply_text_xml(msg, get_text_authorization_success())  #返回成功信息
+    else:
+        return get_reply_text_xml(msg, get_text_invalid_receive_authorization())  #命令格式不正确

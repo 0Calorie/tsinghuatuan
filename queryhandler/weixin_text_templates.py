@@ -219,7 +219,7 @@ def get_text_timeout_book_event():
 
 def get_text_existed_book_event():
     return ''
-    #return '您已有票，自动切换为取票。\n'
+    # return '您已有票，自动切换为取票。\n'
 
 
 def get_text_usage_get_activity_menu():
@@ -281,5 +281,52 @@ def get_text_unbinded_select_seat(openid):
 def get_text_show_all_seat_selection(openid, tickets):
     response = "你好，现在你可以为以下活动选座\n"
     for ticket in tickets:
-        response += '请到'+get_text_link(s_reverse_select_seat(openid, ticket.unique_id), '这里')+'进行'+ticket.activity.name+'的选座\n'
+        response += '请到' + get_text_link(s_reverse_select_seat(openid, ticket.unique_id),
+                                         '这里') + '进行' + ticket.activity.name + '的选座\n'
     return response
+
+
+def get_text_unbinded_authorize(openid):
+    return get_text_unbinded_template('授权', openid)
+
+
+def get_text_usage_authorize():
+    return '您好，格式不正确！请输入“授权 被授权人学号”。\n如：“授权 2012011000”'
+
+
+def get_text_unable_to_authorize():
+    return '你好，你已有授权关系，现在不能申请授权:('
+
+
+def get_text_authorization_update_time(stu_id, invalid_time):
+    response = '你好，你与' + stu_id + "原来已有授权关系，现已为你更新授权关系\n" + '授权关系将在' + get_text_time_standard(
+        invalid_time) + '或第一次成功抢票后失效'
+    return response
+
+
+def get_text_apply_authorization(stu_id):
+    return '你好，你已成功申请授权\n'+'授权将在'+stu_id+'回复“接受 你的学号”后生效'
+
+
+def get_text_no_authorization():
+    return '你好，该委托不存在'
+
+
+def get_text_authorization_timeout():
+    return '你好，该委托请求已经超时'
+
+
+def get_text_already_authorization():
+    return '你好，你尚有有效委托，接受委托失败'
+
+
+def get_text_request_already_authorization():
+    return '你好，对方已有有效委托，接受委托失败'
+
+
+def get_text_authorization_success():
+    return '恭喜您，接受委托成功'
+
+
+def get_text_invalid_receive_authorization():
+    return '你好，格式不正确，请输入“接受 对方学号”。\n如：“接受 2012012333”'
