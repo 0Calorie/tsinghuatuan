@@ -243,8 +243,8 @@ def book_ticket(user, key, now):
             ticket = tickets[0]
             ticket.status = 1
             ticket.seat_status = activity.seat_status - 1
-            ticket.seat = None,
-            ticket.select_start = select_start,
+            ticket.seat = None
+            ticket.select_start = select_start
             ticket.select_end = select_start + timedelta(0, activity.group_interval)
             ticket.additional_ticket_id = -1
             ticket.save()
@@ -615,16 +615,18 @@ def response_cancel_authorization(msg):
 
     received_msg = get_msg_content(msg)
 
-    authorizer = Authorization.objects.select_for_update().filter(authorizer_stu_id=user.stu_id, status=1)
-    if authorizer.exists():
-        authorizer[0].status = 2
-        authorizer[0].save()
-        return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorizer[0].authorized_person_stu_id))
+    authorizers = Authorization.objects.select_for_update().filter(authorizer_stu_id=user.stu_id, status=1)
+    if authorizers.exists():
+        authorizer = authorizers
+        authorizer.status = 2
+        authorizer.save()
+        return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorizer.authorized_person_stu_id))
     else:
-        authorized = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
-        if authorized.exists():
-            authorized[0].status = 2
-            authorized[0].save()
-            return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorized[0].authorizer_stu_id))
+        authorizeds = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
+        if authorizeds.exists():
+            authorized = authorizeds[0]
+            authorized.status = 2
+            authorized.save()
+            return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorized.authorizer_stu_id))
         else:
             return get_reply_text_xml(msg,get_text_cancel_no_authorization())
