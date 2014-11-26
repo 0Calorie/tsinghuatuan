@@ -183,7 +183,7 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
 
     return 'Valid'
 
-def chooseSeat_view():#(request, weixinOpenID, activityID):
+def chooseSeat_view(request):#(request, weixinOpenID, activityID):
     return render_to_response('userSelectSeat.html')
     isValid = 'Valid'
     # has been validated?
