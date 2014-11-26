@@ -50,7 +50,7 @@ function showSeat(num) {
                         state: -1,
                         price: 0,
                         row: i + 1,
-                        column: j + 1
+                        column: row*(num-1) + (j + 1)
                     });
                     $(a).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat center")
                     $(a).css("background-size", "contain");
@@ -133,10 +133,9 @@ function backIsHit() {
 }
 
 function confirmIsHit() {
-    var chosenColumn = chosenSeat.column;
-    var chosenRow = chosenSeat.row;
-    var ticketID = ticketPack.ticketID;
-    var url = 'http://wx3.igeek.asia/u/chooseSeat/' + weixinOpenID + '/' + ticketID + '/' + chosenRow + '/' + chosenColumn;
+    var chosenColumn = chosenSeat.getAttribute('column') ;
+    var chosenRow = chosenSeat.getAttribute('row') ;
+    var url = 'http://localhost:4603/u/chooseSeatConfirm/try/' + weixinOpenID + '/' + ticketID + '/' + chosenRow + '/' + chosenColumn;
     sender = new XMLHttpRequest();
     sender.open('GET', url, true);
     sender.onreadystatechange = function () {
@@ -153,6 +152,7 @@ function confirmIsHit() {
                         mes.innerHTML = chosenSeatID;
                         ok.appendChild(mes);
                         ok.style.display = 'block';
+                        break;
                     default:
                         var place = document.getElementById('place');
                         place.innerHTML = 'Fail. Try Again.';

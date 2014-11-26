@@ -253,29 +253,38 @@ def choose_seat_view(request, openid, uid):
 
 def chooseSeat_confirmIsHit(request, weixinOpenID, ticketID, seatRow, seatColumn):
     #check validity
-    validityStatus = chooseSeat_standardValidationChecker(weixinOpenID, activityID)
+    '''validityStatus = chooseSeat_standardValidationChecker(weixinOpenID, activityID)
     if validityStatus != 'Valid':
+        print 'invalid'
         return HttpResponse('Error_Validity')
-
+    print 'valid'
+    '''
     try:
         theTicket = Ticket.objects.get(unique_id = ticketID)
     except:
+        print 'ex1'
         return HttpResponse('No_Such_Ticket')
 
     theActivity = theTicket.activity;
     try:
         theSeat = Seat.objects.get(activity = theActivity, seat_row = seatRow, seat_column = seatColumn)
     except:
+        print 'ex2'
         return HttpResponse('Error_DB1')
     if theSeat.status != 0:
+        print '!=0'
         return HttpResponse('Selected')
 
     try:
         Seat.objects.filter(activity = theActivity, seat_row = seatRow, seat_column = seatColumn).update(status = 2)
-        Ticket.objects.get(unique_id = ticketID).update(seat = theSeat)
     except:
+        print 'ex3'
+    try:
+        Ticket.objects.filter(unique_id = ticketID).update(seat = theSeat)
+    except:
+        print 'ex4'
         return HttpResponse('Error_DB2')
-    return HttpResponse('OK')
+    return HttpResponse('Ok')
 
 def chooseSeat_refreshIsHit(request, weixinOpenID, activityID):
     # check validity
