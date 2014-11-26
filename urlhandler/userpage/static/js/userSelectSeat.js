@@ -53,7 +53,7 @@ function showSeat(num) {
                         row: i + 1,
                         column: j + 1
                     });"{% static "
-                    $(a).css("background", "url(" + "{% static "/img/seat2.png"%}" + ") no-repeat center");
+                    $(a).css("background", "url(/static/img/seat2.png) no-repeat center");
                     $(a).css("background-size", "contain");
                     $(a).css("text-align", "center");
 
