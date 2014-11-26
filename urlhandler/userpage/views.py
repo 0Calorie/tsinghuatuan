@@ -233,8 +233,7 @@ def chooseSeat_view(request, openid, uid):
 
     return render_to_response('userSelectSeat.html', {
         'validity' : isValid,
-        'weixinOpenID' : weixinOpenID,
-        'activityID' : activityID,
+        'weixinOpenID' : openid,
         'ticketPack' : ticketPack,
         'seatPack' : seatPack
     }, context_instance=RequestContext(request))

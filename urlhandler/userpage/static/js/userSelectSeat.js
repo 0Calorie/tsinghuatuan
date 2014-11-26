@@ -47,7 +47,7 @@ function showSeat(num) {
                     $(a).attr('onclick', 'chooseSeat();');
                     $(a).attr('class', 'smallSeat');
                     $(a).attr({
-                        id: (i + 1) + "-" + (j + 1),
+                        id: (i + 1)*row + "-" + (j + 1),
                         state: -1,
                         price: 0,
                         row: i + 1,
