@@ -624,7 +624,7 @@ def response_cancel_authorization(msg):
         authorized = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
         if authorized.exists():
             authorized[0].status = 2
-            authorized[0].save
+            authorized[0].save()
             return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorized[0].authorizer_stu_id))
         else:
             return get_reply_text_xml(msg,get_text_cancel_no_authorization())
