@@ -606,7 +606,6 @@ def check_cancel_authorization(msg):
     return handler_check_text(msg,['不约'])
 
 
-
 def response_cancel_authorization(msg):
 
     fromuser = get_msg_from(msg)
@@ -620,12 +619,12 @@ def response_cancel_authorization(msg):
     if authorizer.exists():
         authorizer[0].status = 2
         authorizer[0].save()
-        return get_reply_text_xml(msg,get_text_cancel_authorization_success(authoriz[0].authorized_person_stu_id))
+        return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorizer[0].authorized_person_stu_id))
     else:
         authorized = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
         if authorized.exists():
             authorized[0].status = 2
             authorized[0].save
-            return get_reply_text_xml(msg,get_text_cancel_authorization_success(authoriaed.authorizer_stu_id))
+            return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorized[0].authorizer_stu_id))
         else:
             return get_reply_text_xml(msg,get_text_cancel_no_authorization())
