@@ -629,6 +629,7 @@ def response_authorize(msg):
             else:
                 authorization.status = 0
                 authorization.apply_time = now
+                authorization.save()
                 return get_reply_text_xml(msg, get_text_apply_authorization(key))
 
 
