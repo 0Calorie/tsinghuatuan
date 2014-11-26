@@ -3,7 +3,7 @@
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.forms.models import model_to_dict
-from datetime import *
+from datetime import datetime
 import json
 import time
 from django.http import HttpResponseRedirect
@@ -14,17 +14,19 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.db.models import F
 import urllib
 import urllib2
-from urlhandler.models import Activity, Ticket
+from urlhandler.models import Activity, Ticket, Seat
 from urlhandler.models import User as Booker
 from weixinlib.custom_menu import get_custom_menu, modify_custom_menu, add_new_custom_menu, auto_clear_old_menus
 from weixinlib.settings import get_custom_menu_with_book_acts, WEIXIN_BOOK_HEADER
 from adminpage.safe_reverse import *
 
+
 import xlwt
 import re
 from django.utils.http import urlquote
 from django.utils.encoding import smart_str
-
+#serializer model into json
+from django.core import serializers
 
 
 @csrf_protect
@@ -48,6 +50,8 @@ def activity_list(request):
         'activities': activities,
         'permission': permission_num,
     })
+
+
 
 
 def activity_checkin(request, actid):
@@ -167,31 +171,45 @@ def logout(request):
 def str_to_datetime(strg):
     return datetime.strptime(strg, '%Y-%m-%d %H:%M:%S')
 
+def str_to_datetime_(strg):
+    return datetime.strptime(strg, '%Y %m %d %H %M %S')
 
 def activity_create(activity):
+    print activity
     preDict = dict()
-    for k in ['name', 'key', 'description', 'place', 'pic_url', 'seat_status', 'total_tickets']:
+    for k in ['name','key', 'description', 'place', 'pic_url', 'seat_status', 'total_tickets']:
         preDict[k] = activity[k]
     for k in ['start_time', 'end_time', 'book_start', 'book_end']:
-        preDict[k] = str_to_datetime(activity[k])
-
+       preDict[k] = str_to_datetime(activity[k])
+    if not (activity['seat_status'] == u'0'):
+        for k in ['group_interval','group_size']:
+            preDict[k] = activity[k]
+        for k in ['select_start','select_end']:
+            preDict[k] = str_to_datetime(activity[k])
+    else:
+        preDict['group_interval'] = '0'
+        preDict['group_size'] = '0'
+        preDict['select_start'] = datetime.now()
+        preDict['select_end'] = datetime.now()
     preDict['status'] = 1 if ('publish' in activity) else 0
+    if ('total_price' in activity):
+        preDict['total_price'] = activity['total_price']
     preDict['remain_tickets'] = preDict['total_tickets']
-    preDict['group_interval'] = 30000
-    preDict['menu_url'] = preDict['name']
-    preDict['group_size'] = 2
-    preDict['select_start'] = datetime.now()
-
     newact = Activity.objects.create(**preDict)
     return newact
 
 
 def activity_modify(activity):
+    print "MODIFY"
+    print activity
     nowact = Activity.objects.get(id=activity['id'])
     now = datetime.now()
     if nowact.status == 0:
-        keylist = ['name', 'key', 'description', 'place', 'pic_url', 'seat_status', 'total_tickets']
-        timelist = ['start_time', 'end_time', 'book_start', 'book_end']
+        keylist = ['name', 'total_price','key', 'description', 'place', 'pic_url', 'seat_status', 'total_tickets']
+        timelist = [ 'start_time', 'end_time', 'book_start', 'book_end']
+        if not (nowact.seat_status == u'0'):
+            keylist = keylist + ['group_interval', 'group_size']
+            timelist = timelist + ['select_start', 'select_end']
     elif nowact.status == 1:
         if now >= nowact.start_time:
             keylist = ['description', 'pic_url']
@@ -202,6 +220,9 @@ def activity_modify(activity):
         else:
             keylist = ['description', 'place', 'pic_url', 'seat_status', 'total_tickets']
             timelist = ['start_time', 'end_time', 'book_end']
+        if not (nowact.seat_status == u'0'):
+            keylist = keylist + ['group_interval', 'group_size','total_price']
+            timelist = timelist + ['select_end','select_start']
     else:
         keylist = []
         timelist = []
@@ -256,7 +277,6 @@ def activity_add(request):
 def activity_detail(request, actid):
     if not request.user.is_authenticated():
         return HttpResponseRedirect(s_reverse_admin_home())
-
     try:
         activity = Activity.objects.get(id=actid)
 
@@ -278,6 +298,7 @@ class DatetimeJsonEncoder(json.JSONEncoder):
 
 
 def activity_post(request):
+    print "POST"
     if not request.user.is_authenticated():
         return HttpResponseRedirect(s_reverse_admin_home())
 
@@ -496,3 +517,81 @@ def activity_export_stunum(request, actid):
     ##########################################保存
     wb.save(response)
     return response
+
+def seat_create(seat):
+    preDict = dict()
+    preDict['activity'] = Activity.objects.get(id = seat['activity'])
+    for k in ['place','seat_price','seat_floor', 'seat_row','seat_column']:
+        preDict[k] = seat[k]
+    preDict['status'] = 0
+    preDict['seat_type'] = "A"
+    print preDict
+    newSeat = Seat.objects.create(**preDict)
+    return newSeat
+
+@csrf_exempt
+def activity_save_seat(request, actid):
+    print "activity_save_seat"
+    print request
+    if not request.POST:
+        return Http404
+    else:
+        print "POST"
+        rtnJSON = {}
+        activity = Activity.objects.filter(id = actid)
+        print activity
+        Seat.objects.filter(activity = activity).delete()
+        post = request.POST
+        print post
+        aid = post.get('aid','')
+        floorList = post.get('floor','').split(" ")
+        columnList = post.get('column','').split(" ")
+        rowList = post.get('row','').split(" ")
+        priceList = post.get('price','').split(" ")
+        length = len(floorList)
+        activity = Activity.objects.get(id = actid)
+        place = activity.place
+        for i in range(0, length):
+            seat = dict()
+            seat['seat_floor'] = int(floorList[i])
+            seat['seat_column'] = int(columnList[i])
+            seat['seat_row'] = int(rowList[i])
+            seat['seat_price'] = int(priceList[i])
+            seat['activity'] = int(actid)
+            seat['place'] = place
+            print seat
+            try:
+                newact = seat_create(seat)
+            except:
+                rtnJSON['meg'] = 'create fail'
+                rtnJSON['next_url'] = '/hello/'
+                return HttpResponse(json.dumps(rtnJSON), content_type='application/json')
+        return HttpResponseRedirect("/list/")
+
+        #return HttpResponse(json.dumps(rtnJSON), content_type='application/json')
+    
+
+def hello(request):
+    return HttpResponse("hello world")
+
+def activity_select_seat_lecture(request, actid):
+    seats = []
+    activity = Activity.objects.get(id = actid)
+    now = datetime.now()
+    print now
+    if activity.select_start < now:
+        canModify = 0 # administer can not modify seat 
+    else:
+        canModify = 1
+    seatmodels = Seat.objects.filter(activity = activity)  
+    for seat in seatmodels:
+    	seats += [model_to_dict(seat)]
+    seatNum = len(seatmodels)
+    return render_to_response('activity_select_seat_lecture.html', {
+        'id' : actid,
+        'allSeat': seats,
+        'activity':activity,
+        'seatNum' : seatNum,
+        'canModify' : canModify,
+	})
+

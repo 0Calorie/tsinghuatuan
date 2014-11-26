@@ -9,7 +9,6 @@ class User(models.Model):
     status = models.IntegerField()
     seed = models.FloatField(default=1024)
 
-
 class Activity(models.Model):
     name = models.CharField(max_length=255)
     key = models.CharField(max_length=255)
@@ -20,15 +19,17 @@ class Activity(models.Model):
     place_url = models.CharField(max_length=255)
     book_start = models.DateTimeField()
     book_end = models.DateTimeField()
+    select_start= models.DateTimeField(null = True)
+    select_end = models.DateTimeField(null = True)
     seat_status = models.IntegerField(default=0)
-    total_tickets = models.IntegerField()
-    status = models.IntegerField()
+    total_tickets = models.IntegerField(default = 0)
+    status = models.IntegerField(default = 0)
     pic_url = models.CharField(max_length=255)
     remain_tickets = models.IntegerField()
     menu_url = models.CharField(max_length=255, null=True)
     group_interval = models.IntegerField()
-    group_size = models.IntegerField()
-    select_start = models.DateTimeField()
+    group_size = models.IntegerField(default = 0, null = True)
+    total_price = models.CharField(max_length=255,null = True)
     # Something about status:
     # -1: deleted
     # 0: saved but not published
@@ -36,7 +37,6 @@ class Activity(models.Model):
     # Something about seat_status:
     # 0: no seat
     # 1: require to select seat
-
 
 class Seat(models.Model):
     activity = models.ForeignKey(Activity)
@@ -52,7 +52,17 @@ class Seat(models.Model):
     # 0: seat can be select
     # 1: seat is locked, can not be select
     # 2: seat is selected
-
+'''
+class Seat(models.Model):
+    s_activity_id = models.IntegerField()
+    s_place = models.CharField(max_length=255) # TODO : Char or Integer
+    s_status = models.IntegerField() # 0 free 1 locked 2 occupied
+    s_type = models.IntegerField()
+    s_price = models.IntegerField()
+    s_floor = models.IntegerField()
+    s_row = models.IntegerField()
+    s_column = models.IntegerField()
+'''
 
 class Ticket(models.Model):
     stu_id = models.CharField(max_length=255)
@@ -60,9 +70,9 @@ class Ticket(models.Model):
     activity = models.ForeignKey(Activity)
     status = models.IntegerField()
     seat_status = models.IntegerField()
-    seat = models.ForeignKey(Seat, null=True)
-    select_start = models.DateTimeField()
-    select_end = models.DateTimeField()
+    seat = models.ForeignKey(Seat)
+    select_start = models.DateField()
+    select_end = models.DateField()
     additional_ticket_id = models.IntegerField()
     # Something about status
     # 0: ticket order is cancelled
@@ -75,55 +85,3 @@ class Ticket(models.Model):
     # Something about additional_ticket_id
     # -1: no additional ticket
     # else: additional ticket id
-
-
-class Authorization(models.Model):
-    authorizer_stu_id = models.CharField(max_length=255)
-    authorized_person_stu_id = models.CharField(max_length=255)
-    status = models.IntegerField()
-    apply_time = models.DateTimeField()
-    # Something about status
-    # 0: authorization is applied but not accepted
-    # 1: authorization is valid
-    # 2: authorization is invalid
-
-
-'''
-class UserSession(models.Model):
-    stu_id = models.CharField(max_length=255)
-    session_key = models.CharField(max_length=255)
-    session_status = models.IntegerField(1)
-
-    def generate_session(self,stu_id):
-        try:
-            stu = User.objects.get(stu_id=stu_id)
-            sessions = UserSession.objects.filter(stu_id = stu_id)
-            if sessions:
-                for session in sessions:
-                    session.delete()
-            s = UserSession(stu_id=stu_id,session_key=uuid.uuid4(),session_status = 0)
-            s.save()
-            return True
-        except:
-            return False
-
-    def is_session_valid(self,stu_id,session_key):
-        try:
-            s = UserSession.objects.get(stu_id=stu_id,session_key=session_key)
-            if(s.session_status == 0):
-                s.session_status = 1
-                s.save()
-                return True
-            else:
-                s.delete()
-                return False
-        except:
-            return False
-
-    def can_print(self,stu_id,session_key):
-        try:
-            s = UserSession.objects.get(stu_id=stu_id,session_key=session_key)
-            return True
-        except:
-            return False
-'''

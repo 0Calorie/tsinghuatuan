@@ -64,9 +64,14 @@ var dateInterfaceMap = {
     'place': 'value',
     'book_start': 'time',
     'book_end': 'time',
+    'select_start': 'time',
+    'select_end': 'time',
     'pic_url': 'value',
     'total_tickets': 'value',
-    'seat_status': 'value'
+    'seat_status': 'value',
+    'group_size': 'value',
+    'group_interval': 'value',
+    'total_price':'value'
 }, lockMap = {
     'value': function(dom, lock) {
         dom.prop('disabled', lock);
@@ -121,10 +126,18 @@ function initializeForm(activity) {
         $('#input-end-month').val(curmonth);
         $('#input-book-start-month').val(curmonth);
         $('#input-book-end-month').val(curmonth);
+        $('#input-start-day').val(curmonth);
+        $('#input-end-day').val(curmonth);
+        $('#input-book-start-day').val(curmonth);
+        $('#input-book-end-day').val(curmonth);
         $('#input-start-minute').val(0);
         $('#input-end-minute').val(0);
+        $('#input-start-hour').val(0);
+        $('#input-end-hour').val(0);
         $('#input-book-start-minute').val(0);
         $('#input-book-end-minute').val(0);
+        $('#input-book-start-hour').val(0);
+        $('#input-book-end-hour').val(0);
         $('#input-seat_status').val(0);
     }
     if (typeof activity.checked_tickets !== 'undefined') {
@@ -364,12 +377,16 @@ function beforeSubmit(formData, jqForm, options) {
         'pic_url': '活动配图',
         'book_start': '订票开始时间',
         'book_end': '订票结束时间',
-        'seat_status': '座位分配设置'
+        'seat_status': '座位分配设置',
+        'group_interval':'阶段抢票时常',
+        'group_size':'阶段抢票人数',
+        'total_price':'票价',
+
     }, lackArray = [], dateArray = [
-        'start_time', 'end_time', 'book_start', 'book_end'
+        'start_time', 'end_time', 'book_start', 'book_end','select_end','select_start'
     ];
     for (i = 0, len = formData.length; i < len; ++i) {
-        if (!formData[i].value) {
+        if (!formData[i].value && formData[i].required) {
             lackArray.push(nameMap[formData[i].name]);
         }
     }
@@ -456,8 +473,47 @@ function submitComplete(xhr) {
     showResult();
 }
 
+initializeForm(activity);
+showForm();
 
-function publishActivity() {
+
+$('.form-control').on('focus', function() {var me = $(this); setTimeout(function(){me.select();}, 100)});
+
+$(document).ready(function(){
+    if(activity.id>0)
+    {
+        selectSeat();
+    }
+
+});
+function selectSeat(){
+    var id = $('#input-seat_status');
+    var index = id[0].selectedIndex;
+    if(index==1)
+    {
+        $('#input-seat').css("display","block");
+        $('#input-seat-school').css("display","block");
+        $('#input-seat-lecture').css("display","none");
+    }
+    else if(index==2)
+    {
+         $('#input-seat').css("display","block");
+         $('#input-seat-school').css("display","none");
+         $('#input-seat-lecture').css("display","block");
+    }
+    else
+         $('#input-seat').css("display","none");
+}
+
+//===========================================================================
+function publishMyActivity1()
+{
+    alert("publishMyActivity");
+    $('#saveBtn').click();
+}
+
+
+function publishMyActivity() {
     if(!$('#activity-form')[0].checkValidity || $('#activity-form')[0].checkValidity()){
         if(!checktime())
             return false;
@@ -478,8 +534,7 @@ function publishActivity() {
     return false;
 }
 
-initializeForm(activity);
-showForm();
+
 
 $('#activity-form').submit(function() {
     showProcessing();
@@ -494,8 +549,6 @@ $('#activity-form').submit(function() {
     $(this).ajaxSubmit(options);
     return false;
 }).on('reset', function() {
-    initializeForm(activity);
+    //initializeForm(activity);
     return false;
 });
-
-$('.form-control').on('focus', function() {var me = $(this); setTimeout(function(){me.select();}, 100)});
