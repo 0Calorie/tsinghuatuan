@@ -538,11 +538,12 @@ def response_accept_authorization(msg):
         m = re.match(r'\d{10}$', key)
         if not m:
             return get_reply_text_xml(msg, get_text_invalid_receive_authorization())
-        authorization = Authorization.objects.filter(authorizer_stu_id=key,
+        authorizations = Authorization.objects.filter(authorizer_stu_id=key,
                                                      authorized_person_stu_id=user.stu_id, status=0)
-        if not authorization.exists():  #查看委托请求是否已经发出
+        if not authorizations.exists():  #查看委托请求是否已经发出
             return get_reply_text_xml(msg, get_text_no_authorization())
         else:
+            authorization = authorizations[0]
             valid_time = authorization.apply_time + timedelta(0, 3600)
             if now > valid_time:  #查看接受委托时间是否已经超时
                 return get_reply_text_xml(msg, get_text_authorization_timeout())
