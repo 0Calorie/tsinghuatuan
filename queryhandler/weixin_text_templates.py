@@ -338,3 +338,14 @@ def get_text_cancel_authorization_success(stu_id):
 
 def get_text_cancel_no_authorization():
     return '你好，你没有“约”要解除'
+
+
+def get_text_can_not_authorize_yourself():
+    return '对不起，你不可以约自己'
+
+
+def get_text_check_authorization(stu_id):
+    return '你好，你“约”的对象是'+stu_id
+
+def get_text_no_check_authorization():
+    return '你好，目前你没有“约”'

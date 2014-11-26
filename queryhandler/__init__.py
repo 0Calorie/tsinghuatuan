@@ -23,6 +23,7 @@ handler_list = [
     {'check': check_authorize,              'response': response_authorize},
     {'check': check_accept_authorization,   'response': response_accept_authorization},
     {'check': check_cancel_authorization,   'response': response_cancel_authorization},
+    {'check': check_check_authorization,    'response': response_check_authorization},
 ]
 
 

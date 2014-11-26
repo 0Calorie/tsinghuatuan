@@ -167,6 +167,9 @@ def response_book_ticket(msg):
         return get_reply_text_xml(msg, get_text_usage_book_ticket())
 
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
+    ##authorizations = Authorization.objects.select_for_update.filter(status=1, authorized_person_stu_id=user.stu_id)
+
+
     activities = Activity.objects.filter(status=1, book_end__gte=now, book_start__lte=now, key=key)
     if not activities.exists():
         future_activities = Activity.objects.filter(status=1, book_start__gt=now, key=key)
@@ -476,6 +479,9 @@ def response_authorize(msg):
     if not m:
         return get_reply_text_xml(msg, get_text_usage_authorize())
 
+    if key == user.stu_id:
+        return get_reply_text_xml(msg, get_text_can_not_authorize_yourself())
+
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
 
     able_to_authorize = True
@@ -630,3 +636,24 @@ def response_cancel_authorization(msg):
             return get_reply_text_xml(msg,get_text_cancel_authorization_success(authorized.authorizer_stu_id))
         else:
             return get_reply_text_xml(msg,get_text_cancel_no_authorization())
+
+
+def check_check_authorization(msg):
+    return handler_check_text(msg,['约谁'])
+
+def response_check_authorization(msg):
+
+    fromuser = get_msg_from(msg)
+    user = get_user(fromuser)
+    if user is None:
+        return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
+
+    authorizers = Authorization.objects.select_for_update().filter(authorizer_stu_id=user.stu_id, status=1)
+    if authorizers.exists():
+        return get_reply_text_xml(msg,get_text_check_authorization(authorizers[0].authorized_person_stu_id))
+    else:
+        authorizeds = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
+        if authorizeds.exists():
+            return get_reply_text_xml(msg,get_text_check_authorization(authorizeds[0].authorized_person_stu_id))
+        else:
+            return get_reply_text_xml(msg,get_text_no_check_authorization())
