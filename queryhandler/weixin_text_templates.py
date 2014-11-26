@@ -258,7 +258,7 @@ def get_text_no_ticket_need_select_seat():
 
 
 def get_text_no_need_to_select_seat():
-    return '你好，该活动不需要抢票'
+    return '你好，该活动不需要选座'
 
 
 def get_text_select_seat_over(seat):
