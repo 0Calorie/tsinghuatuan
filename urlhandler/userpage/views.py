@@ -3,7 +3,7 @@
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from urlhandler.models import User, Activity, Ticket#, Seat
+from urlhandler.models import User, Activity, Ticket, Seat
 from urlhandler.settings import STATIC_URL
 import urllib, urllib2, json
 import datetime
@@ -183,8 +183,7 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
 
     return 'Valid'
 
-def chooseSeat_view(request):#(request, weixinOpenID, activityID):
-    return render_to_response('userSelectSeat.html')
+def chooseSeat_view(request, openid, uid):
     isValid = 'Valid'
     # has been validated?
     if User.objects.filter(weixin_id=weixinOpenID, status=1).exists():
@@ -196,9 +195,9 @@ def chooseSeat_view(request):#(request, weixinOpenID, activityID):
         return render_to_response('mobile_base.html')
 
     # has ticket? if objects.get get nothing, will itsTickets be null or an exception will be raised ?
-    if Ticket.objects.filter(StudentID=currentUser.stu_id, activity=activityID).exists():
+    if Ticket.objects.filter(unique_id=uid).exists():
         try:
-            itsTickets = Ticket.objects.get(studentID = currentUser.stu_id, activity=activityID)
+            itsTickets = Ticket.objects.get(unique_id)
         except:
             return render_to_response('mobile_base.html')
     else:
@@ -206,7 +205,7 @@ def chooseSeat_view(request):#(request, weixinOpenID, activityID):
 
     # check if this activity allow seats choosing. if yes, then get activity's seat picture
     try:
-        theActivity = Activity.objects.get(id = activityID)
+        theActivity = itsTickets.activity
     except:
         return render_to_response('mobile_base.html')
     if theActivity.seat_status != 1:
@@ -224,7 +223,7 @@ def chooseSeat_view(request):#(request, weixinOpenID, activityID):
 
     # get current seat status
     seats = []
-    seatmodels = Seat.objects.filter(s_activity_id = activityID)
+    seatmodels = Seat.objects.filter(activity = theActivity)
     for seat in seatmodels:
         seats += [model_to_dict(seat)]
     seatNum = len(seatmodels)
@@ -234,6 +233,7 @@ def chooseSeat_view(request):#(request, weixinOpenID, activityID):
 
     return render_to_response('userSelectSeat.html', {
         'validity' : isValid,
+        'weixinOpenID' : weixinOpenID,
         'activityID' : activityID,
         'ticketPack' : ticketPack,
         'seatPack' : seatPack
@@ -241,7 +241,7 @@ def chooseSeat_view(request):#(request, weixinOpenID, activityID):
 
     ## remember to check everything did above whatever the requested action is!!!
 
-def chooseSeat_confirmIsHit(request, weixinOpenID, activityID, ticketID, seatRow, seatColumn):
+def chooseSeat_confirmIsHit(request, weixinOpenID, ticketID, seatRow, seatColumn):
     #check validity
     validityStatus = chooseSeat_standardValidationChecker(weixinOpenID, activityID)
     if validityStatus != 'Valid':
@@ -252,15 +252,16 @@ def chooseSeat_confirmIsHit(request, weixinOpenID, activityID, ticketID, seatRow
     except:
         return HttpResponse('No_Such_Ticket')
 
+    theActivity = theTicket.activity;
     try:
-        theSeat = Seat.objects.get(activity = activityID, seat_row = seatRow, seat_column = seatColumn)
+        theSeat = Seat.objects.get(activity = theActivity, seat_row = seatRow, seat_column = seatColumn)
     except:
         return HttpResponse('Error_DB1')
     if theSeat.status != 0:
         return HttpResponse('Selected')
 
     try:
-        Seat.objects.filter(activity = activityID, seat_row = seatRow, seat_column = seatColumn).update(status = 2)
+        Seat.objects.filter(activity = theActivity, seat_row = seatRow, seat_column = seatColumn).update(status = 2)
         Ticket.objects.get(unique_id = ticketID).update(seat = theSeat)
     except:
         return HttpResponse('Error_DB2')

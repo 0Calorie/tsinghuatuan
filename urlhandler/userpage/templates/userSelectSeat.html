@@ -5,27 +5,25 @@
     <link href="{% static "css/chooseSeatBase.css"%}?_=4" rel="stylesheet" type="text/css" />
     <title>清华紫荆之声</title>
     <script src="{% static "lib/jquery/jquery-1.11.1.min.js" %}"></script>
-<!--<script>
-           var actID = {{id}};
-           var seatNum = {{ seatNum }};
-           var ticketNum = {{ticketNum}};
+<<script>
+           var validity = {{validity}};
+           var weixinOpenID = {{weixinOpenID}}
+           var actID = {{activityID}};
+           var ticketPack = {{ticketPack}};
+           var seatPack = {{seatPack}};
            var allSeat = [
-               {% for seat in allSeat %}
-                  { 'floor' : {{seat.s_floor}},
-                    'column': {{seat.s_column}},
-                    'row' : {{seat.s_row}},
-                    'price': {{seat.s_price}},
-                    'state' :{{seat.s_status}},
-                    'place' : "{{seat.s_place}}",
-                  }{% if forloop.last %}{% else %},{% endif %}
-               {% endfor %}
-           ];
-           //座位所在地点
-           var place = "{{place}}";
-           $("#place")[0].innerText = "你有"+seatNum+"个座位可选~";
-           $("#aid").attr("value", actID);
-           $("#submitForm").attr("action", "/saveSeat/"+actID+"/");
-       </script>-->
+           {% for seat in seatPack.seats}
+           { 
+              'row' : {{seat.seat_row}},
+              'column' : {{seat.seat_column}}.
+              'price' : {{seat.seat_price}},
+              'status' : {{seat.seat_status}},
+              'floor' : {{seat.seat_floor}}
+            }{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+          ];
+
+       </script>
     <script src="{% static "js/userSelectSeat.js" %}"></script>
     </head>
 <body>
@@ -34,6 +32,7 @@
         What do you want?
 </header>
 <hr/>
+{% if validity == true %}
 <div id="mainbody">
   <div id="mainContent" style="position:relative;width:100%;">
     <div style="position:relative;margin-left: 20%;">
@@ -53,12 +52,15 @@
   </div>
 </div>
 <div id = "seatPicture" style="display:none;">
-  <div style='background: "{% static "img/seat2.png" %}";'></div>
-  <div style='background: "{% static "img/seat3.png" %}";'></div>
+  <div id = 'seat2' style='background: "{% static "img/seat2.png" %}" no-repeat center;'></div>
+  <div id = 'seat3' style='background: "{% static "img/seat3.png" %}" no-repeat center;'></div>
 
 </div>
 
 </div>
+{% else %}
+<div style="font-size: 30px; color: white;"> haha</div>
+{% endif %}
 <footer id="footer">
     <hr />
     0Cal<br>

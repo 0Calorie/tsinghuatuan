@@ -48,7 +48,7 @@ function showSeat(num) {
                     $(a).attr('class', 'smallSeat');
                     $(a).attr({
                         id: (i + 1) + "-" + (j + 1),
-                        state: 0,
+                        state: -1,
                         price: 0,
                         row: i + 1,
                         column: j + 1
@@ -76,18 +76,11 @@ function showSeat(num) {
     var place = document.getElementById('place');
     place.innerHTML = 'Sector ' + num;
 
-    //show chosenSeat if it is in currentSection
-    var tempSeat = document.getElementById(chosenSeatID);
-    if (tempSeat != null) {
-        chosenSeat = tempSeat;
-        chosenSeat.style.background = "url(/static/img/seat3.png) no-repeat center";
-        chosenSeat.style.backgroundSize = "contain";
-    }
-
     currentSection.pointer = newTables;
     currentSection.row = row;
     currentSection.column = column;
     currentSection.num = num;
+    layer2();
 }
 
 function addThreeButton() {
@@ -134,12 +127,18 @@ function backIsHit() {
     }
     var tab = document.getElementById('selectRegion');
     tab.style.display = 'block';
+    chosenSeat = null;
+    chosenSeatID = 0;
 
 }
 
 function confirmIsHit() {
+    var chosenColumn = chosenSeat.column;
+    var chosenRow = chosenSeat.row;
+    var ticketID = ticketPack.ticketID;
+    var url = 'http://wx3.igeek.asia/u/chooseSeat/' + weixinOpenID + '/' + ticketID + '/' + chosenRow + '/' + chosenColumn;
     sender = new XMLHttpRequest();
-    sender.open('GET', '', true);
+    sender.open('GET', url, true);
     sender.onreadystatechange = function () {
         if (sender.readyState == 4) {
             if (sender.status == 200) {
@@ -161,6 +160,7 @@ function confirmIsHit() {
             }
         }
     }
+    sender.send();
 }
 
 function refreshIsHit() {
@@ -180,4 +180,22 @@ function chooseSeat() {
     theChosen.style.backgroundSize = "contain";
     chosenSeat = theChosen;
     chosenSeatID = theChosen.id;
+}
+
+function layer2()
+{
+    len = allSeat.length;
+    for(var i = 0; i < len; i++)
+    {
+        floor = allSeat[i].floor;
+        seatprice = allSeat[i].price;
+        status= allSeat[i].status;
+        id = row + "-" + column;
+        $("#"+id).attr("price", seatprice);
+        $("#"+id).attr("status", status);
+        if(status!=0)
+        {
+            $("#"+id).css("background-color", "red");
+        }       
+    }
 }
