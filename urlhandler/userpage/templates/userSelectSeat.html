@@ -5,18 +5,16 @@
     <link href="{% static "css/chooseSeatBase.css"%}?_=4" rel="stylesheet" type="text/css" />
     <title>清华紫荆之声</title>
     <script src="{% static "lib/jquery/jquery-1.11.1.min.js" %}"></script>
-<<script>
-           var validity = {{validity}};
-           var weixinOpenID = {{weixinOpenID}}
-           var ticketPack = {{ticketPack}};
-           var seatPack = {{seatPack}};
+<script>
+           var validity = "{{validity}}";
+           var weixinOpenID = "{{weixinOpenID}}";
            var allSeat = [
-           {% for seat in seatPack.seats}
+           {% for seat in seatPack.seats %}
            { 
               'row' : {{seat.seat_row}},
-              'column' : {{seat.seat_column}}.
+              'column' : {{seat.seat_column}},
               'price' : {{seat.seat_price}},
-              'status' : {{seat.seat_status}},
+              'status' : {{seat.status}},
               'floor' : {{seat.seat_floor}}
             }{% if forloop.last %}{% else %}, {% endif %}
             {% endfor %}
@@ -31,7 +29,7 @@
         What do you want?
 </header>
 <hr/>
-{% if validity == true %}
+{% if validity == 'Valid' %}
 <div id="mainbody">
   <div id="mainContent" style="position:relative;width:100%;">
     <div style="position:relative;margin-left: 20%;">
@@ -53,9 +51,8 @@
 
 </div>
 
-</div>
 {% else %}
-<div style="font-size: 30px; color: white;"> haha</div>
+<div style="font-size: 30px; color: white;"> {{validity}}</div>
 {% endif %}
 <footer id="footer">
     <hr />

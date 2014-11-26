@@ -38,16 +38,15 @@ function showSeat(num) {
     for (i = 0; i < row; i++) {
         var line = document.createElement('div');
         line.setAttribute('class', 'aRowOfSeats');
-            var a = toBeClone.cloneNode(true);
+            var a = document.createElement('div');
             a.innerHTML = (i + 1);
             a.setAttribute('class', 'rowHeader');
             $(line).append(a);
             for (j = 0; j < column; j++) {
                 var a = document.createElement('div');
-                    $(a).attr('onclick', 'chooseSeat();');
                     $(a).attr('class', 'smallSeat');
                     $(a).attr({
-                        id: (i + 1)*row + "-" + (j + 1),
+                        id: (i+1) + "-" + (row*(num-1) + (j + 1)),
                         state: -1,
                         price: 0,
                         row: i + 1,
@@ -58,7 +57,7 @@ function showSeat(num) {
                     $(a).css("text-align", "center");
 
                     $(line).append(a);
-                    a.innerHTML = (j + 1);
+                    a.innerHTML = row*(num-1) + (j + 1);
             }
             $(newTables).append(line);
             var clearBoth = document.createElement('div');
@@ -174,7 +173,7 @@ function chooseSeat() {
     var toBeClone_Empty = document.getElementById('seat3');
     var toBeClone_Chosen = document.getElementById('seat2');
     if (chosenSeat != null) {
-        chosenSeat.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat center";
+        chosenSeat.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center";
         chosenSeat.style.backgroundSize = "contain";
     }
     theChosen.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat3.png) no-repeat center";
@@ -191,12 +190,21 @@ function layer2()
         floor = allSeat[i].floor;
         seatprice = allSeat[i].price;
         status= allSeat[i].status;
+        row = allSeat[i].row;
+        column = allSeat[i].column;
         id = row + "-" + column;
-        $("#"+id).attr("price", seatprice);
-        $("#"+id).attr("status", status);
-        if(status!=0)
-        {
-            $("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
-        }       
+        ss = document.getElementById(id);
+        if(ss != undefined){
+            $("#"+id).attr("price", seatprice);
+            $("#"+id).attr("status", status);
+            if(status==0)
+            {
+                $("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
+                $("#"+id).css("background-size", "contain");
+                $("#" + id).attr('onclick', 'chooseSeat();');
+
+            }
+        }
+               
     }
 }

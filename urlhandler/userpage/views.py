@@ -186,41 +186,52 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
 def choose_seat_view(request, openid, uid):
     isValid = 'Valid'
     # has been validated?
-    if User.objects.filter(weixin_id=weixinOpenID, status=1).exists():
+    if User.objects.filter(weixin_id=openid, status=1).exists():
         try:
-            currentUser = User.objects.get(weixin_id=weixinOpenID)
+            currentUser = User.objects.get(weixin_id=openid)
         except:
+            print 'ex1'
             return render_to_response('mobile_base.html')#should return error page
     else:
+        print 'el1'
         return render_to_response('mobile_base.html')
 
     # has ticket? if objects.get get nothing, will itsTickets be null or an exception will be raised ?
     if Ticket.objects.filter(unique_id=uid).exists():
         try:
-            itsTickets = Ticket.objects.get(unique_id)
+            itsTickets = Ticket.objects.get(unique_id = uid)
         except:
+            print 'ex2'
             return render_to_response('mobile_base.html')
     else:
+        print 'el2'
         return render_to_response('mobile_base.html')
 
     # check if this activity allow seats choosing. if yes, then get activity's seat picture
     try:
         theActivity = itsTickets.activity
     except:
+        print 'ex3'
         return render_to_response('mobile_base.html')
-    if theActivity.seat_status != 1:
+    if theActivity.seat_status == 0:
+        print 'el3'
         return render_to_response('mobile_base.html')
 
+    print 'asd'
     # can that ticket choose its seat now?  has this ticket choose its seat before?
     if (itsTickets.select_start > datetime.datetime.now() or itsTickets.select_end < datetime.datetime.now()):
+        print itsTickets.select_start
+        print itsTickets.select_end
+        print datetime.datetime.now()
         isValid = 'Not_Now'
-    if itsTickets.seat_status != None:
+    if itsTickets.seat_status != 0:
+        print 'chosen'
         isValid = 'Has_Chosen'
     ticketPack = dict()
     ticketPack['ticketID'] = itsTickets.unique_id
     ticketPack['numOfSeatToChoose'] = itsTickets.additional_ticket_id
 
-
+    print 'dfg'
     # get current seat status
     seats = []
     seatmodels = Seat.objects.filter(activity = theActivity)
