@@ -543,7 +543,7 @@ def response_accept_authorization(msg):
         if not authorization.exists():  #查看委托请求是否已经发出
             return get_reply_text_xml(msg, get_text_no_authorization())
         else:
-            valid_time = authurization.apply_time + timedelta(0, 3600)
+            valid_time = authorization.apply_time + timedelta(0, 3600)
             if now > valid_time:  #查看接受委托时间是否已经超时
                 return get_reply_text_xml(msg, get_text_authorization_timeout())
 
