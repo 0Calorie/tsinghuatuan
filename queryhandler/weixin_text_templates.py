@@ -330,3 +330,11 @@ def get_text_authorization_success():
 
 def get_text_invalid_receive_authorization():
     return '你好，格式不正确，请输入“约约约 对方学号”。\n如：“约约约 2012012333”'
+
+
+def get_text_cancel_authorization_success(stu_id):
+    return '你好，你和'+stu_id+'的“约”已经成功解除'
+
+
+def get_text_cancel_no_authorization():
+    return '你好，你没有“约”要解除'

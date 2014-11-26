@@ -600,3 +600,27 @@ def response_accept_authorization(msg):
             return get_reply_text_xml(msg, get_text_authorization_success())  #返回成功信息
     else:
         return get_reply_text_xml(msg, get_text_invalid_receive_authorization())  #命令格式不正确
+
+
+def response_cancel_authorization(msg):
+
+    fromuser = get_msg_from(msg)
+    user = get_user(fromuser)
+    if user is None:
+        return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
+
+    received_msg = get_msg_content(msg)
+
+    authorizer = Authorization.objects.select_for_update().filter(authorizer_stu_id=user.stu_id, status=1)
+    if authorizer.exists():
+        authorizer[0].status = 2
+        authorizer[0].save()
+        return get_reply_text_xml(msg,get_text_cancel_authorization_success(authoriz[0].authorized_person_stu_id))
+    else:
+        authorized = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
+        if authorized.exists():
+            authorized[0].status = 2
+            authorized[0].save
+            return get_reply_text_xml(msg,get_text_cancel_authorization_success(authoriaed.authorizer_stu_id))
+        else:
+            return get_reply_text_xml(msg,get_text_cancel_no_authorization())
