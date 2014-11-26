@@ -135,7 +135,7 @@ function backIsHit() {
 function confirmIsHit() {
     var chosenColumn = chosenSeat.getAttribute('column') ;
     var chosenRow = chosenSeat.getAttribute('row') ;
-    var url = 'http://localhost:4603/u/chooseSeatConfirm/try/' + weixinOpenID + '/' + ticketID + '/' + chosenRow + '/' + chosenColumn;
+    var url = 'http://wx3.igeek.asia/u/chooseSeatConfirm/try/' + weixinOpenID + '/' + ticketID + '/' + chosenRow + '/' + chosenColumn;
     sender = new XMLHttpRequest();
     sender.open('GET', url, true);
     sender.onreadystatechange = function () {
