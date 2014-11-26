@@ -20,6 +20,8 @@ handler_list = [
     {'check': check_get_activity_menu,      'response': response_get_activity_menu},
     {'check': check_xnlhwh,                 'response': response_xnlhwh},
     {'check': check_select_seat,            'response': response_select_seat},
+    {'check': check_authorize,              'response': response_authorize},
+    {'check': check_accept_authorization,   'response': response_accept_authorization},
 ]
 
 
