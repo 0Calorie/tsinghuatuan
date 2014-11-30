@@ -570,7 +570,7 @@ def activity_save_seat(request, actid):
 
         #return HttpResponse(json.dumps(rtnJSON), content_type='application/json')
     
-
+#for test only
 def hello(request):
     return HttpResponse("hello world")
 
