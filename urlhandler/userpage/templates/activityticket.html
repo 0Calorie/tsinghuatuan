@@ -39,13 +39,24 @@
         活动地点：<b>{{ act_place }}</b>
     </div>
     {% if ticket_status > 0 %}
-        {% if ticket_seat == 'B' %}
+        {% if ticket_seat.status == 0 %}
             <div class="ticket-wrapper">
-                说明：<span class="status-size ticket-used">您的座位在B区 请从二楼北侧进入</span>
+                <span class="status-size ticket-used">您尚未选座</span>
+                <span class="status-size ticket-used">
+                    记得在 <b>{{ select.start|date:"Y年m月d日 H:i" }}</b>
+                       到 <b>{{ select.end  |date:"Y年m月d日 H:i" }}</b>期间选择座位哦~
+                </span>
             </div>
-        {% elif ticket_seat == 'C' %}
+        {% elif ticket_seat.status == 1%}
             <div class="ticket-wrapper">
-                说明：<span class="status-size ticket-used">您的座位在C区 请从二楼南侧进入</span>
+                <span class="status-size ticket-used">
+                    您的座位在{{ticket_seat.seat1.cloumn}}排{{ticket_seat.seat1.row}}列
+                </span>
+                {% if ticket_seat['seat2'] %}
+                <span class="status-size ticket-used">
+                    您的第二个座位在{{ticket_seat.seat2.cloumn}}排{{ticket_seat.seat2.row}}列
+                </span>
+                {% endif %}
             </div>
         {% endif %}
     {% endif %}
