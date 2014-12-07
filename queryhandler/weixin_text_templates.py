@@ -86,7 +86,7 @@ def get_text_one_ticket_title(ticket, now):
 def get_text_one_ticket_description(ticket, now):
     tmp = '活动开始前45分钟凭本电子票入场。\n活动时间：' + get_text_time_standard(
         ticket.activity.start_time) + '\n活动地点：' + ticket.activity.place
-    if ticket.activity.seat_status == 1:
+    if not ticket.seat is None:
         tmp += ('\n' + '你的座位是：'+ticket.seat.description)
     if ticket.activity.book_end > now:
         tmp += ('\n回复“退票 ' + ticket.activity.key + '”即可退票。')
