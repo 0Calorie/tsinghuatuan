@@ -265,7 +265,7 @@ def chooseSeat_confirmIsHit(request, weixinOpenID, ticketID, seatRow, seatColumn
         print 'ex1'
         return HttpResponse('No_Such_Ticket')
 
-    theActivity = theTicket.activity;
+    theActivity = theTicket.activity
     try:
         theSeat = Seat.objects.get(activity = theActivity, seat_row = seatRow, seat_column = seatColumn)
     except:
@@ -346,38 +346,36 @@ def details_view(request, activityid):
 
 
 def ticket_view(request, uid):
-    ticket = Ticket.objects.filter(unique_id=uid)
-    if not ticket.exists():
+    ticket1 = dict()
+    ticket2 = dict()
+    seat1 = dict()
+    seat2 = dict()
+    act = dict()
+    try:
+        ticket = Ticket.objects.get(unique_id=uid)
+    except:
         raise Http404  #current activity is invalid
-    activity = Activity.objects.filter(id=ticket[0].activity_id)
-    act_id = activity[0].id
-    act_name = activity[0].name
-    act_key = activity[0].key
-    act_begintime = activity[0].start_time
-    act_endtime = activity[0].end_time
-    act_place = activity[0].place
-    ticket_status = ticket[0].status
+    ticket1 = model_to_dict(ticket)
+    act =  model_to_dict(ticket.activity)
+    #已经选择座位
+    if ticket1['seat_status'] == 1:
+        seat1 = model_to_dict(ticket.seat)
+    #表示活动已经结束
     now = datetime.datetime.now()
-    if act_endtime < now:#表示活动已经结束
-        ticket_status = 3
-    #select seat time
-    select = dict()
-    select['start'] = ticket[0].select_start
-    select['end'] =  ticket[0].select_end
-    # ticket_seat
-    ticket_seat= dict()
-    ticket_seat['status'] = ticket[0].seat_status
-    if ticket_seat['status'] == 1:  #已经选座
-        ticket_seat['seat1'] = ticket[0].seat
-        add_id = ticket[0].additional_ticket_id
-        if not add_id == -1:        #是否有双人票
-             ticket_another = Ticket.object.get(id=add_id)
-             ticket_seat['seat2'] = ticket_another.seat
-
+    if act['end_time'] < now:
+        ticket1['status'] = 3
+    #有双人座
+    add_id = ticket1['additional_ticket_id']
+    if add_id > 0:
+        ticket = Ticket.objects.get(id = add_id)
+        ticket2 = model_to_dict(ticket)
+        if ticket2['seat_status'] == 1:
+            seat2 = model_to_dict(ticket.seat)
     act_photo = "http://qr.ssast.org/fit/"+uid
-    variables=RequestContext(request,{'act_id':act_id, 'act_name':act_name,'act_place':act_place, 'act_begintime':act_begintime,
-                                      'act_endtime':act_endtime,'act_photo':act_photo, 'ticket_status':ticket_status,
-                                      'ticket_seat':ticket_seat,'act_key':act_key, 'select' :select})
+    print ticket1
+    print seat1
+    print seat2
+    variables=RequestContext(request,{'act_photo':act_photo, 'activity':act, 'ticket1':ticket1, 'ticket2': ticket2, 'seat1':seat1, 'seat2':seat2})
     return render_to_response('activityticket.html', variables)
 
 def help_view(request):
