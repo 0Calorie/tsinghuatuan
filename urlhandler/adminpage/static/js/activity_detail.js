@@ -113,6 +113,117 @@ function initializeForm(activity) {
     for (key in keyMap) {
         actionMap[keyMap[key]]($('#input-' + key), activity[key]);
     }
+
+    $('#activity-start-input')[0].value = "" + $('#input-start-year')[0].value;
+    if($('#input-start-month')[0].value < 10)
+        $('#activity-start-input')[0].value += "-0" + $('#input-start-month')[0].value;
+    else
+        $('#activity-start-input')[0].value += "-" + $('#input-start-month')[0].value;
+    if($('#input-start-day')[0].value  < 10)
+        $('#activity-start-input')[0].value +=   "-0" + $('#input-start-day')[0].value;
+    else
+        $('#activity-start-input')[0].value +=   "-" + $('#input-start-day')[0].value;
+    if($('#input-start-hour')[0].value < 10 )
+        $('#activity-start-input')[0].value += " 0" + $('#input-start-hour')[0].value;
+    else
+        $('#activity-start-input')[0].value += " " + $('#input-start-hour')[0].value;
+    if($('#input-start-minute')[0].value < 10) 
+        $('#activity-start-input')[0].value += ":0" + $('#input-start-minute')[0].value;
+    else
+        $('#activity-start-input')[0].value += ":" + $('#input-start-minute')[0].value;
+
+
+     $('#activity-end-input')[0].value = "" + $('#input-end-year')[0].value;
+    if($('#input-end-month')[0].value < 10)
+        $('#activity-end-input')[0].value += "-0" + $('#input-end-month')[0].value;
+    else
+        $('#activity-end-input')[0].value += "-" + $('#input-end-month')[0].value;
+    if($('#input-end-day')[0].value  < 10)
+        $('#activity-end-input')[0].value +=   "-0" + $('#input-end-day')[0].value;
+    else
+        $('#activity-end-input')[0].value +=   "-" + $('#input-end-day')[0].value;
+    if($('#input-end-hour')[0].value < 10 )
+        $('#activity-end-input')[0].value += " 0" + $('#input-end-hour')[0].value;
+    else
+        $('#activity-end-input')[0].value += " " + $('#input-end-hour')[0].value;
+    if($('#input-end-minute')[0].value < 10) 
+        $('#activity-end-input')[0].value += ":0" + $('#input-end-minute')[0].value;
+    else
+        $('#activity-start-input')[0].value += ":" + $('#input-start-minute')[0].value;
+   
+
+    $('#book-start-input')[0].value = "" + $('#input-book-start-year')[0].value;
+    if($('#input-book-start-month')[0].value < 10)
+        $('#book-start-input')[0].value += "-0" + $('#input-book-start-month')[0].value;
+    else
+        $('#book-start-input')[0].value += "-" + $('#input-book-start-month')[0].value;
+    if($('#input-book-start-day')[0].value  < 10)
+        $('#book-start-input')[0].value +=   "-0" + $('#input-book-start-day')[0].value;
+    else
+        $('#book-start-input')[0].value +=   "-" + $('#input-book-start-day')[0].value;
+    if($('#input-book-start-hour')[0].value < 10 )
+        $('#book-start-input')[0].value += " 0" + $('#input-book-start-hour')[0].value;
+    else
+        $('#book-start-input')[0].value += " " + $('#input-book-start-hour')[0].value;
+    if($('#input-book-start-minute')[0].value < 10) 
+        $('#book-start-input')[0].value += ":0" + $('#input-book-start-minute')[0].value;
+    else
+        $('#book-start-input')[0].value += ":" + $('#input-book-start-minute')[0].value;
+
+     $('#book-end-input')[0].value = "" + $('#input-book-end-year')[0].value;
+    if($('#input-book-end-month')[0].value < 10)
+        $('#book-end-input')[0].value += "-0" + $('#input-book-end-month')[0].value;
+    else
+        $('#book-end-input')[0].value += "-" + $('#input-book-end-month')[0].value;
+    if($('#input-book-end-day')[0].value  < 10)
+        $('#book-end-input')[0].value +=   "-0" + $('#input-book-end-day')[0].value;
+    else
+        $('#book-end-input')[0].value +=   "-" + $('#input-book-end-day')[0].value;
+    if($('#input-book-end-hour')[0].value < 10 )
+        $('#book-end-input')[0].value += " 0" + $('#input-book-end-hour')[0].value;
+    else
+        $('#book-end-input')[0].value += " " + $('#input-book-end-hour')[0].value;
+    if($('#input-book-end-minute')[0].value < 10) 
+        $('#book-end-input')[0].value += ":0" + $('#input-book-end-minute')[0].value;
+    else
+        $('#book-end-input')[0].value += ":" + $('#input-book-end-minute')[0].value;
+
+    $('#seat-start-input')[0].value = "" + $('#input-select-start-year')[0].value;
+    if($('#input-select-start-month')[0].value < 10)
+        $('#seat-start-input')[0].value += "-0" + $('#input-select-start-month')[0].value;
+    else
+        $('#seat-start-input')[0].value += "-" + $('#input-select-start-month')[0].value;
+    if($('#input-select-start-day')[0].value  < 10)
+        $('#seat-start-input')[0].value +=   "-0" + $('#input-select-start-day')[0].value;
+    else
+        $('#seat-start-input')[0].value +=   "-" + $('#input-select-start-day')[0].value;
+    if($('#input-select-start-hour')[0].value < 10 )
+        $('#seat-start-input')[0].value += " 0" + $('#input-select-start-hour')[0].value;
+    else
+        $('#seat-start-input')[0].value += " " + $('#input-select-start-hour')[0].value;
+    if($('#input-select-start-minute')[0].value < 10) 
+        $('#seat-start-input')[0].value += ":0" + $('#input-select-start-minute')[0].value;
+    else
+        $('#seat-start-input')[0].value += ":" + $('#input-select-start-minute')[0].value;
+
+     $('#seat-end-input')[0].value = "" + $('#input-select-end-year')[0].value;
+    if($('#input-select-end-month')[0].value < 10)
+        $('#seat-end-input')[0].value += "-0" + $('#input-select-end-month')[0].value;
+    else
+        $('#seat-end-input')[0].value += "-" + $('#input-select-end-month')[0].value;
+    if($('#input-select-end-day')[0].value  < 10)
+        $('#seat-end-input')[0].value +=   "-0" + $('#input-select-end-day')[0].value;
+    else
+        $('#seat-end-input')[0].value +=   "-" + $('#input-select-end-day')[0].value;
+    if($('#input-select-end-hour')[0].value < 10 )
+        $('#seat-end-input')[0].value += " 0" + $('#input-select-end-hour')[0].value;
+    else
+        $('#seat-end-input')[0].value += " " + $('#input-select-end-hour')[0].value;
+    if($('#input-select-end-minute')[0].value < 10) 
+        $('#seat-end-input')[0].value += ":0" + $('#input-select-end-minute')[0].value;
+    else
+        $('#seat-end-input')[0].value += ":" + $('#input-select-end-minute')[0].value;
+    
     if (!activity.id) {
         $('#input-name').val('');
         //新增活动，自动生成年份
@@ -139,6 +250,12 @@ function initializeForm(activity) {
         $('#input-book-start-hour').val(0);
         $('#input-book-end-hour').val(0);
         $('#input-seat_status').val(0);
+        $('#activity-start-input')[0].value = "";
+        $('#activity-end-input')[0].value = "";
+        $('#book-start-input')[0].value = "";
+        $('#book-end-input')[0].value = "";
+        $('#seat-start-input')[0].value = "";
+        $('#seat-end-input')[0].value = "";
     }
     if (typeof activity.checked_tickets !== 'undefined') {
         initialProgress(activity.checked_tickets, activity.ordered_tickets, activity.total_tickets);
@@ -544,3 +661,195 @@ $('#activity-form').submit(function() {
     //initializeForm(activity);
     return false;
 });
+
+$(document).ready(function(){
+    $('#activity-start').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+});
+     $('#activity-end').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+});
+      $('#book-start').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+});
+     $('#book-end').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+});
+      $('#seat-start').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+});
+     $('#seat-end').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+});
+     if(activity.id){
+    var now = new Date();
+    var nowtime = "";
+    nowtime += now.getFullYear();
+    if(now.getMonth()>=9)
+        nowtime += "-"+ ( now.getMonth()+1);
+    else
+        nowtime = nowtime + "-"+ 0 + (now.getMonth+1);
+    if(now.getDate()<=9)
+        nowtime += "-0" + now.getDate();
+    else
+        nowtime += "-" + now.getDate();
+    if(now.getHours()<=9)
+        nowtime += " 0"+now.getHours();
+    else
+        nowtime += " "+now.getHours();
+    if(now.getMinutes()<=9)
+        nowtime += ":0" + now.getMinutes();
+    else
+        nowtime += ":" + now.getMinutes();
+    $('#seat-start .input-group-addon').css("display","none");
+    $('#seat-start-input').attr("disabled","true");
+    $('#book-start .input-group-addon').css("display","none");
+    $('#book-start-input').attr("disabled","true");
+     }
+
+});
+function checkTime(){
+    if($('#activity-start-input')[0].value >= $('#activity-end-input')[0].value && $('#activity-end-input')[0].value !="" )
+        alert("活动结束时间应大于活动开始时间~");
+    if($('#book-end-input')[0].value >= $('#activity-start-input')[0].value && $('#activity-start-input')[0].value !="" )
+        alert("活动开始时间应大于抢票结束时间~");
+    if($('#book-start-input')[0].value >= $('#book-end-input')[0].value && $('#book-end-input')[0].value != "")
+        alert("抢票结束时间应大于抢票开始时间~");
+    if($('#seat-start-input')[0].value < $('#book-end-input')[0].value && $('#seat-start-input')[0].value !="")
+        alert("选座开始时间应大于抢票结束时间~");
+    if($('#seat-start-input')[0].value >= $('#seat-end-input')[0].value && $('#seat-end-input')[0].value !="")
+        alert("选座结束时间应大于选座开始时间~");
+    if($('#seat-end-input')[0].value >= $('#activity-start-input')[0].value && $('#activity-start-input')[0].value !="")
+        alert("活动开始时间应大于选座结束时间");
+
+    var now = new Date();
+    var nowtime = "";
+    nowtime += now.getFullYear();
+    if(now.getMonth()>=9)
+        nowtime += "-"+ ( now.getMonth()+1);
+    else
+        nowtime = nowtime + "-"+ 0 + (now.getMonth+1);
+    if(now.getDate()<=9)
+        nowtime += "-0" + now.getDate();
+    else
+        nowtime += "-" + now.getDate();
+    if(now.getHours()<=9)
+        nowtime += " 0"+now.getHours();
+    else
+        nowtime += " "+now.getHours();
+    if(now.getMinutes()<=9)
+        nowtime += ":0" + now.getMinutes();
+    else
+        nowtime += ":" + now.getMinutes();
+    if (!activity.id) {
+
+        if($('#book-start-input')[0].value !="" && $('#book-start-input')[0].value <= nowtime)
+        {
+            alert("抢票开始时间应大于当前时间~");
+            $('#book-start-input')[0].value = "";
+        }
+    }
+
+    if($('#activity-start-input')[0].value != "")
+    {
+        var string = $('#activity-start-input')[0].value;
+        $('#input-start-year')[0].value = string.substring(0,4);
+        $('#input-start-month')[0].value = string.substring(5,7);
+        $('#input-start-day')[0].value = string.substring(8,10);
+        $('#input-start-hour')[0].value = string.substring(11,13);
+        $('#input-start-minute')[0].value = string.substring(14,16);
+    }
+
+    if($('#activity-end-input')[0].value != "")
+    {
+        var string = $('#activity-end-input')[0].value;
+        $('#input-end-year')[0].value = string.substring(0,4);
+        $('#input-end-month')[0].value = string.substring(5,7);
+        $('#input-end-day')[0].value = string.substring(8,10);
+        $('#input-end-hour')[0].value = string.substring(11,13);
+        $('#input-end-minute')[0].value = string.substring(14,16);
+    }
+
+     if($('#book-start-input')[0].value != "")
+    {
+        var string = $('#book-start-input')[0].value;
+        $('#input-book-start-year')[0].value = string.substring(0,4);
+        $('#input-book-start-month')[0].value = string.substring(5,7);
+        $('#input-book-start-day')[0].value = string.substring(8,10);
+        $('#input-book-start-hour')[0].value = string.substring(11,13);
+        $('#input-book-start-minute')[0].value = string.substring(14,16);
+    }
+
+     if($('#book-end-input')[0].value != "")
+    {
+        var string = $('#book-end-input')[0].value;
+        $('#input-book-end-year')[0].value = string.substring(0,4);
+        $('#input-book-end-month')[0].value = string.substring(5,7);
+        $('#input-book-end-day')[0].value = string.substring(8,10);
+        $('#input-book-end-hour')[0].value = string.substring(11,13);
+        $('#input-book-end-minute')[0].value = string.substring(14,16);
+    }
+
+     if($('#seat-start-input')[0].value != "")
+    {
+        var string = $('#seat-start-input')[0].value;
+        $('#input-select-start-year')[0].value = string.substring(0,4);
+        $('#input-select-start-month')[0].value = string.substring(5,7);
+        $('#input-select-start-day')[0].value = string.substring(8,10);
+        $('#input-select-start-hour')[0].value = string.substring(11,13);
+        $('#input-select-start-minute')[0].value = string.substring(14,16);
+    }
+
+     if($('#seat-end-input')[0].value != "")
+    {
+        var string = $('#seat-end-input')[0].value;
+        $('#input-select-end-year')[0].value = string.substring(0,4);
+        $('#input-select-end-month')[0].value = string.substring(5,7);
+        $('#input-select-end-day')[0].value = string.substring(8,10);
+        $('#input-select-end-hour')[0].value = string.substring(11,13);
+        $('#input-select-end-minute')[0].value = string.substring(14,16);
+    }
+
+}

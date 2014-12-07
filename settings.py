@@ -4,4 +4,4 @@
 
 LUCKY_URL = "/weixin"
 
-LOCAL_PORT = 4603
+LOCAL_PORT = 8000

@@ -8,10 +8,14 @@
 
 {% block css %}
     <link rel="stylesheet" href="{% static "css/activity_detail.css" %}"/>
+    <link href="{% static "lib/bs/datetimepicker/css/bootstrap-datetimepicker.css" %}" rel="stylesheet" type="text/css" />
+
 {% endblock %}
 
 {% block js %}
 <script src="{% static "lib/jq/form/jquery.form.min.js" %}"></script>
+<script src="{% static "lib/bs/datetimepicker/js/bootstrap-datetimepicker.js" %}"></script>
+<script src="{% static "lib/bs/datetimepicker/js/locales/bootstrap-datetimepicker.ZH-CN.js" %}"></script>
    
     <script>
         var activity = {
@@ -136,7 +140,7 @@ id="input-pic_url" min="0" placeholder="请填入图片链接" required>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="display:none">
                 <label for="input-start-year" class="col-sm-2 control-label">活动开始</label>
                 <div class="form-inline col-sm-10" id="input-start_time">
                     <div class="form-group date-input">
@@ -178,7 +182,18 @@ id="input-pic_url" min="0" placeholder="请填入图片链接" required>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+
+             <div class="form-group">
+                <label for="dtp_input1" class="col-md-2 control-label">活动开始</label>
+                <div id = "activity-start" class="input-group date form_datetime col-md-5"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly="" id="activity-start-input" onchange="checkTime()">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input1" value="1979-09-20 02:30:07"><br>
+            </div>
+
+            <div class="form-group" style="display:none">
                 <label for="input-end-year" class="col-sm-2 control-label">活动结束</label>
                 <div class="form-inline col-sm-10" id="input-end_time">
                     <div class="form-group date-input">
@@ -220,6 +235,16 @@ id="input-pic_url" min="0" placeholder="请填入图片链接" required>
                     </div>
                 </div>
             </div>
+            
+             <div class="form-group">
+                <label for="dtp_input1" class="col-md-2 control-label">活动结束</label>
+                <div id = "activity-end" class="input-group date form_datetime col-md-5"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly="" id="activity-end-input" onchange="checkTime()">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input1" value="1979-09-20 02:30:07"><br>
+            </div>
 
             <div class="form-group">
                 <label for="input-total_tickets" class="col-sm-2 control-label">总票数</label>
@@ -229,7 +254,7 @@ id="input-total_tickets" min="1" placeholder="此次活动通过“紫荆之声�
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="display:none">
                 <label for="input-book-start-year" class="col-sm-2 control-label">订票开始</label>
                 <div class="form-inline col-sm-10" id="input-book_start">
                     <div class="form-group date-input">
@@ -271,7 +296,19 @@ id="input-total_tickets" min="1" placeholder="此次活动通过“紫荆之声�
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+
+             <div class="form-group">
+                <label for="dtp_input1" class="col-md-2 control-label">订票开始</label>
+                <div id = "book-start" class="input-group date form_datetime col-md-5"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly="" id="book-start-input" onchange="checkTime()">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input1" value="1979-09-20 02:30:07"><br>
+            </div>
+
+
+            <div class="form-group" style="display:none">
                 <label for="input-book-end-year" class="col-sm-2 control-label">订票结束</label>
                 <div class="form-inline col-sm-10" id="input-book_end">
                     <div class="form-group date-input">
@@ -314,6 +351,16 @@ id="input-total_tickets" min="1" placeholder="此次活动通过“紫荆之声�
                 </div>
             </div>
 
+             <div class="form-group">
+                <label for="dtp_input1" class="col-md-2 control-label">订票结束</label>
+                <div id = "book-end" class="input-group date form_datetime col-md-5"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly="" id="book-end-input" onchange="checkTime()">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input1" value="1979-09-20 02:30:07"><br>
+            </div>
+
 
             <div class="form-group" id="progress-tickets">
                 <label class="col-sm-2 control-label">订票与入场情况</label>
@@ -340,7 +387,7 @@ id="input-total_tickets" min="1" placeholder="此次活动通过“紫荆之声�
                 </div>
             </div>
 
-            <div class="form-group allocateSeat">
+            <div class="form-group" style="display:none">
                 <label for="input-select-end-year" class="col-sm-2 control-label">选座结束</label>
                 <div class="form-inline col-sm-10" id="input-select_end">
                     <div class="form-group date-input">
@@ -383,7 +430,17 @@ id="input-total_tickets" min="1" placeholder="此次活动通过“紫荆之声�
                 </div>
             </div>
 
-        <div class="form-group allocateSeat">
+             <div class="form-group allocateSeat">
+                <label for="dtp_input1" class="col-md-2 control-label">选座开始</label>
+                <div id = "seat-start" class="input-group date form_datetime col-md-5"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly="" id="seat-start-input" onchange="checkTime()">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input1" value="1979-09-20 02:30:07"><br>
+            </div>
+
+        <div class="form-group" style="display:none">
                 <label for="input-select-start-year" class="col-sm-2 control-label">选座开始</label>
                 <div class="form-inline col-sm-10" id="input-select_start">
                     <div class="form-group date-input">
@@ -424,6 +481,16 @@ id="input-total_tickets" min="1" placeholder="此次活动通过“紫荆之声�
                         <label class="control-label" for="input-select-start-minute">分</label>
                     </div>
                 </div>
+            </div>
+
+             <div class="form-group allocateSeat">
+                <label for="dtp_input1" class="col-md-2 control-label">选座结束</label>
+                <div id = "seat-end" class="input-group date form_datetime col-md-5"  data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly="" id="seat-end-input" onchange="checkTime()">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="dtp_input1" value="1979-09-20 02:30:07"><br>
             </div>
 
             <div class="form-group allocateSeat">
