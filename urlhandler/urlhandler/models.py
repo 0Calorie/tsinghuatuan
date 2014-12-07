@@ -3,11 +3,23 @@ from django.db import models
 import uuid
 
 
+class Authorization(models.Model):
+    authorizer_stu_id = models.CharField(max_length=255)
+    authorized_person_stu_id = models.CharField(max_length=255)
+    status = models.IntegerField()
+    apply_time = models.DateTimeField()
+    # Something about status
+    # 0: authorization is applied but not accepted
+    # 1: authorization is valid
+    # 2: authorization is invalid
+
+
 class User(models.Model):
     weixin_id = models.CharField(max_length=255)
     stu_id = models.CharField(max_length=255)
     status = models.IntegerField()
     seed = models.FloatField(default=1024)
+    authorization = models.ForeignKey(Authorization, null=True)
 
 
 class Activity(models.Model):
@@ -90,13 +102,3 @@ class Ticket(models.Model):
     # -1: no additional ticket
     # else: additional ticket id
 
-
-class Authorization(models.Model):
-    authorizer_stu_id = models.CharField(max_length=255)
-    authorized_person_stu_id = models.CharField(max_length=255)
-    status = models.IntegerField()
-    apply_time = models.DateTimeField()
-    # Something about status
-    # 0: authorization is applied but not accepted
-    # 1: authorization is valid
-    # 2: authorization is invalid

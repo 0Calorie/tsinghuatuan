@@ -167,15 +167,6 @@ def response_book_ticket(msg):
         return get_reply_text_xml(msg, get_text_usage_book_ticket())
 
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
-    authorizations = Authorization.objects.select_for_update().filter(status=1, authorized_person_stu_id=user.stu_id)
-    if authorizations.exists():
-        authorization = authorizations[0]
-        if authorization.apply_time + authorization_duration < now:
-            authorization.status = 2
-            authorization.save()
-        if authorization.status == 1:
-            return get_reply_text_xml(msg,
-                                      get_text_already_authorized_can_not_book_ticket(authorization.authorizer_stu_id))
 
     activities = Activity.objects.filter(status=1, book_end__gte=now, book_start__lte=now, key=key)
     if not activities.exists():
@@ -187,14 +178,12 @@ def response_book_ticket(msg):
         tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activities[0], status__gt=0)
         if tickets.exists():
             return get_reply_text_xml(msg, get_text_existed_book_ticket(tickets[0]))
-        authorizations = Authorization.objects.select_for_update().filter(status=1, authorizer_stu_id=user.stu_id)
         auth = False
-        if authorizations.exists():
-            authorization = authorizations[0]
+        authorization = user.authorization
+        if not (authorization is None):
             if authorization.apply_time + authorization_duration < now:
-                authorization.status = 2
-                authorization.save()
-            if authorization.status == 1:
+                Authorization.object.filter(id=authorization.id).update(status=2)
+            if user.stu_id == authorization.authorizer_stu_id and authorization.status == 1:
                 auth = True
         ticket = book_ticket(user, key, now, auth)
         if ticket is None:
@@ -700,6 +689,9 @@ def response_accept_authorization(msg):
             authorization.status = 1
             authorization.apply_time = now
             authorization.save()
+            user.authorization = authorization
+            User.objects.filter(id=key).update(authorization=authorization)
+
             return get_reply_text_xml(msg, get_text_authorization_success())  #返回成功信息
     else:
         return get_reply_text_xml(msg, get_text_invalid_receive_authorization())  #命令格式不正确
@@ -722,6 +714,8 @@ def response_cancel_authorization(msg):
         authorizer = authorizers[0]
         authorizer.status = 2
         authorizer.save()
+        User.objects.filter(id=user.id).update(authorization=None)
+        User.objects.filter(id=authorizer.authorized_person_stu_id).update(authorization=None)
         return get_reply_text_xml(msg, get_text_cancel_authorization_success(authorizer.authorized_person_stu_id))
     else:
         authorizeds = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
@@ -729,6 +723,8 @@ def response_cancel_authorization(msg):
             authorized = authorizeds[0]
             authorized.status = 2
             authorized.save()
+            User.objects.filter(id=user.id).update(authorization=None)
+            User.objects.filter(id=authorizer.authoizer_stu_id).update(authorization=None)
             return get_reply_text_xml(msg, get_text_cancel_authorization_success(authorized.authorizer_stu_id))
         else:
             return get_reply_text_xml(msg, get_text_cancel_no_authorization())
@@ -744,12 +740,20 @@ def response_check_authorization(msg):
     if user is None:
         return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
 
-    authorizers = Authorization.objects.select_for_update().filter(authorizer_stu_id=user.stu_id, status=1)
-    if authorizers.exists():
-        return get_reply_text_xml(msg, get_text_check_authorization(authorizers[0].authorized_person_stu_id))
+    authorization = user.authorization
+    now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
+    if user is None:
+        return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
+
+    if user.authorization is None:
+        return get_reply_text_xml(msg, get_text_no_check_authorization())
     else:
-        authorizeds = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
-        if authorizeds.exists():
-            return get_reply_text_xml(msg, get_text_check_authorization(authorizeds[0].authorizer_stu_id))
+        if authorization.apply_time + authorization_duration < now:
+            Authorization.object.filter(id=authorization.id).update(status=2)
+        if authorization.status == 1:
+            if user.id == authorization.authorizer_stu_id:
+                return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorizer_stu_id))
+            else:
+                return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorized_person_stu_id))
         else:
             return get_reply_text_xml(msg, get_text_no_check_authorization())
