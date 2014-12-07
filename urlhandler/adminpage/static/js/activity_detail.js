@@ -480,29 +480,21 @@ showForm();
 $('.form-control').on('focus', function() {var me = $(this); setTimeout(function(){me.select();}, 100)});
 
 $(document).ready(function(){
+
     if(activity.id>0)
     {
         selectSeat();
     }
 
 });
+$(".allocateSeat").css("display","none");
 function selectSeat(){
     var id = $('#input-seat_status');
-    var index = id[0].selectedIndex;
-    if(index==1)
-    {
-        $('#input-seat').css("display","block");
-        $('#input-seat-school').css("display","block");
-        $('#input-seat-lecture').css("display","none");
-    }
-    else if(index==2)
-    {
-         $('#input-seat').css("display","block");
-         $('#input-seat-school').css("display","none");
-         $('#input-seat-lecture').css("display","block");
-    }
+    var index = id.val();
+    if(index > 0)
+        $(".allocateSeat").css("display","block");
     else
-         $('#input-seat').css("display","none");
+        $(".allocateSeat").css("display","none");
 }
 
 //===========================================================================
