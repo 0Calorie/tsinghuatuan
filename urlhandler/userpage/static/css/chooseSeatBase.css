@@ -11,7 +11,7 @@ body
     font-family:"微软雅黑","黑体","宋体";
     font-size: 12px;
     line-height: 1.428571429;
-    background-color: rgb(100,100,100);
+    background-color: rgb(238, 221, 221);
     color: #423932;
 }
 hr {
@@ -88,8 +88,8 @@ body > #wrap {
 }
 .regionSelectDiv{
   margin-left:10%;
-  float:left; 
-  font-size:20px; 
+  float:left;
+  font-size:20px;
   cursor:pointer;
   background:gray;
 }
@@ -101,4 +101,35 @@ body > #wrap {
   font-size: 15px;
   padding: 2% 4% 2% 0%;
   margin: 1% 1% 1% 1% ;
+}
+
+.stage{
+    font-size:20px;
+    text-align:center;
+    background: darkgrey;
+    padding-left:20%;
+    padding-right:20%;
+}
+.region{
+    background: rgb(255, 32, 144);
+    float:left;
+    width: 20%;
+    margin-left: 0px;
+    text-align: center;
+    margin-top: 2%;
+    margin-bottom: 2;
+}
+.regionC{
+    /* height: 100px; */
+}
+.regionE {
+    float: left;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+.regionD {
+    width: 40%;
+    margin-left: 15%;
+    margin-right: 10%;
+    /* margin-top: 0; */
 }
