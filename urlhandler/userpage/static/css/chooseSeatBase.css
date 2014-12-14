@@ -111,7 +111,7 @@ body > #wrap {
   clear: both;
 }
 #selectRegion{
-  background-image: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat_xq.png)
+  background-image: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat_xq.png);
   background-repeat: no-repeat;
   /* height: 400px; */
   padding-bottom: 50%;
