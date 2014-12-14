@@ -10,17 +10,12 @@ var currentSection = {
     row: 0,
     column: 0
 };
-<<<<<<< HEAD
 
-var sectionNum = -1;
-window.onresize = function(){showSeat(sectionNum);}
-
-=======
 /*
 var sectionNum = -1;
 window.onresize = function(){showSeat(sectionNum);}
 */
->>>>>>> origin/master
+
 function getClientHeight(){
     return document.documentElement.clientHeight;
 }
