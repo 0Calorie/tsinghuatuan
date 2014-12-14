@@ -68,11 +68,8 @@ function showSeat_addEachRow(num, row, column, newTables){
                 row: i + 1,
                 column: row*(num-1) + (j + 1)
             });
-<<<<<<< HEAD
+            
             $(a).css("padding", clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth /25 + "px");
-=======
-            $(a).css("padding", clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth /25 + "px");//minwidth?
->>>>>>> origin/master
             $(a).css("margin", clientHeight/100 + "px " + "0px " + clientHeight/100 + "px " + "0px");
             //a.innerHTML = row*(num-1) + (j + 1);
             $(line).append(a);
