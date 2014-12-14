@@ -10,17 +10,10 @@ var currentSection = {
     row: 0,
     column: 0
 };
-<<<<<<< HEAD
-
-var sectionNum = -1;
-window.onresize = function(){showSeat(sectionNum);}
-
-=======
 /*
 var sectionNum = -1;
 window.onresize = function(){showSeat(sectionNum);}
 */
->>>>>>> origin/master
 function getClientHeight(){
     return document.documentElement.clientHeight;
 }
@@ -73,11 +66,7 @@ function showSeat_addEachRow(num, row, column, newTables){
                 row: i + 1,
                 column: row*(num-1) + (j + 1)
             });
-<<<<<<< HEAD
-            $(a).css("padding", clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth /25 + "px");
-=======
             $(a).css("padding", clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth /25 + "px");//minwidth?
->>>>>>> origin/master
             $(a).css("margin", clientHeight/100 + "px " + "0px " + clientHeight/100 + "px " + "0px");
             //a.innerHTML = row*(num-1) + (j + 1);
             $(line).append(a);
