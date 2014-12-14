@@ -36,7 +36,7 @@ function showSeat_addColumnIndex(num, row, column, newTables){
         var a = document.createElement('div');
         $(a).attr('class', 'columnIndex');
         $(a).css("width", clientWidth/25*2 + "px");
-        a.innerHTML = row*(num-1) + (j + 1);
+        a.innerHTML = row*(num-1) + (j + 1) + " ";
         $(line).append(a);
     }
     $(newTables).append(line);
@@ -68,7 +68,7 @@ function showSeat_addEachRow(num, row, column, newTables){
                 row: i + 1,
                 column: row*(num-1) + (j + 1)
             });
-            
+
             $(a).css("padding", clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth /25 + "px");
             $(a).css("margin", clientHeight/100 + "px " + "0px " + clientHeight/100 + "px " + "0px");
             //a.innerHTML = row*(num-1) + (j + 1);
