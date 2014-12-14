@@ -89,7 +89,7 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'wx3_text',
+            'NAME': 'wx3_test',
             'USER': 'wx3',
             'PASSWORD': '414cj35iB42fzXJz',
             'HOST': '127.0.0.1',
