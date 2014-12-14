@@ -92,10 +92,10 @@ else:
             'NAME': 'wx3_test',
             'USER': 'wx3',
             'PASSWORD': '414cj35iB42fzXJz',
-            'HOST': '127.0.0.1',
+            'HOST': 'wx3.igeek.asia',
             'PORT': '3306',
         }
-        }
+    }
 
 
 # Internationalization
