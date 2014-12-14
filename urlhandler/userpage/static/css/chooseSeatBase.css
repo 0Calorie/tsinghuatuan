@@ -8,11 +8,11 @@ html {
 body
 {
     margin:0px;
-    font-family:"微软雅黑","黑体","宋体";
+    font-family:"寰蒋闆呴粦","榛戜綋","瀹嬩綋";
     font-size: 12px;
     line-height: 1.428571429;
-    background-color: rgb(238, 221, 221);
-    color: #423932;
+    background-color: rgb(100,100,100);
+    color: rgba(255, 255, 255, 0);
 }
 hr {
   margin-top: 5px;
@@ -55,7 +55,7 @@ body > #wrap {
 
 #footer {
     position: relative;
-    margin-top: -60px; /* minus footer height */
+    /*margin-top: -60px; /* minus footer height */
     height: 37px; /* a little smaller than 50 to avoid scroll*/
     clear:both;
     text-align: center;
@@ -71,65 +71,51 @@ body > #wrap {
   font-size: 20px;
 }
 .smallSeat{
-  padding: 2% 4% 2% 4%;
-  margin: 1% 1% 1% 1% ;
   cursor: pointer;
   float: left;
+  background: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat center;
+  background-size: contain;
+  text-align: center;
 }
 .sectionDiv{
-  margin-left: 10%;
-  margin-right: 10%;
+  margin-left: 14%;
+  margin-right: 14%;
   margin-top: 3%;
   margin-bottom: 3%;
-  padding-left: 1%;
-  padding-right: 1%;
   position: relative;
-  background-color: rgba(200,200,200,0.8);
+  background-color: rgba(200,200,200,0.49);
 }
 .regionSelectDiv{
   margin-left:10%;
-  float:left;
-  font-size:20px;
+  float:left; 
+  font-size:20px; 
   cursor:pointer;
-  background:gray;
+  background:rgba(200,200,200,0.2);
+  /* position: absolute; */
+  /* top: 10%; */
+  /* width: 30%; */
+  /* height: 20%; */
 }
 .aRowOfSeats{
-  margin-left: 5%;
 }
-.rowHeader{
+.rowIndex{
   float: left;
-  font-size: 15px;
-  padding: 2% 4% 2% 0%;
-  margin: 1% 1% 1% 1% ;
+  text-align: center;
+  overflow: hidden;
 }
-
-.stage{
-    font-size:20px;
-    text-align:center;
-    background: darkgrey;
-    padding-left:20%;
-    padding-right:20%;
+.columnIndex{
+  float: left;
+  text-align: center;
 }
-.region{
-    background: rgb(255, 32, 144);
-    float:left;
-    width: 20%;
-    margin-left: 0px;
-    text-align: center;
-    margin-top: 2%;
-    margin-bottom: 2;
+.clearBoth{
+  clear: both;
 }
-.regionC{
-    /* height: 100px; */
-}
-.regionE {
-    float: left;
-    margin-left: 5%;
-    margin-right: 5%;
-}
-.regionD {
-    width: 40%;
-    margin-left: 15%;
-    margin-right: 10%;
-    /* margin-top: 0; */
+#selectRegion{
+  background-image: url(seat_xq.png);
+  background-repeat: no-repeat;
+  /* height: 400px; */
+  padding-bottom: 50%;
+  padding-top: 50%;
+  background-size: contain;
+  width: inh;
 }

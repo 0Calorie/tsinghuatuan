@@ -151,6 +151,7 @@ def validation_addNewbieToDataBase(weixinOpenID, studentID):
     return 'Accepted'
 
 def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
+
     # has been validated?
     if not(User.objects.filter(weixin_id=weixinOpenID, status=1).exists()):
         return 'Not_Validated'

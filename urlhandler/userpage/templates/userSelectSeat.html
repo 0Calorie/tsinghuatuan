@@ -1,70 +1,71 @@
 <!DOCTYPE html>
 {% load staticfiles %}
-<html lang="zh-CN">
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="{% static "css/chooseSeatBase.css"%}?_=4" rel="stylesheet" type="text/css" />
-  <title>清华紫荆之声</title>
-  <script src="{% static "lib/jquery/jquery-1.11.1.min.js" %}"></script>
-  <script>
-           var validity = "{{validity}}";
-           var weixinOpenID = "{{weixinOpenID}}";
-           var ticketID = "{{ticketPack.ticketID}}"
-           var allSeat = [
-           {% for seat in seatPack.seats %}
-           {
-              'row' : {{seat.seat_row}},
-              'column' : {{seat.seat_column}},
-              'price' : {{seat.seat_price}},
-              'status' : {{seat.status}},
-              'floor' : {{seat.seat_floor}}
-            }{% if forloop.last %}{% else %}, {% endif %}
-            {% endfor %}
-          ];
-
-       </script>
-  <script src="{% static "js/userSelectSeat.js" %}"></script>
-</head>
+<html lang="zh-CN"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="{% static "css/chooseSeatBase.css" %}" rel="stylesheet" type="text/css" />
+    <title>清华紫荆之声</title>
+    <script src="{% static "js/jquery-1.11.1.min.js" %}"></script>
+    <script src="{% static "js/userSelectSeat.js" %}"></script>
+    </head>
 <body>
-  <div id="wrap">
-    <header>What do you want?</header>
-    <hr/>
-
-    <div id="mainbody">
-      <div id="mainContent" style="position: absolute;width:100%;">
-        <div class="wholepicture" style="    z-index: 0;    position: absolute;    left: 30px;">
-          <img src="/static1/img/seat_zt.png"></div>
-        <div class="clickDIV" style=" width: 400px;position: absolute;">
-
-          <div class="stage">舞台</div>
-          <div id="selectRegion" style="width: 100%; position: relative; margin-left: 10%;">
-            <div class="regionCEB" style=" margin-top: 20px;">
-              <div class="region regionC" style=" height: 100px;   width: 50px;">C区</div>
-              <div class="region regionE" style=" width: 140px; height: 100px;">E区</div>
-              <div class="region regionB" style="height: 100px; width: 50px;">B区</div>
-            </div>
-            <div class="region regionD" style="height: 50px;">D区</div>
-            <div class="region regionD" style="height: 50px;">A区</div>
-          </div>
-        </div>
-        <div id="activityName"></div>
-      </div>
-      <div id="seat" style="display:none;position:absolute;width:100%;background-color: rgba(50,50,50,1);z-index:999;min-height:85%;">
-        <h2 id="place" style =" margin-top:5%; color: red; text-align:center;"></h2>
-      </div>
-      <div id="successHolder" style="display: none">
-        <img src="{% static "img/success.png" %}" />
+<header id = "header">
+        What do you want?
+</header>
+<div id="wrap">
+<hr/>
+<div id="mainbody">
+<div id="mainContent" style="position:relative;width:100%;">
+    <div style="position:relative;/* margin-left: 10%; */">
+      <div id="selectRegion" style="display: block;">          
+          <div class="regionSelectDiv" onclick="showSeat(1);" style="
+    position: absolute;
+    top: 5%;
+    left: 21%;
+    height: 30%;
+    width: 40%;
+    z-index: 10;
+"></div>
+          <div class="regionSelectDiv" onclick="showSeat(2);" style="
+    position: absolute;
+    top: 5%;
+    left: 15%;
+    width: 53%;
+    height: 45%;
+    z-index: 8;
+"></div>
+  
+          <div class="regionSelectDiv" onclick="showSeat(3);" style="
+    position: absolute;
+    top: 20%;
+    left: 6%;
+    height: 50%;
+    width: 70%;
+    z-index: 6;
+"></div>
+  <div class="regionSelectDiv" onclick="showSeat(3);" style="
+    position: absolute;
+    top: 40%;
+    left: %;
+    height: 46%;
+    width: 83%;
+"></div>
       </div>
     </div>
-
+    <div id="activityName"></div>
   </div>
-  <!--
+  <div id="seat" style="display:none;position:absolute;width:100%;background-color: rgba(50,50,50,1);z-index:999;min-height:85%;">
+     <h2 id="place" style =" margin-top:5%; color: red; text-align:center;"></h2>
+  </div>
+  <div id="successHolder" style="display: none">
+      <img src="{% static "img/success.png" %}" />
+  </div>
+</div>
 
-<div style="font-size: 30px; color: white;">{{validity}}</div>
--->
 <footer id="footer">
-  <hr />
-  0Cal
-  <br>&copy; 2014</footer>
+    <hr />
+    0Cal<br>
+    &copy; 2014
+</footer>
 </body>
 </html>

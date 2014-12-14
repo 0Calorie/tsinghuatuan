@@ -10,6 +10,74 @@ var currentSection = {
     row: 0,
     column: 0
 };
+/*
+var sectionNum = -1;
+window.onresize = function(){showSeat(sectionNum);}
+*/
+function getClientHeight(){
+    return document.documentElement.clientHeight;
+}
+function getClientWidth(){
+    return document.documentElement.clientWidth;
+}
+
+function showSeat_addColumnIndex(num, row, column, newTables){
+    var clientWidth = getClientWidth(), clientHeight = getClientHeight();
+    var line = document.createElement('div');
+    line.setAttribute('class', 'aRowOfSeats');
+    var a = document.createElement('div');
+    $(a).attr('class', 'columnIndex');
+    $(a).css("width", clientWidth/25*2 + "px");
+    a.innerHTML = "\\";
+    $(line).append(a);
+    for (j = 0; j < column; j++) {
+        var a = document.createElement('div');
+        $(a).attr('class', 'columnIndex');
+        $(a).css("width", clientWidth/25*2 + "px");
+        a.innerHTML = row*(num-1) + (j + 1);
+        $(line).append(a);
+    }
+    $(newTables).append(line);
+    var clearBoth = document.createElement('div');
+    $(clearBoth).attr('class', 'clearBoth');
+    $(line).append(clearBoth);
+}
+
+function showSeat_addEachRow(num, row, column, newTables){
+    var clientWidth = getClientWidth(), clientHeight = getClientHeight();
+    for (i = 0; i < row; i++) {
+        var line = document.createElement('div');
+        line.setAttribute('class', 'aRowOfSeats');
+        var a = document.createElement('div');
+        a.innerHTML = (i + 1);
+        $(a).attr('class', 'rowIndex');
+        $(a).css("height", clientWidth/25*2 + "px");
+        $(a).css("line-height", clientWidth/25*2 + "px");
+        $(a).css("width", clientWidth/25*2 + "px");
+        $(a).css("margin", clientHeight/100 + "px " + "0px " + clientHeight/100 + "px " + "0px");
+        $(line).append(a);
+        for (j = 0; j < column; j++) {
+            var a = document.createElement('div');
+            $(a).attr('class', 'smallSeat');
+            $(a).attr({
+                id: (i+1) + "-" + (row*(num-1) + (j + 1)),
+                state: -1,
+                price: 0,
+                row: i + 1,
+                column: row*(num-1) + (j + 1)
+            });
+            $(a).css("padding", clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth/25 + "px " + clientWidth /25 + "px");//minwidth?
+            $(a).css("margin", clientHeight/100 + "px " + "0px " + clientHeight/100 + "px " + "0px");
+            //a.innerHTML = row*(num-1) + (j + 1);
+            $(line).append(a);
+        }
+        $(newTables).append(line);
+        var clearBoth = document.createElement('div');
+        $(clearBoth).attr('class', 'clearBoth');
+        $(line).append(clearBoth);
+    }
+}
+
 function showSeat(num) {
     //remove old seat table
     var oldTable = document.getElementById('section');
@@ -17,6 +85,7 @@ function showSeat(num) {
         backIsHit();
     }
     
+    sectionNum = num;
     var row;
     var column;
     if (num == 1) {
@@ -31,47 +100,21 @@ function showSeat(num) {
         row = 7;
         column = 4;
     }
+    var clientWidth = getClientWidth(), clientHeight = getClientHeight();
+    var seatWidth = clientWidth*0.1 + "px";
     var newTables = document.createElement('div');
     newTables.id = 'section';
     newTables.setAttribute('class', 'sectionDiv');
-    var toBeClone = document.getElementById('seat2');
-    for (i = 0; i < row; i++) {
-        var line = document.createElement('div');
-        line.setAttribute('class', 'aRowOfSeats');
-            var a = document.createElement('div');
-            a.innerHTML = (i + 1);
-            a.setAttribute('class', 'rowHeader');
-            $(line).append(a);
-            for (j = 0; j < column; j++) {
-                var a = document.createElement('div');
-                    $(a).attr('class', 'smallSeat');
-                    $(a).attr({
-                        id: (i+1) + "-" + (row*(num-1) + (j + 1)),
-                        state: -1,
-                        price: 0,
-                        row: i + 1,
-                        column: row*(num-1) + (j + 1)
-                    });
-                    $(a).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat center")
-                    $(a).css("background-size", "contain");
-                    $(a).css("text-align", "center");
-
-                    $(line).append(a);
-                    a.innerHTML = row*(num-1) + (j + 1);
-            }
-            $(newTables).append(line);
-            var clearBoth = document.createElement('div');
-            clearBoth.style.clear = 'both';
-            $(line).append(clearBoth);
-    }
+    newTables.style.marginLeft = clientWidth /100 * 15 + "px";
+    newTables.style.marginRight = clientWidth / 100 * 15 + "px"
+    
+    showSeat_addColumnIndex(num, row, column, newTables);
+    showSeat_addEachRow(num, row, column, newTables);
     
     $('#seat').append(newTables);
     addThreeButton();
     $('#seat').css('display', 'block');
-    //$('#selectRegion').animate({
-    //    //left: '200px'
-    //    opacity: '0'
-    //});
+
     $('#selectRegion').css('display', 'none');
     var place = document.getElementById('place');
     place.innerHTML = 'Sector ' + num;
@@ -80,7 +123,7 @@ function showSeat(num) {
     currentSection.row = row;
     currentSection.column = column;
     currentSection.num = num;
-    layer2();
+    //layer2();
 }
 
 function addThreeButton() {
