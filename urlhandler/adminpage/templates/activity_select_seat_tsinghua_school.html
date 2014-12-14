@@ -4,7 +4,6 @@
 {% block css %}
   <link rel="stylesheet" href="{% static "css/activity_list.css" %}"/>
     <link rel="stylesheet" href="{% static "css/activity_detail.css" %}"/>
-    <link rel="stylesheet" href="{% static "css/activity_seat.css" %}"/>
 
 {% endblock %}
 
@@ -34,10 +33,10 @@
            $("#aid").attr("value", actID);
            $("#submitForm").attr("action", "/saveSeat/"+actID+"/");
        </script>
-       <script src="{% static "js/activity_seat.js" %}"></script>
+       <script src="{% static "js/activity_seat_tsinghua_school.js" %}"></script>
 {% endblock %}
 {% block content %}
-      <div id="mainContent" class = "retc" style="position:relative;min-height:200px;height:auto!important;height:200px">
+      <div id="mainContent" class = "retc" style="position:relative;min-height:200px;width:100%;height:auto!important;height:200px">
       	<div style="position:relative;margin:0 auto;width:800px">
       		<h2 class="place" name= "place"></h2>
       		<h2 class="ticket" name = "ticket"></h2>
@@ -47,7 +46,6 @@
   		</table>
   		</div>
   		<div id="firstfloor" style="height:auto!important;height:200px;margin-top:100px;position:relative;"></div>
-      <div id="secondfloor" style="height:auto!important;height:200px;margin-top:100px;position:relative;"></div>
   		<div id="postSeat" style="position:relative;top:margin-top:20px;margin-left:330px">
             <form role="form" id="submitForm" method="POST" action= "">
                 {% csrf_token %}

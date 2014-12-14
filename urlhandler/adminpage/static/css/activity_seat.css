@@ -1,0 +1,7 @@
+.default-seat{
+    width: 33px;
+    height: 25px;
+    cursor: pointer;
+    background: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat;
+    background-size: contain;
+}

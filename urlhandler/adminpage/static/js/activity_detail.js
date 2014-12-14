@@ -149,7 +149,7 @@ function initializeForm(activity) {
     if($('#input-end-minute')[0].value < 10) 
         $('#activity-end-input')[0].value += ":0" + $('#input-end-minute')[0].value;
     else
-        $('#activity-start-input')[0].value += ":" + $('#input-start-minute')[0].value;
+        $('#activity-end-input')[0].value += ":" + $('#input-start-minute')[0].value;
    
 
     $('#book-start-input')[0].value = "" + $('#input-book-start-year')[0].value;
@@ -623,8 +623,9 @@ function publishMyActivity1()
 
 
 function publishMyActivity() {
+
     if(!$('#activity-form')[0].checkValidity || $('#activity-form')[0].checkValidity()){
-        if(!checktime())
+        if(!checkTime())
             return false;
         showProcessing();
         setResult('');
@@ -751,18 +752,30 @@ $(document).ready(function(){
 
 });
 function checkTime(){
-    if($('#activity-start-input')[0].value >= $('#activity-end-input')[0].value && $('#activity-end-input')[0].value !="" )
+    if($('#activity-start-input')[0].value >= $('#activity-end-input')[0].value && $('#activity-end-input')[0].value !="" ) {
         alert("活动结束时间应大于活动开始时间~");
-    if($('#book-end-input')[0].value >= $('#activity-start-input')[0].value && $('#activity-start-input')[0].value !="" )
+        return false;
+    }
+    if($('#book-end-input')[0].value >= $('#activity-start-input')[0].value && $('#activity-start-input')[0].value !="" ) {
         alert("活动开始时间应大于抢票结束时间~");
-    if($('#book-start-input')[0].value >= $('#book-end-input')[0].value && $('#book-end-input')[0].value != "")
+        return false;
+    }
+    if($('#book-start-input')[0].value >= $('#book-end-input')[0].value && $('#book-end-input')[0].value != "") {
         alert("抢票结束时间应大于抢票开始时间~");
-    if($('#seat-start-input')[0].value < $('#book-end-input')[0].value && $('#seat-start-input')[0].value !="")
+        return false;
+    }
+    if($('#seat-start-input')[0].value < $('#book-end-input')[0].value && $('#seat-start-input')[0].value !=""){
         alert("选座开始时间应大于抢票结束时间~");
-    if($('#seat-start-input')[0].value >= $('#seat-end-input')[0].value && $('#seat-end-input')[0].value !="")
+        return false;
+    }
+    if($('#seat-start-input')[0].value >= $('#seat-end-input')[0].value && $('#seat-end-input')[0].value !=""){
         alert("选座结束时间应大于选座开始时间~");
-    if($('#seat-end-input')[0].value >= $('#activity-start-input')[0].value && $('#activity-start-input')[0].value !="")
+        return false;
+    }
+    if($('#seat-end-input')[0].value >= $('#activity-start-input')[0].value && $('#activity-start-input')[0].value !=""){
         alert("活动开始时间应大于选座结束时间");
+        return false;
+    }
 
     var now = new Date();
     var nowtime = "";
@@ -789,6 +802,7 @@ function checkTime(){
         {
             alert("抢票开始时间应大于当前时间~");
             $('#book-start-input')[0].value = "";
+            return false;
         }
     }
 
@@ -851,5 +865,6 @@ function checkTime(){
         $('#input-select-end-hour')[0].value = string.substring(11,13);
         $('#input-select-end-minute')[0].value = string.substring(14,16);
     }
+    return true;
 
 }

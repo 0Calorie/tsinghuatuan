@@ -1,5 +1,5 @@
- var rowNum = 10;
- var columnNum = 10;
+ var rowNum = 40;
+ var columnNum = 40;
  var tables = document.createElement('table');
             for(i=0;i<2*rowNum;i++)
             {
@@ -21,13 +21,7 @@
                     if(i%2==0&&j%2==0)
                     {
 
-                    $(a).css('background', "gray");
                     $(a).attr('onclick', 'changeColor();');
-                    $(a).css({
-                        width: '33px',
-                        height: '25px',
-                        cursor: 'pointer'
-                    });
                     $(a).attr({
                         id:(i/2+1)+"-"+(j/2+1),
                         state:0,
@@ -35,10 +29,9 @@
                         row:i/2+1,
                         column:j/2+1
                     });
-                    $(a).css("background","url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat");
-                    $(a).css("background-size","contain");
+                   $(a).addClass("default-seat");
                     }
-                    else if(i==2&&(j==5||j==13))
+                    else if(i==2&&(j==21||j==61))
                     {
                         $(a).css('width', '100px');
                         $(a).css('height', '25px');
