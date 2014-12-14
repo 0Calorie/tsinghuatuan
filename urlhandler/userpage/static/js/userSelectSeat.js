@@ -11,10 +11,13 @@ var currentSection = {
     column: 0
 };
 
-/*
+
 var sectionNum = -1;
-window.onresize = function(){showSeat(sectionNum);}
-*/
+window.onresize = function(){
+    if(sectionNum!=-1)
+        showSeat(sectionNum);
+}
+
 
 function getClientHeight(){
     return document.documentElement.clientHeight;
@@ -176,6 +179,7 @@ function backIsHit() {
     chosenSeat = null;
     chosenSeatID = 0;
 
+    sectionNum = -1;
 }
 
 function confirmIsHit() {
