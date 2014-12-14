@@ -56,18 +56,47 @@ WSGI_APPLICATION = 'urlhandler.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wx3_test',
-        'USER': 'wx3',
-        'PASSWORD': '414cj35iB42fzXJz',
-        'HOST': 'db.igeek.asia',
-        'PORT': '3306',
+if 'SERVER_SOFTWARE' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'NYenZfWMVWuqtUGNuQsI',
+            'USER': '6jIVijhGUVreXBNI6jYzZGlt',
+            'PASSWORD': 'AxB1w67ddB4cwkCLw3gQSoBjGUcICUL3',
+            'HOST': 'sqld.duapp.com',
+            'PORT': '4050',
+            }
     }
-}
+    #con = MySQLdb.Connect(host = "sqld.duapp.com",
+   #                       port = 4050,
+   #                       user = "6jIVijhGUVreXBNI6jYzZGlt",
+   #                       passwd = "AxB1w67ddB4cwkCLw3gQSoBjGUcICUL3",
+    #                      db = "NYenZfWMVWuqtUGNuQsI")
+   # con.ping(True)
+   #cur = con.cursor()
+elif (os.environ.get('USER', '') == 'ssastadmin') or ('SSAST_DEPLOYMENT' in os.environ):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'tsinghuatuan',
+            'USER': 'tsinghuatuan',
+            'PASSWORD': 'MA4vXQSAdcWkoZfI',
+            'HOST': '',
+            'PORT': '',
+            }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'wx3_text',
+            'USER': 'wx3',
+            'PASSWORD': '414cj35iB42fzXJz',
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
+        }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
