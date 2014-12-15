@@ -134,7 +134,7 @@ function initializeForm(activity) {
         $('#input-select-start-day')[0].value,$('#input-select-start-hour')[0].value,$('#input-select-start-minute')[0].value);
     
 
-     $('#seat-end-input')[0].value = transTimeToFormal($('#input-select-end-year')[0].value,$('#input-select-end-month')[0].value
+     $('#seat-end-input')[0].value = transTimeToFormal($('#input-select-end-year')[0].value,$('#input-select-end-month')[0].value,
         $('#input-select-end-day')[0].value,$('#input-select-end-hour')[0].value,$('#input-select-end-minute')[0].value);
     
     if (!activity.id) {
