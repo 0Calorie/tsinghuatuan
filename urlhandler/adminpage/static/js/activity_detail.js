@@ -114,115 +114,28 @@ function initializeForm(activity) {
         actionMap[keyMap[key]]($('#input-' + key), activity[key]);
     }
 
-    $('#activity-start-input')[0].value = "" + $('#input-start-year')[0].value;
-    if($('#input-start-month')[0].value < 10)
-        $('#activity-start-input')[0].value += "-0" + $('#input-start-month')[0].value;
-    else
-        $('#activity-start-input')[0].value += "-" + $('#input-start-month')[0].value;
-    if($('#input-start-day')[0].value  < 10)
-        $('#activity-start-input')[0].value +=   "-0" + $('#input-start-day')[0].value;
-    else
-        $('#activity-start-input')[0].value +=   "-" + $('#input-start-day')[0].value;
-    if($('#input-start-hour')[0].value < 10 )
-        $('#activity-start-input')[0].value += " 0" + $('#input-start-hour')[0].value;
-    else
-        $('#activity-start-input')[0].value += " " + $('#input-start-hour')[0].value;
-    if($('#input-start-minute')[0].value < 10) 
-        $('#activity-start-input')[0].value += ":0" + $('#input-start-minute')[0].value;
-    else
-        $('#activity-start-input')[0].value += ":" + $('#input-start-minute')[0].value;
+    $('#activity-start-input')[0].value = transTimeToFormal($('#input-start-year')[0].value,$('#input-start-month')[0].value,
+        $('#input-start-day')[0].value,$('#input-start-hour')[0].value,$('#input-start-minute')[0].value);
 
 
-     $('#activity-end-input')[0].value = "" + $('#input-end-year')[0].value;
-    if($('#input-end-month')[0].value < 10)
-        $('#activity-end-input')[0].value += "-0" + $('#input-end-month')[0].value;
-    else
-        $('#activity-end-input')[0].value += "-" + $('#input-end-month')[0].value;
-    if($('#input-end-day')[0].value  < 10)
-        $('#activity-end-input')[0].value +=   "-0" + $('#input-end-day')[0].value;
-    else
-        $('#activity-end-input')[0].value +=   "-" + $('#input-end-day')[0].value;
-    if($('#input-end-hour')[0].value < 10 )
-        $('#activity-end-input')[0].value += " 0" + $('#input-end-hour')[0].value;
-    else
-        $('#activity-end-input')[0].value += " " + $('#input-end-hour')[0].value;
-    if($('#input-end-minute')[0].value < 10) 
-        $('#activity-end-input')[0].value += ":0" + $('#input-end-minute')[0].value;
-    else
-        $('#activity-end-input')[0].value += ":" + $('#input-start-minute')[0].value;
+    $('#activity-end-input')[0].value = transTimeToFormal($('#input-end-year')[0].value,$('#input-end-month')[0].value,
+        $('#input-end-day')[0].value,$('#input-end-hour')[0].value,$('#input-end-minute')[0].value );
+    
    
+    $('#book-start-input')[0].value = transTimeToFormal($('#input-book-start-year')[0].value,$('#input-book-start-month')[0].value,
+        $('#input-book-start-day')[0].value,$('#input-book-start-hour')[0].value,$('#input-book-start-minute')[0].value);
+    
 
-    $('#book-start-input')[0].value = "" + $('#input-book-start-year')[0].value;
-    if($('#input-book-start-month')[0].value < 10)
-        $('#book-start-input')[0].value += "-0" + $('#input-book-start-month')[0].value;
-    else
-        $('#book-start-input')[0].value += "-" + $('#input-book-start-month')[0].value;
-    if($('#input-book-start-day')[0].value  < 10)
-        $('#book-start-input')[0].value +=   "-0" + $('#input-book-start-day')[0].value;
-    else
-        $('#book-start-input')[0].value +=   "-" + $('#input-book-start-day')[0].value;
-    if($('#input-book-start-hour')[0].value < 10 )
-        $('#book-start-input')[0].value += " 0" + $('#input-book-start-hour')[0].value;
-    else
-        $('#book-start-input')[0].value += " " + $('#input-book-start-hour')[0].value;
-    if($('#input-book-start-minute')[0].value < 10) 
-        $('#book-start-input')[0].value += ":0" + $('#input-book-start-minute')[0].value;
-    else
-        $('#book-start-input')[0].value += ":" + $('#input-book-start-minute')[0].value;
+     $('#book-end-input')[0].value = transTimeToFormal($('#input-book-end-year')[0].value,$('#input-book-end-month')[0].value,
+        $('#input-book-end-day')[0].value,$('#input-book-end-hour')[0].value,$('#input-book-end-minute')[0].value);
 
-     $('#book-end-input')[0].value = "" + $('#input-book-end-year')[0].value;
-    if($('#input-book-end-month')[0].value < 10)
-        $('#book-end-input')[0].value += "-0" + $('#input-book-end-month')[0].value;
-    else
-        $('#book-end-input')[0].value += "-" + $('#input-book-end-month')[0].value;
-    if($('#input-book-end-day')[0].value  < 10)
-        $('#book-end-input')[0].value +=   "-0" + $('#input-book-end-day')[0].value;
-    else
-        $('#book-end-input')[0].value +=   "-" + $('#input-book-end-day')[0].value;
-    if($('#input-book-end-hour')[0].value < 10 )
-        $('#book-end-input')[0].value += " 0" + $('#input-book-end-hour')[0].value;
-    else
-        $('#book-end-input')[0].value += " " + $('#input-book-end-hour')[0].value;
-    if($('#input-book-end-minute')[0].value < 10) 
-        $('#book-end-input')[0].value += ":0" + $('#input-book-end-minute')[0].value;
-    else
-        $('#book-end-input')[0].value += ":" + $('#input-book-end-minute')[0].value;
 
-    $('#seat-start-input')[0].value = "" + $('#input-select-start-year')[0].value;
-    if($('#input-select-start-month')[0].value < 10)
-        $('#seat-start-input')[0].value += "-0" + $('#input-select-start-month')[0].value;
-    else
-        $('#seat-start-input')[0].value += "-" + $('#input-select-start-month')[0].value;
-    if($('#input-select-start-day')[0].value  < 10)
-        $('#seat-start-input')[0].value +=   "-0" + $('#input-select-start-day')[0].value;
-    else
-        $('#seat-start-input')[0].value +=   "-" + $('#input-select-start-day')[0].value;
-    if($('#input-select-start-hour')[0].value < 10 )
-        $('#seat-start-input')[0].value += " 0" + $('#input-select-start-hour')[0].value;
-    else
-        $('#seat-start-input')[0].value += " " + $('#input-select-start-hour')[0].value;
-    if($('#input-select-start-minute')[0].value < 10) 
-        $('#seat-start-input')[0].value += ":0" + $('#input-select-start-minute')[0].value;
-    else
-        $('#seat-start-input')[0].value += ":" + $('#input-select-start-minute')[0].value;
+    $('#seat-start-input')[0].value = transTimeToFormal($('#input-select-start-year')[0].value,$('#input-select-start-month')[0].value,
+        $('#input-select-start-day')[0].value,$('#input-select-start-hour')[0].value,$('#input-select-start-minute')[0].value);
+    
 
-     $('#seat-end-input')[0].value = "" + $('#input-select-end-year')[0].value;
-    if($('#input-select-end-month')[0].value < 10)
-        $('#seat-end-input')[0].value += "-0" + $('#input-select-end-month')[0].value;
-    else
-        $('#seat-end-input')[0].value += "-" + $('#input-select-end-month')[0].value;
-    if($('#input-select-end-day')[0].value  < 10)
-        $('#seat-end-input')[0].value +=   "-0" + $('#input-select-end-day')[0].value;
-    else
-        $('#seat-end-input')[0].value +=   "-" + $('#input-select-end-day')[0].value;
-    if($('#input-select-end-hour')[0].value < 10 )
-        $('#seat-end-input')[0].value += " 0" + $('#input-select-end-hour')[0].value;
-    else
-        $('#seat-end-input')[0].value += " " + $('#input-select-end-hour')[0].value;
-    if($('#input-select-end-minute')[0].value < 10) 
-        $('#seat-end-input')[0].value += ":0" + $('#input-select-end-minute')[0].value;
-    else
-        $('#seat-end-input')[0].value += ":" + $('#input-select-end-minute')[0].value;
+     $('#seat-end-input')[0].value = transTimeToFormal($('#input-select-end-year')[0].value,$('#input-select-end-month')[0].value
+        $('#input-select-end-day')[0].value,$('#input-select-end-hour')[0].value,$('#input-select-end-minute')[0].value);
     
     if (!activity.id) {
         $('#input-name').val('');
@@ -262,6 +175,28 @@ function initializeForm(activity) {
     }
     curstatus = activity.status;
     lockByStatus(curstatus, activity.book_start, activity.start_time, activity.end_time);
+}
+
+function transTimeToFormal(year,month,day,hour,minute){
+    var time = "";
+    time += year;
+    if(month < 10)
+        time += "-0" + month;
+    else
+        time += "-" + month;
+    if(day < 10)
+        time += "-0" + day;
+    else
+        time += "-" + day;
+    if(hour < 10)
+        time += " 0" + hour;
+    else
+        time += " " + hour;
+    if(minute < 10)
+        time += ":0" + minute;
+    else
+        time += ":" + minute;
+    return time;
 }
 
 function check_percent(p) {
