@@ -19,45 +19,11 @@ WEIXIN_EVENT_KEYS = {
     'ticket_no_book_recommand': 'TSINGHUA_NO_BOOK_ACTS',
     'ticket_book_header': 'TSINGHUA_BOOK_',
     'modern_figure': 'V1001_MODERN_FIGURE',
+    'ticket_authorization': 'TSINGHUA_authorization'
 }
 
 WEIXIN_CUSTOM_MENU_TEMPLATE = {
     "button": [
-        {
-            "name": "资讯",
-            "sub_button": [
-                {
-                    "type": "click",
-                    "name": "逗逼",
-                    "key": WEIXIN_EVENT_KEYS['info_activity'],
-                    "sub_button": []
-                },
-                {
-                    "type": "click",
-                    "name": "讲座",
-                    "key": WEIXIN_EVENT_KEYS['info_lecture'],
-                    "sub_button": []
-                },
-                {
-                    "type": "click",
-                    "name": "新闻",
-                    "key": WEIXIN_EVENT_KEYS['info_news'],
-                    "sub_button": []
-                },
-                {
-                    "type": "click",
-                    "name": "人物",
-                    "key": WEIXIN_EVENT_KEYS['modern_figure'],
-                    "sub_button": []
-                },
-                {
-                    "type": "click",
-                    "name": "社团",
-                    "key": WEIXIN_EVENT_KEYS['info_organization'],
-                    "sub_button": []
-                }
-            ]
-        },
         {
             "name": "服务",
             "sub_button": [
@@ -98,6 +64,12 @@ WEIXIN_CUSTOM_MENU_TEMPLATE = {
                     "sub_button": []
                 }
             ]
+        },
+        {
+            "type": "click",
+            "name": "约吗",
+            "key": WEIXIN_EVENT_KEYS['ticket_authorization'],
+            "sub_button": []
         },
         {
             "name": "抢票",

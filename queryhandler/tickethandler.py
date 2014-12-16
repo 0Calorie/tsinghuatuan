@@ -620,7 +620,7 @@ def response_accept_authorization(msg):
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
-        return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
+        return get_reply_text_xml(msg, get_text_unbinded_authorize(fromuser))
 
     received_msg = get_msg_content(msg).split()
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
@@ -757,3 +757,16 @@ def response_check_authorization(msg):
                 return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorized_person_stu_id))
         else:
             return get_reply_text_xml(msg, get_text_no_check_authorization())
+
+
+def check_click_authorization(msg):
+    return handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_authorization']])
+
+
+def response_click_authorization(msg):
+    fromuser = get_msg_from(msg)
+    user = get_user(fromuser)
+    if user is None:
+        return get_reply_text_xml(msg, get_text_unbinded_authorize(fromuser))
+
+    return get_reply_text_xml(msg, get_text_authorization_link(user.id))
