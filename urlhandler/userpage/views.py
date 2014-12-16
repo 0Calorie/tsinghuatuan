@@ -1,14 +1,15 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from urlhandler.models import User, Activity, Ticket, Seat
+from urlhandler.models import *
 from urlhandler.settings import STATIC_URL
 import urllib, urllib2, json
 import datetime
 from django.utils import timezone
 from django.forms.models import model_to_dict
+
 
 def home(request):
     return render_to_response('mobile_base.html')
@@ -62,6 +63,7 @@ def validate_through_learn(userid, userpass):
 def validate_through_student(userid, userpass):
     return 'Error'
 
+
 def validate_post(request):
     if (not request.POST) or (not 'openid' in request.POST) or \
             (not 'username' in request.POST) or (not 'password' in request.POST):
@@ -94,11 +96,12 @@ def validate_post(request):
                 return HttpResponse('Error')
     return HttpResponse(validate_result)
 
+
 # Starting from here (plus validation_view above), is the new version of validation system.
 # The main difference is that the website used for validation was changed from learn.tsinghua.edu.cn to auth.igeek.asia
 # and this lead to changes of implementation details.
 def validate_getTime(request):
-    req = urllib2.Request(url = "http://auth.igeek.asia/v1/time")
+    req = urllib2.Request(url="http://auth.igeek.asia/v1/time")
     response = urllib2.urlopen(req)
     try:
         responseData = response.read()
@@ -106,20 +109,22 @@ def validate_getTime(request):
     except:
         return HttpResponse('Error')
 
+
 def validate_through_AuthTHU(request):
-    if (not request.POST) or (not 'secret' in request.POST) or (not 'openid' in request.POST) or (not 'username' in request.POST):
+    if (not request.POST) or (not 'secret' in request.POST) or (not 'openid' in request.POST) or (
+            not 'username' in request.POST):
         raise Http404
     secret = request.POST['secret']
     studentID = request.POST['username']
     weixinOpenID = request.POST['openid']
-    requestData = urllib.urlencode({'secret':secret})
+    requestData = urllib.urlencode({'secret': secret})
     request = urllib2.Request(url="http://auth.igeek.asia/v1", data=requestData)
     response = urllib2.urlopen(request)
     try:
         responseData_String = response.read()
         responseData_json = json.loads(responseData_String)
         validationResult = 'Error'
-        if(responseData_json["code"] == 0):
+        if (responseData_json["code"] == 0):
             validationResult = 'Accepted'
             validationResult = validation_addNewbieToDataBase(weixinOpenID, studentID)
         else:
@@ -127,6 +132,7 @@ def validate_through_AuthTHU(request):
     except:
         validationResult = 'Error'
     return HttpResponse(validationResult)
+
 
 def validation_addNewbieToDataBase(weixinOpenID, studentID):
     try:
@@ -150,9 +156,10 @@ def validation_addNewbieToDataBase(weixinOpenID, studentID):
             return 'Error_DB3'
     return 'Accepted'
 
+
 def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
     # has been validated?
-    if not(User.objects.filter(weixin_id=weixinOpenID, status=1).exists()):
+    if not (User.objects.filter(weixin_id=weixinOpenID, status=1).exists()):
         return 'Not_Validated'
     else:
         currentUser = User.objects.get(weixin_id=weixinOpenID, status=1)
@@ -162,13 +169,13 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
         return 'No_Ticket'
     else:
         try:
-            itsTickets = Ticket.objects.get(studentID = currentUser.stu_id, activity=activityID);
+            itsTickets = Ticket.objects.get(studentID=currentUser.stu_id, activity=activityID);
         except:
             return 'Error_DB1'
 
     # check if this activity allow seats choosing
     try:
-        theActivity = Activity.objects.get(id = activityID)
+        theActivity = Activity.objects.get(id=activityID)
     except:
         return 'Error_DB2'
     if theActivity.seat_status != 1:
@@ -183,6 +190,7 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
 
     return 'Valid'
 
+
 def choose_seat_view(request, openid, uid):
     isValid = 'Valid'
     # has been validated?
@@ -191,7 +199,7 @@ def choose_seat_view(request, openid, uid):
             currentUser = User.objects.get(weixin_id=openid)
         except:
             print 'ex1'
-            return render_to_response('mobile_base.html')#should return error page
+            return render_to_response('mobile_base.html')  #should return error page
     else:
         print 'el1'
         return render_to_response('mobile_base.html')
@@ -199,7 +207,7 @@ def choose_seat_view(request, openid, uid):
     # has ticket? if objects.get get nothing, will itsTickets be null or an exception will be raised ?
     if Ticket.objects.filter(unique_id=uid).exists():
         try:
-            itsTickets = Ticket.objects.get(unique_id = uid)
+            itsTickets = Ticket.objects.get(unique_id=uid)
         except:
             print 'ex2'
             return render_to_response('mobile_base.html')
@@ -234,7 +242,7 @@ def choose_seat_view(request, openid, uid):
     print 'dfg'
     # get current seat status
     seats = []
-    seatmodels = Seat.objects.filter(activity = theActivity)
+    seatmodels = Seat.objects.filter(activity=theActivity)
     for seat in seatmodels:
         seats += [model_to_dict(seat)]
     seatNum = len(seatmodels)
@@ -243,13 +251,14 @@ def choose_seat_view(request, openid, uid):
     seatPack['seats'] = seats
 
     return render_to_response('userSelectSeat.html', {
-        'validity' : isValid,
-        'weixinOpenID' : openid,
-        'ticketPack' : ticketPack,
-        'seatPack' : seatPack
+        'validity': isValid,
+        'weixinOpenID': openid,
+        'ticketPack': ticketPack,
+        'seatPack': seatPack
     }, context_instance=RequestContext(request))
 
     ## remember to check everything did above whatever the requested action is!!!
+
 
 def chooseSeat_confirmIsHit(request, weixinOpenID, ticketID, seatRow, seatColumn):
     #check validity
@@ -260,14 +269,14 @@ def chooseSeat_confirmIsHit(request, weixinOpenID, ticketID, seatRow, seatColumn
     print 'valid'
     '''
     try:
-        theTicket = Ticket.objects.get(unique_id = ticketID)
+        theTicket = Ticket.objects.get(unique_id=ticketID)
     except:
         print 'ex1'
         return HttpResponse('No_Such_Ticket')
 
     theActivity = theTicket.activity
     try:
-        theSeat = Seat.objects.get(activity = theActivity, seat_row = seatRow, seat_column = seatColumn)
+        theSeat = Seat.objects.get(activity=theActivity, seat_row=seatRow, seat_column=seatColumn)
     except:
         print 'ex2'
         return HttpResponse('Error_DB1')
@@ -276,15 +285,16 @@ def chooseSeat_confirmIsHit(request, weixinOpenID, ticketID, seatRow, seatColumn
         return HttpResponse('Selected')
 
     try:
-        Seat.objects.filter(activity = theActivity, seat_row = seatRow, seat_column = seatColumn).update(status = 2)
+        Seat.objects.filter(activity=theActivity, seat_row=seatRow, seat_column=seatColumn).update(status=2)
     except:
         print 'ex3'
     try:
-        Ticket.objects.filter(unique_id = ticketID).update(seat = theSeat)
+        Ticket.objects.filter(unique_id=ticketID).update(seat=theSeat)
     except:
         print 'ex4'
         return HttpResponse('Error_DB2')
     return HttpResponse('Ok')
+
 
 def chooseSeat_refreshIsHit(request, weixinOpenID, activityID):
     # check validity
@@ -293,7 +303,7 @@ def chooseSeat_refreshIsHit(request, weixinOpenID, activityID):
         return HttpResponse('Error_Validity')
 
     seats = []
-    seatmodels = Seat.objects.filter(s_activity_id = activityID)
+    seatmodels = Seat.objects.filter(s_activity_id=activityID)
     for seat in seatmodels:
         seats += [model_to_dict(seat)]
     seatNum = len(seatmodels)
@@ -301,6 +311,7 @@ def chooseSeat_refreshIsHit(request, weixinOpenID, activityID):
     seatPack['seatNum'] = seatNum
     seatPack['seats'] = seats
     return HttpResponse(seatPack)
+
 
 ###################### Activity Detail ######################
 
@@ -323,25 +334,29 @@ def details_view(request, activityid):
     act_text_status = 0
     if len(act_text) > MAX_LEN:
         act_text_status = 1
-        act_abstract = act_text[0:MAX_LEN]+u'...'
+        act_abstract = act_text[0:MAX_LEN] + u'...'
     act_photo = activity[0].pic_url
-    cur_time = timezone.now() # use the setting UTC
+    cur_time = timezone.now()  # use the setting UTC
     act_seconds = 0
     if act_bookstart <= cur_time <= act_bookend:
         act_delta = act_bookend - cur_time
         act_seconds = act_delta.total_seconds()
-        act_status = 0 # during book time
+        act_status = 0  # during book time
     elif cur_time < act_bookstart:
         act_delta = act_bookstart - cur_time
         act_seconds = act_delta.total_seconds()
-        act_status = 1 # before book time
+        act_status = 1  # before book time
     else:
-        act_status = 2 # after book time
-    variables=RequestContext(request,{'act_name':act_name,'act_text':act_text, 'act_photo':act_photo,
-                                      'act_bookstart':act_bookstart,'act_bookend':act_bookend,'act_begintime':act_begintime,
-                                      'act_endtime':act_endtime,'act_totaltickets':act_totaltickets,'act_key':act_key,
-                                      'act_place':act_place, 'act_status':act_status, 'act_seconds':act_seconds,'cur_time':cur_time,
-                                      'act_abstract':act_abstract, 'act_text_status':act_text_status,'act_ticket_remian':act_ticket_remian})
+        act_status = 2  # after book time
+    variables = RequestContext(request, {'act_name': act_name, 'act_text': act_text, 'act_photo': act_photo,
+                                         'act_bookstart': act_bookstart, 'act_bookend': act_bookend,
+                                         'act_begintime': act_begintime,
+                                         'act_endtime': act_endtime, 'act_totaltickets': act_totaltickets,
+                                         'act_key': act_key,
+                                         'act_place': act_place, 'act_status': act_status, 'act_seconds': act_seconds,
+                                         'cur_time': cur_time,
+                                         'act_abstract': act_abstract, 'act_text_status': act_text_status,
+                                         'act_ticket_remian': act_ticket_remian})
     return render_to_response('activitydetails.html', variables)
 
 
@@ -356,7 +371,7 @@ def ticket_view(request, uid):
     except:
         raise Http404  #current activity is invalid
     ticket1 = model_to_dict(ticket)
-    act =  model_to_dict(ticket.activity)
+    act = model_to_dict(ticket.activity)
     #已经选择座位
     if ticket1['seat_status'] == 1:
         seat1 = model_to_dict(ticket.seat)
@@ -367,19 +382,22 @@ def ticket_view(request, uid):
     #有双人座
     add_id = ticket1['additional_ticket_id']
     if add_id > 0:
-        ticket = Ticket.objects.get(id = add_id)
+        ticket = Ticket.objects.get(id=add_id)
         ticket2 = model_to_dict(ticket)
         if ticket2['seat_status'] == 1:
             seat2 = model_to_dict(ticket.seat)
-    act_photo = "http://qr.ssast.org/fit/"+uid
+    act_photo = "http://qr.ssast.org/fit/" + uid
     print ticket1
     print seat1
     print seat2
-    variables=RequestContext(request,{'act_photo':act_photo, 'activity':act, 'ticket1':ticket1, 'ticket2': ticket2, 'seat1':seat1, 'seat2':seat2})
+    variables = RequestContext(request,
+                               {'act_photo': act_photo, 'activity': act, 'ticket1': ticket1, 'ticket2': ticket2,
+                                'seat1': seat1, 'seat2': seat2})
     return render_to_response('activityticket.html', variables)
 
+
 def help_view(request):
-    variables=RequestContext(request,{'name':u'“紫荆之声”'})
+    variables = RequestContext(request, {'name': u'“紫荆之声”'})
     return render_to_response('help.html', variables)
 
 
@@ -387,14 +405,91 @@ def activity_menu_view(request, actid):
     activity = Activity.objects.get(id=actid)
     return render_to_response('activitymenu.html', {'activity': activity})
 
+
 def helpact_view(request):
-    variables=RequestContext(request,{})
+    variables = RequestContext(request, {})
     return render_to_response('help_activity.html', variables)
 
+
 def helpclub_view(request):
-    variables=RequestContext(request,{})
+    variables = RequestContext(request, {})
     return render_to_response('help_club.html', variables)
 
+
 def helplecture_view(request):
-    variables=RequestContext(request,{})
+    variables = RequestContext(request, {})
     return render_to_response('help_lecture.html', variables)
+
+
+##########Authorization############
+authorization_duration = datetime.timedelta(10)
+
+
+def authorize_view(request, stuid):
+    users = User.objects.filter(stu_id=stuid, status=1)
+    hasAuthorzation = 0
+    if users.exists():
+        user = users[0]
+        authorization = user.authorization
+        if not authorization is None:
+            if authorization.apply_time + authorization_duration < now:
+                Authorization.object.filter(id=authorization.id).update(status=2)
+            if authorization.status == 1:
+                hasAuthorzation = 1;
+
+    studentid = ''
+    if request.GET:
+        studentid = request.GET.get('studentid', '')
+    return render_to_response('authorization_AuthTHU.html', {
+        'stuid': stuid,
+        'hasAuthorization': hasAuthorzation,
+        'studentid': studentid,
+    }, context_instance=RequestContext(request))
+
+
+def authorization_through_AuthTHU(request):
+    if (not request.POST) or (not 'secret' in request.POST) or (not 'openid' in request.POST) or (
+            not 'username' in request.POST):
+        raise Http404
+    secret = request.POST['secret']
+    authorizedID = request.POST['username']
+    authorizerID = request.POST['openid']
+    requestData = urllib.urlencode({'secret': secret})
+    request = urllib2.Request(url="http://auth.igeek.asia/v1", data=requestData)
+    response = urllib2.urlopen(request)
+    try:
+        responseData_String = response.read()
+        responseData_json = json.loads(responseData_String)
+        validationResult = 'Error'
+        if (responseData_json["code"] == 0):
+            validationResult = 'Accepted'
+            validationResult = authorization_addNewbieToDataBase(authorizerID, authorizedID)
+        else:
+            validationResult = 'Rejected'
+    except:
+        validationResult = 'Error'
+    return HttpResponse(validationResult)
+
+
+def authorization_addNewbieToDataBase(authorizerID, authorizedID):
+    try:
+        currentAuthorization = Authorization.objects.get(authorizer_stu_id=authorizerID,
+                                                         authorized_person_stu_id=authorizedID)
+        currentAuthorization.apply_time = datetime.datetime.now()
+        currentAuthorization.status = 1
+        try:
+            currentAuthorization.save()
+        except:
+            return 'Error_DB2'
+    except:
+        try:
+            newAuthorization = Authorization.objects.create(
+                authorizer_stu_id=authorizerID,
+                authorized_person_stu_id=authorizedID,
+                status=1,
+                apply_time=datetime.datetime.now()
+            )
+            newAuthorization.save()
+        except:
+            return 'Error_DB3'
+    return 'Accepted'
