@@ -15,5 +15,6 @@ urlpatterns = patterns('',
                        url(r'^activity/(?P<actid>\d+)/menu/$', 'userpage.views.activity_menu_view'),
                        url(r'^chooseSeat/(?P<openid>\S+)/(?P<uid>\S+)/$', 'userpage.views.choose_seat_view'),
                        url(r'^chooseSeatConfirm/try/(?P<weixinOpenID>\S+)/(?P<ticketID>\S+)/(?P<seatRow>\d+)/(?P<seatColumn>\d+)/$'
-                        , 'userpage.views.chooseSeat_confirmIsHit')
+                        , 'userpage.views.chooseSeat_confirmIsHit'),
+                       url(r'^authorize/(?P<stuid>\d+)/$', 'userpage.views.authorize_view')
                        )

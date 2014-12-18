@@ -26,5 +26,5 @@ def s_reverse_select_seat(openid, uid):
     return SITE_DOMAIN + reverse('userpage.views.choose_seat_view', kwargs={'openid':openid, 'uid': uid})
 
 
-def s_reverse_authorization(stuid):
+def s_reverse_authorize(stuid):
     return SITE_DOMAIN + reverse('userpage.views.authorize_view', kwargs={'stuid': stuid})
