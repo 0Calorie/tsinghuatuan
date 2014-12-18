@@ -166,7 +166,23 @@ function checkIsDigit(groupid, helpid, inputid, hintName) {
         //dom.removeAttribute('hidden');
         showElem(helpid);
         return false;
-    } else {
+    }
+    else {
+        showSuccess(groupid, helpid);
+        return true;
+    }
+}
+
+function checkTheSameID(groupid, helpid, inputid, hintName, stuid) {
+    if (document.getElementById(inputid).value == stuid) {
+        document.getElementById(groupid).setAttribute('class', 'form-group has-error');
+        var dom = document.getElementById(helpid);
+        dom.innerText = '不能和自己"约约约"';
+        //dom.removeAttribute('hidden');
+        showElem(helpid);
+        return false;
+    }
+    else {
         showSuccess(groupid, helpid);
         return true;
     }
@@ -175,6 +191,9 @@ function checkIsDigit(groupid, helpid, inputid, hintName) {
 function checkUsername() {
     if (checkNotEmpty('usernameGroup', 'helpUsername', 'inputUsername', '学号')) {
         return checkIsDigit('usernameGroup', 'helpUsername', 'inputUsername', '学号');
+        if (checkUsername.arguments.length>0){
+            return checkTheSameID('usernameGroup', 'helpUsername', 'inputUsername', '学号', checkUsername.arguments[0])
+        }
     }
     return false;
 }
