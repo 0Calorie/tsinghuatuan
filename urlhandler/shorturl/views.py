@@ -16,7 +16,8 @@ def decode(request, short_url):
 
 key = 'shabihuang'
 chars = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-index = 0
+Index = 0
+
 
 def encode(raw_url):
     md5 = hashlib.md5((key+raw_url).encode('utf-8')).hexdigest()
@@ -31,7 +32,7 @@ def encode(raw_url):
             lHexLong >>= 5
         result_url.append(short_url)
     ShortUrl.objects.create(
-        short_url=result_url[index],
+        short_url=result_url[Index],
         raw_url=raw_url
     )
-    return result_url[index]
+    return result_url[Index]
