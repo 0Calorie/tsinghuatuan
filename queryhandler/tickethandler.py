@@ -762,6 +762,7 @@ def check_click_authorization(msg):
 
 
 def response_click_authorization(msg):
+    print('click yuema')
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
