@@ -189,11 +189,14 @@ function checkTheSameID(groupid, helpid, inputid, hintName, stuid) {
 
 function checkUsername() {
     if (checkNotEmpty('usernameGroup', 'helpUsername', 'inputUsername', '学号')) {
-        return checkIsDigit('usernameGroup', 'helpUsername', 'inputUsername', '学号');
-        if (checkUsername.arguments.length>0){
-            console.log(checkUsername.arguments[0]);
-            return checkTheSameID('usernameGroup', 'helpUsername', 'inputUsername', '学号', checkUsername.arguments[0]);
-        }
+        if (checkIsDigit('usernameGroup', 'helpUsername', 'inputUsername', '学号')){
+            if (checkUsername.arguments.length>0){
+                console.log(checkUsername.arguments[0]);
+                return checkTheSameID('usernameGroup', 'helpUsername', 'inputUsername', '学号', checkUsername.arguments[0]);
+            }else 
+                return true;
+        }else 
+            return false;
     }
     return false;
 }
