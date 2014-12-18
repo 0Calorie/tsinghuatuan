@@ -12,7 +12,7 @@ def decode(request, short_url):
         raw_url = surl[0].raw_url
         return HttpResponseRedirect(raw_url)
     else:
-        return HttpResponseRedirect(SITE_DOMAIN+'/u/.html')
+        return HttpResponseRedirect(SITE_DOMAIN+'/u/')
 
 key = 'shabihuang'
 chars = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -35,4 +35,4 @@ def encode(raw_url):
         short_url=result_url[Index],
         raw_url=raw_url
     )
-    return result_url[Index]
+    return SITE_DOMAIN+'/s/'+result_url[Index]+'/'
