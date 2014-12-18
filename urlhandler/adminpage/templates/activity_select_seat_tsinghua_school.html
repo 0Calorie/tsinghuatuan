@@ -29,7 +29,7 @@
            //座位所在地点
            var place = "{{activity.place}}";
            var price = "{{activity.total_price}}".split(" ");
-           $(".place")[0].innerText = place + "座位图" ;
+           /*$(".place")[0].innerText = place + "座位图" ;*/
             $(".ticket")[0].innerText = "总共" + ticketNum +"张票"  + " 已选择" + seatNum +"个座位";
            $("#aid").attr("value", actID);
            $("#submitForm").attr("action", "/saveSeat/"+actID+"/");
@@ -39,7 +39,7 @@
 {% block content %}
       <div id="mainContent" class = "retc">
       	<div style="position:relative;margin:0 auto;width:80%">
-      		<h2 class="place" name= "place"></h2>
+      		<h2 class="place" name= "place">新清华学堂座位图</h2>
   		  </div>
        <div style="position:relative;margin:0 auto;width:80%;margin-top:30px;margin-bottom:30px;display:none" id="selectPriceDiv">
          <div>

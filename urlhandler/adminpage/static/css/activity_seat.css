@@ -95,3 +95,21 @@ background-size: contain; */
 	left: 10%;
 	width: 30%;
 }
+
+.colNum{
+	width: 50px;
+	height: 25px;
+	cursor: pointer;
+	text-align: center;
+}
+
+.seatCursor{
+	position: relative;
+	margin-top: -40px;
+	margin-left: 0px;
+	display: none;
+	color: red;
+	text-align: center;
+	border: 1px solid black;
+	-webkit-border-radius: 5px;
+}

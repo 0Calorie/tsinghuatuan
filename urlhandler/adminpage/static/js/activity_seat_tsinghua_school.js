@@ -3,7 +3,6 @@ var priceColor = new Array("#FFFF80",
                            "#FF8080",
                            "#FF8040",
                            "#8080FF",
-                           "#8080FF",
                            "#808000");
 var defaultSeat = "gray";
 
@@ -12,10 +11,21 @@ function showCursor(){
 	  $('#'+id+' .cursor').css("display","block");
 }
 
+function showSeatCursor(){
+	 var id = $(this.event.srcElement)[0].id;
+	  $('#'+id+' .seatCursor').css("display","block");
+}
+
 function cancelShowCursor(){
 	 var id = $(this.event.srcElement)[0].id;
 	  $('#'+id+' .cursor').css("display","none");
 }
+
+function cancelShowSeatCursor(){
+	 var id = $(this.event.srcElement)[0].id;
+	  $('#'+id+' .seatCursor').css("display","none");
+}
+
 
 function showRegionSeat(num){
 	$('#region-'+num).css("display","block");
@@ -117,7 +127,7 @@ $("#selectPrice").ready(function() {
     {
         var td = document.createElement('td');
         $(td).css({
-            width: '50px',
+            width: '75px',
             cursor: 'pointer',
             height: '50px',
             "font-size": '20px',
@@ -130,7 +140,7 @@ $("#selectPrice").ready(function() {
         $(td).attr({
             align: 'center',
             onclick: 'selectPrice()',
-            price: price[i],
+            price: price[i]
         });
         $(td).css("background-size","contain");
         td.innerHTML = price[i] + "元";
@@ -161,6 +171,8 @@ function alignLeft(tr,i,j,column,maxColumn,row,leftColumn,floor){
 			$(td).addClass("default-seat");
 			$(td).attr({
 				onclick: "changeColor()",
+				onmouseover: "showSeatCursor()",
+				onmouseout: "cancelShowSeatCursor()",
 				id: floor+"-"+row+"-"+(k+1+leftColumn),
 				state: 0,
 				price: 0,
@@ -168,6 +180,10 @@ function alignLeft(tr,i,j,column,maxColumn,row,leftColumn,floor){
 				column: (k+1+leftColumn),
 				floor: floor
 				});
+			var div = document.createElement('div');
+			$(div).addClass("seatCursor");
+			div.innerText = (k+1+leftColumn);
+			$(td).append(div);
 		}
 		$(tr).append(td);
 
@@ -189,6 +205,8 @@ function alignCenter(tr,i,j,column,maxColumn,row,leftColumn,floor){
 		$(td).addClass("default-seat");
 		$(td).attr({
 			onclick: "changeColor()",
+			onmouseover: "showSeatCursor()",
+			onmouseout: "cancelShowSeatCursor()",
 			id: floor+"-"+row+"-"+(k+1+leftColumn-(maxColumn[j] - column[i][j])/2),
 			state: 0,
 			price: 0,
@@ -196,6 +214,10 @@ function alignCenter(tr,i,j,column,maxColumn,row,leftColumn,floor){
 			column: (k+1+leftColumn-(maxColumn[j] - column[i][j])/2),
 			floor: floor
 			});
+		var div = document.createElement('div');
+			$(div).addClass("seatCursor");
+			div.innerText = (k+1+leftColumn-(maxColumn[j] - column[i][j])/2);
+			$(td).append(div);
 	}
 	$(tr).append(td);
 	}
@@ -216,6 +238,8 @@ function alignRight(tr,i,j,column,maxColumn,row,leftColumn,floor){
 			$(td).addClass("default-seat");
 			$(td).attr({
 				onclick: "changeColor()",
+				onmouseover: "showSeatCursor()",
+				onmouseout: "cancelShowSeatCursor()",
 				id: floor+"-"+row+"-"+(k+1+leftColumn-(maxColumn[j] - column[i][j])),
 				state: 0,
 				price: 0,
@@ -223,6 +247,10 @@ function alignRight(tr,i,j,column,maxColumn,row,leftColumn,floor){
 				column: (k+1+leftColumn-(maxColumn[j] - column[i][j])),
 				floor: floor
 				});
+			var div = document.createElement('div');
+			$(div).addClass("seatCursor");
+			div.innerText = (k+1+leftColumn-(maxColumn[j] - column[i][j]));
+			$(td).append(div);
 		}
 		$(tr).append(td);
 	}
@@ -237,9 +265,7 @@ function createTable(num,columnNum,column,maxColumn,floor){
 			if(j==0){
 				tr = alignRight(tr,i,j,column,maxColumn,i+num,0,floor);
 				var b = document.createElement('td');
-                        $(b).css('width', '50px');
-                        $(b).css('cursor', 'pointer');
-                        $(b).css('height', '25px');
+                        $(b).addClass("colNum");
                         $(b).attr({
                         	state: 0,
                         	onclick: "selectOneRow()",
@@ -260,6 +286,7 @@ function createTable(num,columnNum,column,maxColumn,floor){
 				var b = document.createElement('td');
                         $(b).css('width', '50px');
                         $(b).css('height', '25px');
+                        $(b).css("text-align","center");
                         b.innerText = i+num;
                         $(tr).append(b);
 			}
@@ -279,6 +306,7 @@ function createTable(num,columnNum,column,maxColumn,floor){
 				var b = document.createElement('td');
                         $(b).css('width', '50px');
                         $(b).css('height', '25px');
+                         $(b).css("text-align","center");
                         b.innerText = i+num;
                         $(tr).append(b);
 			}
@@ -291,6 +319,7 @@ function createTable(num,columnNum,column,maxColumn,floor){
 				var b = document.createElement('td');
                         $(b).css('width', '50px');
                         $(b).css('height', '25px');
+                         $(b).css("text-align","center");
                         b.innerText = i+num;
                         $(tr).append(b);
 		}
