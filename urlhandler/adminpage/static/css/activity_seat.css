@@ -1,7 +1,97 @@
 .default-seat{
-    width: 33px;
+    width: 25px;
     height: 25px;
     cursor: pointer;
-    background: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat;
-    background-size: contain;
+/*     background: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat;
+background-size: contain; */
+	background: gray;
+	padding: 2px;
+	border: 2px solid #fff;
+    -moz-border-radius: 10px;  
+    -webkit-border-radius: 10px;
+}
+
+.price-seat{
+	width: 50px;
+    cursor: pointer;
+    height: 50px;
+    font-size: 20px;
+    padding: 2px;
+	border: 2px solid #fff;
+	-moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+#mainContent{
+	position: relative;
+	min-height: 200px;
+	height: auto!important;
+	height: 200px;
+	width:100%;
+}
+
+.place{
+	text-align: left;
+	font-weight: bold;
+}
+
+.seat{
+	position: relative;
+	height: 400px;
+	width: 30%;
+	background: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat_xq.png) no-repeat;
+	background-size: contain;
+	left: 50%;
+	margin-top: -25%;
+}
+.selectA{
+	position: relative;
+	top: 5%;
+	left: 40%;
+	width: 20%;
+	height: 25%;
+	text-align: center;
+	cursor: pointer;
+}
+
+.selectB{
+    height: 10%;
+    width: 20%;
+    top: 16%;
+    left: 40%;
+    position: relative;
+    cursor: pointer;
+}
+
+.selectC{
+    position: relative;
+    width: 20%;
+    height: 15%;
+    top: 22%;
+    left: 40%;
+    cursor: pointer;
+}
+.selectD{
+    position: relative;
+    width: 20%;
+    height: 15%;
+    top: 22%;
+    left: 40%;
+    cursor: pointer;
+}
+.cursor{
+	position: relative;
+    top: -30px;
+    width: 162px;
+    height: 30px;
+    border: 2px solid pink;
+    -moz-border-radius: 10px;  -webkit-border-radius: 10px;
+    margin: 0 auto;
+    left: -40px;
+    display: none;
+    text-align: center;
+}
+#seatNum{
+	position: relative;
+	left: 10%;
+	width: 30%;
 }

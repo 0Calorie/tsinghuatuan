@@ -3,7 +3,8 @@
 {% load staticfiles %}
 {% block css %}
   <link rel="stylesheet" href="{% static "css/activity_list.css" %}"/>
-    <link rel="stylesheet" href="{% static "css/activity_detail.css" %}"/>
+  <link rel="stylesheet" href="{% static "css/activity_detail.css" %}"/>
+  <link rel="stylesheet" href="{% static "css/activity_seat.css" %}"/>
 
 {% endblock %}
 
@@ -29,35 +30,86 @@
            var place = "{{activity.place}}";
            var price = "{{activity.total_price}}".split(" ");
            $(".place")[0].innerText = place + "座位图" ;
-            $(".ticket")[0].innerText = "总共" + ticketNum +"张票"  + "已选择" + seatNum +"个座位";
+            $(".ticket")[0].innerText = "总共" + ticketNum +"张票"  + " 已选择" + seatNum +"个座位";
            $("#aid").attr("value", actID);
            $("#submitForm").attr("action", "/saveSeat/"+actID+"/");
        </script>
        <script src="{% static "js/activity_seat_tsinghua_school.js" %}"></script>
 {% endblock %}
 {% block content %}
-      <div id="mainContent" class = "retc" style="position:relative;min-height:200px;width:100%;height:auto!important;height:200px">
-      	<div style="position:relative;margin:0 auto;width:800px">
+      <div id="mainContent" class = "retc">
+      	<div style="position:relative;margin:0 auto;width:80%">
       		<h2 class="place" name= "place"></h2>
-      		<h2 class="ticket" name = "ticket"></h2>
-  		</div>
-  		<div style="position:relative;margin:0 auto;width:800px;margin-top:30px">
-  		<table  id="selectPrice">
-  		</table>
-  		</div>
-  		<div id="firstfloor" style="height:auto!important;height:200px;margin-top:100px;position:relative;"></div>
-  		<div id="postSeat" style="position:relative;top:margin-top:20px;margin-left:330px">
-            <form role="form" id="submitForm" method="POST" action= "">
-                {% csrf_token %}
-                <input id="floor" type="text" name="floor" value = "value" style="display:none" />
-                <input id="row" type="text" name="row"  value = "value" style="display:none" />
-                <input id="price" type="text" name="price"  value = "value" style="display:none" />
-                <input id="column" type="text" name="column"  value = "value" style="display:none" />
-                <input id="aid" type="text" name="aid"  value = "" style="display:none" />
-                <button type="button" id="submitButton" onclick="postSeat()" class="btn btn-primary" style="margin-top:30px">保存</button>
-                <button type="submit" id="submitButton1" class="btn btn-primary" style="margin-top:30px ; display:none">保存!</button>
-            </form>
-  		</div>
+  		  </div>
+       <div style="position:relative;margin:0 auto;width:80%;margin-top:30px;margin-bottom:30px;display:none" id="selectPriceDiv">
+         <div>
+          <table  id="selectPrice">
+          </table>
+         </div>
+        </div>
+      <div id="main-xq">
+            <div id="seatNum">
+              <h3 class="ticket" name = "ticket"></h3>
+              <table class="table table-hover">
+                 <thead>
+                    <tr>
+                       <th>区域</th>
+                       <th>已选票数</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    <tr>
+                       <td>一楼</td>
+                       <td id="floor-1">0</td>
+                    </tr>
+                    <tr>
+                       <td>二楼</td>
+                       <td id="floor-2">0</td>
+                    </tr>
+                     <tr>
+                       <td>三楼</td>
+                       <td id="floor-3">0</td>
+                    </tr>
+                 </tbody>
+              </table>
+            </div>
+            <div id="postSeat" style="position:relative;margin-top:5%;left:2%;width:30%">
+                  <form role="form" id="submitForm" method="POST" action= "">
+                      {% csrf_token %}
+                      <input id="floor" type="text" name="floor" value = "value" style="display:none" />
+                      <input id="row" type="text" name="row"  value = "value" style="display:none" />
+                      <input id="price" type="text" name="price"  value = "value" style="display:none" />
+                      <input id="column" type="text" name="column"  value = "value" style="display:none" />
+                      <input id="aid" type="text" name="aid"  value = "" style="display:none" />
+                      <div style="margin:0 auto;width:43%;">
+                        <button type="button" id="submitButton" onclick="postSeat()" class="btn btn-primary">保存</button>
+                         <button type="button" id="cancelButton"  class="btn btn-warning" >返回</button>
+                      </div>
+                      <button type="submit" id="submitButton1" class="btn btn-primary" style="margin-top:30px; display:none">保存!</button>
+                  </form>
+            </div>
+        		<div id="selectRegion" class="seat">
+              <div id="selectA" class="selectA" onclick="showRegionSeat(1)">
+                <div class="cursor">点击选择1楼池座座位</div>
+              </div>
+              <div id="selectB" class="selectB" onclick="showRegionSeat(2)">
+                <div class="cursor">点击选择1楼楼座座位</div>
+              </div>
+              <div id="selectC" class="selectC" onclick="showRegionSeat(3)">
+                <div class="cursor">点击选择2楼楼座座位</div>
+              </div>  
+               <div id="selectD" class="selectD" onclick="showRegionSeat(4)">
+                <div class="cursor">点击选择3楼楼座座位</div>
+              </div> 
+
+        </div>
+        </div>
+        <div id="region-1"  style="display:none;">
+        </div>
+        </div>
+        <div id="region-2"  style="display:none;"></div>
+        <div id="region-3"  style="display:none;"></div>
+        <div id="region-4"  style="display:none;"></div>
   </div>
 
 {% endblock %}
