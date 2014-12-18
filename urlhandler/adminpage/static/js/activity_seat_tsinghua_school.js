@@ -3,7 +3,10 @@ var priceColor = new Array("#FFFF80",
                            "#FF8080",
                            "#FF8040",
                            "#8080FF",
-                           "#808000");
+                           "#808000",
+                           "#FF0000",
+                           "#008080"
+                           "#800040");
 var defaultSeat = "gray";
 
 function showCursor(){
