@@ -83,22 +83,24 @@
                       <input id="aid" type="text" name="aid"  value = "" style="display:none" />
                       <div style="margin:0 auto;width:43%;">
                         <button type="button" id="submitButton" onclick="postSeat()" class="btn btn-primary">保存</button>
+                         <a id = "return-detail" href="{% url "adminpage.views.activity_detail" actid=id %}"> 
                          <button type="button" id="cancelButton"  class="btn btn-warning" >返回</button>
+                         </a>
                       </div>
                       <button type="submit" id="submitButton1" class="btn btn-primary" style="margin-top:30px; display:none">保存!</button>
                   </form>
             </div>
         		<div id="selectRegion" class="seat">
-              <div id="selectA" class="selectA" onclick="showRegionSeat(1)">
+              <div id="selectA" class="selectA" onclick="showRegionSeat(1)" onmousemove="showCursor()" onmouseout="cancelShowCursor()">
                 <div class="cursor">点击选择1楼池座座位</div>
               </div>
-              <div id="selectB" class="selectB" onclick="showRegionSeat(2)">
+              <div id="selectB" class="selectB" onclick="showRegionSeat(2)" onmousemove="showCursor()" onmouseout="cancelShowCursor()">
                 <div class="cursor">点击选择1楼楼座座位</div>
               </div>
-              <div id="selectC" class="selectC" onclick="showRegionSeat(3)">
+              <div id="selectC" class="selectC" onclick="showRegionSeat(3)" onmousemove="showCursor()" onmouseout="cancelShowCursor()">
                 <div class="cursor">点击选择2楼楼座座位</div>
               </div>  
-               <div id="selectD" class="selectD" onclick="showRegionSeat(4)">
+               <div id="selectD" class="selectD" onclick="showRegionSeat(4)" onmousemove="showCursor()" onmouseout="cancelShowCursor()">
                 <div class="cursor">点击选择3楼楼座座位</div>
               </div> 
 
@@ -106,10 +108,9 @@
         </div>
         <div id="region-1"  style="display:none;">
         </div>
-        </div>
-        <div id="region-2"  style="display:none;"></div>
-        <div id="region-3"  style="display:none;"></div>
-        <div id="region-4"  style="display:none;"></div>
+        <div id="region-2"  style="display:none;width:200%;margin:0 auto;"></div>
+        <div id="region-3"  style="display:none;width:200%;margin:0 auto;"></div>
+        <div id="region-4"  style="display:none;width:200%;margin:0 auto;"></div>
   </div>
 
 {% endblock %}

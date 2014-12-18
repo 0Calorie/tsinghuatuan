@@ -7,30 +7,15 @@ var priceColor = new Array("#FFFF80",
                            "#808000");
 var defaultSeat = "gray";
 
-document.getElementById('selectA').onmouseover = function () {
-	$('#selectA .cursor').css("display","block");
-};
-document.getElementById('selectA').onmouseout = function () {
-	$('#selectA .cursor').css("display","none");
-};
-document.getElementById('selectB').onmouseover = function () {
-	$('#selectB .cursor').css("display","block");
-};
-document.getElementById('selectB').onmouseout = function () {
-	$('#selectB .cursor').css("display","none");
-};
-document.getElementById('selectC').onmouseover = function () {
-	$('#selectC .cursor').css("display","block");
-};
-document.getElementById('selectC').onmouseout = function () {
-	$('#selectC .cursor').css("display","none");
-};
-document.getElementById('selectD').onmouseover = function () {
-	$('#selectD .cursor').css("display","block");
-};
-document.getElementById('selectD').onmouseout = function () {
-	$('#selectD .cursor').css("display","none");
-};
+function showCursor(){
+	  var id = $(this.event.srcElement)[0].id;
+	  $('#'+id+' .cursor').css("display","block");
+}
+
+function cancelShowCursor(){
+	 var id = $(this.event.srcElement)[0].id;
+	  $('#'+id+' .cursor').css("display","none");
+}
 
 function showRegionSeat(num){
 	$('#region-'+num).css("display","block");
@@ -39,72 +24,35 @@ function showRegionSeat(num){
 }
 
 $('#region-1').ready(function(){
-	var rowNum = 19;
- 	var columnNum = new Array(31,33,35,37,39,
- 							  39,39,39,39,39,
- 							  39,39,39,39,39,
- 							  39,35,33,31
- 							  );
- 	var column = 39;
- 	var tables = document.createElement('table');
-            for(i=0;i<2*rowNum;i++)
-            {
-                var line = document.createElement('tr');
-                if(i%2==0)
-                {
-              
-                for(j=0;j<column;j++)
-                {   
-                	var a = document.createElement('td');
-                    if(j<(column - columnNum[i/2])/2 || j >= (column - (column - columnNum[i/2])/2))
-                    {
-                    	$(a).css("width","25px");
-                    	$(a).css("height","25px");
-                    	$(line).append(a);
-                    	continue;
-                    }
-                  
-                    $(a).attr('onclick', 'changeColor();');
-                    $(a).attr({
-                        id:1+"-"+(i/2+1)+"-"+((j+1)-(column - columnNum[i/2])/2),
-                        state:0,
-                        price:0,
-                        row:i/2+1,
-                        column:j+1,
-                        floor:1
-                    });
-                   $(a).addClass("default-seat");
-				   $(line).append(a);
-    				if(j==8||j==29)
-                    {
-                    	var b = document.createElement('td');
-                        $(b).css('width', '50px');
-                        $(b).css('cursor', 'pointer');
-                        $(b).css('height', '25px');
-                        if(j == 8){
-                        $(b).attr({
-                        	state: 0,
-                        	onclick: "selectOneRow()",
-                        	onmouseover: "showButton()",
-                        	onmouseout: "showNum("+(i/2+1)+")",
-                        	id: "1-"+(i/2+1),
-                        	floor: 1
-                        });
-                    }
-                        b.innerText = i/2+1;
-                        $(line).append(b);
-                    }
+	var columnNum = 19;
+ 	var column = new Array(new Array(5,21,5),
+						  new Array(6,21,6),
+						  new Array(7,21,7),
+						  new Array(8,21,8),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(9,21,9),
+						  new Array(8,21,8),
+						  new Array(7,21,7),
+						  new Array(6,21,6),
+						  new Array(5,21,5));
 
-                }
-              
-            }
-                $(tables).append(line);
-            }
-$(tables).css({
-    position: 'relative',
-    margin: '0 auto',
-});
-$('#region-1').append(tables);
+ 	var maxColumn = new Array(9,21,9);
+ 	var table = createTable(1,columnNum,column,maxColumn,1);
+
+	$(table).css({
+	    position: 'relative',
+	    margin: '0 auto',
+	});
+$('#region-1').append(table);
 });
 
 $('#region-2').ready(function(){
@@ -116,40 +64,51 @@ $('#region-2').ready(function(){
 						   new Array(0,10,22,10,0),
 						   new Array(0,4,18,4,0));
 	var maxColumn = new Array(16,19,22,19,16);
-	var table = document.createElement('table');
-	for(var i=0;i<6;i++){
-		var tr = document.createElement('tr');
-		for(var j=0;j<5;j++){
-			if(j==1){
-				for(var k=0;k<maxColumn[j];k++){
-					var td = document.createElement('td');
-					if(k < (maxColumn[j] - column[i][j]))
-					{
-						$(td).css({
-							width: 25px,
-							height: 25px
-						});
-					}
-					else{
-						$(td).addClass("default-seat");
-						$(td).attr({
-							onclick: "changeColor()",
-							id: "1-"+(20+i)+(k-(maxColumn[j] - column[i][j])),
-							state: 0,
-							price: 0,
-							row: (i+20),
-							column: (k-(maxColumn[j] - column[i][j])),
-							floor: 1
-							)};
-					}
-					$(tr).append(td);
-
-				}
-			}
-		}
-		$(table).append(tr);
-	}
+	var table = createTable(20,columnNum,column,maxColumn,1);
+	$(table).css({
+    position: 'relative',
+    margin: '0 auto',
+});
 	$('#region-2').append(table);
+});
+
+$('#region-3').ready(function(){
+	var columnNum = 7;
+	var column = new Array(new Array(16,16,20,16,16),
+						   new Array(15,18,20,18,15),
+						   new Array(14,19,20,19,14),
+						   new Array(0,17,20,17,0),
+						   new Array(0,12,20,12,0),
+						   new Array(0,8,20,8,0),
+						   new Array(0,4,12,4,0));
+	var maxColumn = new Array(16,19,20,19,16);
+	var table = createTable(1,columnNum,column,maxColumn,2);
+
+	$(table).css({
+	    position: 'relative',
+	    margin: '0 auto',
+	});
+
+	$('#region-3').append(table);
+});
+
+$('#region-4').ready(function(){
+	var columnNum = 7;
+	var column = new Array(new Array(16,0,13,20,13,0,16),
+						   new Array(10,0,15,20,15,0,10),
+						   new Array(10,3,17,20,17,3,10),
+						   new Array(0,0,17,20,17,0,0),
+						   new Array(0,0,11,20,11,0,0),
+						   new Array(0,0,8,20,8,0,0),
+						   new Array(0,0,4,20,4,0,0));
+	var maxColumn = new Array(16,3,17,20,17,3,16);
+	var table = createTable(1,columnNum,column,maxColumn,3);
+
+	$(table).css({
+	    position: 'relative',
+	    margin: '0 auto',
+	});
+	$('#region-4').append(table);
 });
 
 $("#selectPrice").ready(function() {
@@ -188,7 +147,158 @@ $("#selectPrice").ready(function() {
     $('#selectPrice').append(tr);
 });
 
+function alignLeft(tr,i,j,column,maxColumn,row,leftColumn,floor){
+	for(var k=0;k<maxColumn[j];k++){
+		var td = document.createElement('td');
+		if(k >= column[i][j])
+		{
+			$(td).css({
+				width: "25px",
+				height: "25px"
+			});
+		}
+		else{
+			$(td).addClass("default-seat");
+			$(td).attr({
+				onclick: "changeColor()",
+				id: floor+"-"+row+"-"+(k+1+leftColumn),
+				state: 0,
+				price: 0,
+				row: row,
+				column: (k+1+leftColumn),
+				floor: floor
+				});
+		}
+		$(tr).append(td);
 
+		}
+	return tr;
+}
+
+function alignCenter(tr,i,j,column,maxColumn,row,leftColumn,floor){
+	for(var k=0;k<maxColumn[j];k++){
+	var td = document.createElement('td');
+	if(k < (maxColumn[j] - column[i][j])/2||k >= (maxColumn[j]-(maxColumn[j] - column[i][j])/2))
+	{
+		$(td).css({
+			width: "25px",
+			height: "25px"
+		});
+	}
+	else{
+		$(td).addClass("default-seat");
+		$(td).attr({
+			onclick: "changeColor()",
+			id: floor+"-"+row+"-"+(k+1+leftColumn-(maxColumn[j] - column[i][j])/2),
+			state: 0,
+			price: 0,
+			row: row,
+			column: (k+1+leftColumn-(maxColumn[j] - column[i][j])/2),
+			floor: floor
+			});
+	}
+	$(tr).append(td);
+	}
+	return tr;
+}
+
+function alignRight(tr,i,j,column,maxColumn,row,leftColumn,floor){
+	for(var k=0;k<maxColumn[j];k++){
+		var td = document.createElement('td');
+		if(k < (maxColumn[j] - column[i][j]))
+		{
+			$(td).css({
+				width: "25px",
+				height: "25px"
+			});
+		}
+		else{
+			$(td).addClass("default-seat");
+			$(td).attr({
+				onclick: "changeColor()",
+				id: floor+"-"+row+"-"+(k+1+leftColumn-(maxColumn[j] - column[i][j])),
+				state: 0,
+				price: 0,
+				row: row,
+				column: (k+1+leftColumn-(maxColumn[j] - column[i][j])),
+				floor: floor
+				});
+		}
+		$(tr).append(td);
+	}
+	return tr;
+}
+
+function createTable(num,columnNum,column,maxColumn,floor){
+	var table = document.createElement('table');
+	for(var i=0;i<columnNum;i++){
+		var tr = document.createElement('tr');
+		for(var j=0;j<maxColumn.length;j++){
+			if(j==0){
+				tr = alignRight(tr,i,j,column,maxColumn,i+num,0,floor);
+				var b = document.createElement('td');
+                        $(b).css('width', '50px');
+                        $(b).css('cursor', 'pointer');
+                        $(b).css('height', '25px');
+                        $(b).attr({
+                        	state: 0,
+                        	onclick: "selectOneRow()",
+                        	onmouseover: "showButton()",
+                        	onmouseout: "showNum("+(i+num)+")",
+                        	id: floor+"-"+(i+num),
+                        	floor: floor
+                        });
+                        b.innerText = i+num;
+                        $(tr).append(b);
+			}
+			else if(j < (maxColumn.length-1)/2){
+				var sum = 0;
+				for(var k=0;k<j;k++){
+					sum += column[i][k];
+				}
+				tr = alignRight(tr,i,j,column,maxColumn,i+num,sum,floor);
+				var b = document.createElement('td');
+                        $(b).css('width', '50px');
+                        $(b).css('height', '25px');
+                        b.innerText = i+num;
+                        $(tr).append(b);
+			}
+			else if(j == maxColumn.length-1){
+				var sum = 0;
+				for(var k=0;k<j;k++){
+					sum += column[i][k];
+				}
+				tr = alignLeft(tr,i,j,column,maxColumn,i+num,sum ,floor)
+			}
+			else if(j == (maxColumn.length-1)/2){
+				var sum = 0;
+				for(var k=0;k<j;k++){
+					sum += column[i][k];
+				}
+				tr = alignCenter(tr,i,j,column,maxColumn,i+num,sum ,floor);
+				var b = document.createElement('td');
+                        $(b).css('width', '50px');
+                        $(b).css('height', '25px');
+                        b.innerText = i+num;
+                        $(tr).append(b);
+			}
+			else{		
+				var sum = 0;
+				for(var k=0;k<j;k++){
+					sum += column[i][k];
+				}
+				tr = alignLeft(tr,i,j,column,maxColumn,i+num,sum,floor);
+				var b = document.createElement('td');
+                        $(b).css('width', '50px');
+                        $(b).css('height', '25px');
+                        b.innerText = i+num;
+                        $(tr).append(b);
+		}
+		}
+		$(table).append(tr);
+	}
+	return table;
+}
 function changeColor(){
     var id = $(this.event.srcElement)[0].id;
     var color;
@@ -371,39 +481,41 @@ function postSeat_() {
     var row = "";
     var column = "";
     var floor = "";
-    for(i=0;i<$('#firstfloor td').length;i++)
+    for(var j=1;j<=4;j++){
+    for(i=0;i<$('#region-'+j+' td').length;i++)
         {
-            if($('#firstfloor td')[i].id !=""&&$('#firstfloor td')[i].getAttribute("state")==1)
+            if($('#region-'+j+' td')[i].id !=""&&$('#region-'+j+' td')[i].getAttribute("state")==1&&$('#region-'+j+' td')[i].getAttribute("onclick")=="changeColor()")
             {
                 if(price == ""){
-                    price = price + $('#firstfloor td')[i].getAttribute("price");
+                    price = price + $('#region-'+j+' td')[i].getAttribute("price");
                 }
                 else{
-                    price = price + " " + $('#firstfloor td')[i].getAttribute("price");
+                    price = price + " " + $('#region-'+j+' td')[i].getAttribute("price");
                 }
 
                 if(row == "") {
-                    row = row + $('#firstfloor td')[i].getAttribute("row");
+                    row = row + $('#region-'+j+' td')[i].getAttribute("row");
                 }
                 else{
-                    row = row + " " + $('#firstfloor td')[i].getAttribute("row");
+                    row = row + " " + $('#region-'+j+' td')[i].getAttribute("row");
                 }
 
                 if(column == ""){
-                    column = column + $('#firstfloor td')[i].getAttribute("column"); 
+                    column = column + $('#region-'+j+' td')[i].getAttribute("column"); 
                 }
                 else {
-                    column = column + " " + $('#firstfloor td')[i].getAttribute("column");                
+                    column = column + " " + $('#region-'+j+' td')[i].getAttribute("column");                
                 }
                     
                 if(floor == ""){
-                    floor = floor + "1";
+                    floor = floor + $('#region-'+j+' td')[i].getAttribute("floor");
                 }
                 else{
-                    floor = floor + " " + "1";
+                    floor = floor + " " + $('#region-'+j+' td')[i].getAttribute("floor");
                 }
             }
         }
+    }
     $("#floor").attr("value",floor);
     $("#column").attr("value",column);
     $("#price").attr("value",price);
