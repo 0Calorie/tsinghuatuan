@@ -758,11 +758,12 @@ def response_check_authorization(msg):
 
 
 def check_click_authorize(msg):
-    return handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_authorize']])
+    print('click authorize')
+    return handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['authorize']])
 
 
 def response_click_authorize(msg):
-    print('click yuema')
+    print('click authorize successfully')
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
