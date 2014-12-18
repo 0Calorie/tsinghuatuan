@@ -448,7 +448,7 @@ def authorize_view(request, stuid):
     }, context_instance=RequestContext(request))
 
 
-def authorization_through_AuthTHU(request):
+def authorize_through_AuthTHU(request):
     if (not request.POST) or (not 'secret' in request.POST) or (not 'openid' in request.POST) or (
             not 'username' in request.POST):
         raise Http404
@@ -464,7 +464,7 @@ def authorization_through_AuthTHU(request):
         validationResult = 'Error'
         if (responseData_json["code"] == 0):
             validationResult = 'Accepted'
-            validationResult = authorization_addNewbieToDataBase(authorizerID, authorizedID)
+            validationResult = authorize_addNewbieToDataBase(authorizerID, authorizedID)
         else:
             validationResult = 'Rejected'
     except:
@@ -472,7 +472,7 @@ def authorization_through_AuthTHU(request):
     return HttpResponse(validationResult)
 
 
-def authorization_addNewbieToDataBase(authorizerID, authorizedID):
+def authorize_addNewbieToDataBase(authorizerID, authorizedID):
     try:
         currentAuthorization = Authorization.objects.get(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
@@ -491,6 +491,8 @@ def authorization_addNewbieToDataBase(authorizerID, authorizedID):
                 apply_time=datetime.datetime.now()
             )
             newAuthorization.save()
+            User.objects.filter(id=authorizerID).update(authorization=newAuthorization)
+            User.objects.filter(id=authorizedID).update(authorization=newAuthorization)
         except:
             return 'Error_DB3'
     return 'Accepted'
