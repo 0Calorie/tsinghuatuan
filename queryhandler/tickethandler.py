@@ -767,4 +767,4 @@ def response_click_authorize(msg):
     if user is None:
         return get_reply_text_xml(msg, get_text_unbinded_authorize(fromuser))
 
-    return get_reply_text_xml(msg, get_text_authorization_link(user.id))
+    return get_reply_text_xml(msg, get_text_authorization_link(user.stu_id))
