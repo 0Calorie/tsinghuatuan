@@ -3,6 +3,10 @@ from django.db import models
 import uuid
 
 
+class ShortUrl(models.Model):
+    short_url = models.CharField(max_length=10)
+    raw_url = models.CharField(max_length=255)
+
 class Authorization(models.Model):
     authorizer_stu_id = models.CharField(max_length=255)
     authorized_person_stu_id = models.CharField(max_length=255)

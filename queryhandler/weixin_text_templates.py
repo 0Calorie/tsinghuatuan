@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 from userpage.safe_reverse import *
+from shorturl.views import encode
 from queryhandler.settings import QRCODE_URL
 
 
@@ -34,7 +35,7 @@ def get_text_ticket_pic(ticket):
 
 
 def get_text_link(href, title):
-    return '<a href="' + href + '">' + title + '</a>'
+    return '<a href="' + encode(href) + '">' + title + '</a>'
 
 
 def get_text_unbinded_template(actname, openid):
@@ -347,4 +348,4 @@ def get_text_already_authorized_can_not_book_ticket(stu_id):
     return '对不起，你已经和'+stu_id+'“约约约”了，不能进行抢票\n'+stu_id+'会帮你抢票的哟'
 
 def get_text_authorization_link(stu_id):
-    return '生成“约吗”链接成功\n转发此链接\n'+s_reverse_authorize(stu_id)+'\n给你想约的人完成"约约约"';
+    return '生成“约吗”链接成功\n转发此链接\n'+encode(s_reverse_authorize(stu_id))+'\n给你想约的人完成"约约约"';
