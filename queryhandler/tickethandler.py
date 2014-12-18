@@ -705,7 +705,7 @@ def response_cancel_authorization(msg):
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
-        return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
+        return get_reply_text_xml(msg, get_text_unbinded_authorize(fromuser))
 
     received_msg = get_msg_content(msg)
 
@@ -738,12 +738,10 @@ def response_check_authorization(msg):
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
     if user is None:
-        return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
+        return get_reply_text_xml(msg, get_text_unbinded_authorize(fromuser))
 
     authorization = user.authorization
     now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
-    if user is None:
-        return get_reply_text_xml(msg, get_text_unbinded_select_seat(fromuser))
 
     if user.authorization is None:
         return get_reply_text_xml(msg, get_text_no_check_authorization())
@@ -760,7 +758,7 @@ def response_check_authorization(msg):
 
 
 def check_click_authorization(msg):
-    return handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_authorization']])
+    return handler_check_event_click(msg, ['约吗'])
 
 
 def response_click_authorization(msg):
