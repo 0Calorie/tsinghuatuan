@@ -111,11 +111,71 @@ body > #wrap {
   clear: both;
 }
 #selectRegion{
-  background-image: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat_xq.png);
   background-repeat: no-repeat;
   /* height: 400px; */
   padding-bottom: 50%;
   padding-top: 50%;
   background-size: contain;
-  width: inh;
+}
+.DLT{
+  background-image: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat_dlt_word.png);
+}
+.XQ{
+  background-image: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat_xq.png);
+}
+.DLT_A{
+    position: absolute;
+    top: 18%;
+    left: 8%;
+    height: 48%;
+    width: 65%;
+    z-index: 10;
+}
+.DLT_B{
+    position: absolute;
+    top: 20%;
+    left: -5%;
+    width: 90%;
+    height: 47%;
+    z-index: 8;
+}
+.DLT_C{
+    position: absolute;
+    top: 68%;
+    left: 15%;
+    height: 14%;
+    width: 50%;
+    z-index: 6;
+}
+.XQ_D{
+    position: absolute;
+    top: 40%;
+    left: %;
+    height: 46%;
+    width: 83%;
+    z-index:2;
+}
+.XQ_C{
+    position: absolute;
+    top: 20%;
+    left: 6%;
+    height: 50%;
+    width: 70%;
+    z-index: 6;
+}
+.XQ_B{
+    position: absolute;
+    top: 5%;
+    left: 15%;
+    width: 53%;
+    height: 45%;
+    z-index: 8;
+}
+.XQ_A{
+    position: absolute;
+    top: 5%;
+    left: 21%;
+    height: 30%;
+    width: 40%;
+    z-index: 10;
 }

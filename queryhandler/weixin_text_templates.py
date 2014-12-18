@@ -278,7 +278,7 @@ def get_text_show_all_seat_selection(openid, tickets):
 
 
 def get_text_unbinded_authorize(openid):
-    return get_text_unbinded_template('授权', openid)
+    return get_text_unbinded_template('约约约', openid)
 
 
 def get_text_usage_authorize():
@@ -345,3 +345,6 @@ def get_text_no_check_authorization():
 
 def get_text_already_authorized_can_not_book_ticket(stu_id):
     return '对不起，你已经和'+stu_id+'“约约约”了，不能进行抢票\n'+stu_id+'会帮你抢票的哟'
+
+def get_text_authorization_link(stu_id):
+    return get_text_link(s_reverse_authorization())
