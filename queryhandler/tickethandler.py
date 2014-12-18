@@ -757,11 +757,11 @@ def response_check_authorization(msg):
             return get_reply_text_xml(msg, get_text_no_check_authorization())
 
 
-def check_click_authorization(msg):
-    return handler_check_event_click(msg, ['约吗'])
+def check_click_authorize(msg):
+    return handler_check_event_click(msg, [WEIXIN_EVENT_KEYS['ticket_authorize']])
 
 
-def response_click_authorization(msg):
+def response_click_authorize(msg):
     print('click yuema')
     fromuser = get_msg_from(msg)
     user = get_user(fromuser)
