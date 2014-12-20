@@ -588,11 +588,20 @@ def activity_select_seat_lecture(request, actid):
     	seats += [model_to_dict(seat)]
     seatNum = len(seatmodels)
 
-    return render_to_response('activity_select_seat_tsinghua_school.html', {
+    if activity.place == "蒙民伟音乐厅":
+        return render_to_response('activity_select_seat_lecture.html', {
         'id' : actid,
         'allSeat': seats,
         'activity': activity,
         'seatNum': seatNum,
         'canModify': canModify,
     })
+    else:
+        return render_to_response('activity_select_seat_tsinghua_school.html', {
+            'id' : actid,
+            'allSeat': seats,
+            'activity': activity,
+            'seatNum': seatNum,
+            'canModify': canModify,
+        })
 
