@@ -1,5 +1,6 @@
 body{
     background: #fff;
+    font-size: 150%;
 
 }
 .regionSelectDiv{
@@ -110,7 +111,6 @@ table{
   /* border-spacing: 10px; */
 }
 td{
-    padding: 0.2%;
     -moz-border-radius: 25%;
     -webkit-border-radius: 25%;
 }
@@ -215,6 +215,9 @@ border: 1px solid;
     /* margin-top:10%; */
     /* margin-bottom:20%; */
     position: relative;
+    transition: width 2s, height 2s;
+    -moz-transition:width 2s, height 2s, -moz-transform 2s;
+    -webkit-transition: width 2s, height 2s, -webkit-transform 2s;
 }
 .illu_wrap{
     float: left;

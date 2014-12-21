@@ -321,11 +321,35 @@ $(document).ready(function(){
     addIllustration("可选",color_defaultSeat);
     addIllustration("选中",color_selectSeat);
     scale();
+    drag();
 });
+function drag()
+{
+    touch.on('#target', 'touchstart', function(ev){
+        ev.preventDefault();
+    });
+
+    var target = document.getElementById("target");
+    var dx, dy;
+
+    touch.on('#target', 'drag', function(ev){
+        dx = dx || 0;
+        dy = dy || 0;
+        log("当前x值为:" + dx + ", 当前y值为:" + dy +".");
+        var offx = dx + ev.x + "px";
+        var offy = dy + ev.y + "px";
+        this.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+    });
+
+    touch.on('#target', 'dragend', function(ev){
+        dx += ev.x;
+        dy += ev.y;
+    });
+}
 function scale()
 {
     var target = document.getElementById("target");
-    target.style.webkitTransition = 'all ease 0.05s';
+    target.style.webkitTransition = 'all ease 1s';
 
     touch.on('#target', 'touchstart', function(ev){
         ev.preventDefault();
