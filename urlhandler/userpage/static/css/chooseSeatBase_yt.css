@@ -1,5 +1,6 @@
 body{
     background: #fff;
+
 }
 .regionSelectDiv{
     background-color: rgba(233, 97, 97, 0.16);
@@ -137,9 +138,11 @@ h3,h6{
 }
 .illustration{
     width:100%;
-    height:20px;
+    height: auto;
 
     padding-left: 20%;
+    padding-top: 2%;
+    padding-bottom: 6%;
 }
 
 .screen{
@@ -167,19 +170,22 @@ hr{
     cursor: pointer;
     background-color: rgb(255, 214, 0);
     border-radius: 4px;
-    font-size: 1em;
-    margin-top: 7px;
+    font-size: 0.8em;
+    margin-top: 8%;
+    width: 20%;
+    text-align: center;
     /* margin-right: 5px; */
     padding: 5px;
+    color: white;
 }
 .back {
     float: right;
     cursor: pointer;
-    background-color: rgb(224, 222, 210);
-    border-radius:4px;
-    font-size:1em;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    border-radius: 4px;
+    font-size: 0.5em;
+    /* margin-top: 5px; */
+    /* margin-bottom: 5px; */
+    color: darkblue;
     /* margin-right: 5px; */
     padding: 5px;
 }
@@ -190,15 +196,18 @@ hr{
 }
 
 .userSelect{
-    float: left;
-    background-color: rgb(255, 214, 0);
-    font-size: 0.67em;
-    padding: 2px;
-    margin: 3px;
-    border-radius: 3px;
+float: left;
+background-color: rgb(253, 255, 229);
+font-size: 0.5em;
+padding: 2px;
+margin: 3px;
+border-radius: 3px;
+text-align: center;
+color: rgb(255, 172, 24);
+border: 1px solid;
 }
 .seat{
-    margin-top:20%;
+    margin-top:10%;
     margin-bottom:20%;
 }
 .illu_wrap{
@@ -208,9 +217,11 @@ hr{
     margin-right: 10%;
 }
 .illu_word{
-    font-size: 0.5em;
-
+    margin: 0;
+    font-size: 0.3em;
+    /* width: 100%; */
     float: left;
+    padding-left: 3px;
 }
 .illu_color{
     float: left:;
@@ -218,7 +229,39 @@ hr{
     width: 10px;
     height: 10px;
     float: left;
+    margin-top: 4px;
     border-radius: 2px;
 }
+.wholePic{
+    background-color: rgba(199, 199, 199, 0.72);
+
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    top: 0;
+    left: 0;
+}
+.slogan{
+    margin-top: 50%;
+
+    height: 10%;
+    text-align: center;
+    padding: 10% 0 0 0;
+}
+.success{
+    background-color: rgb(255, 184, 0);
+
+}
+.failure{
+    background-color: rgb(241, 96, 96);
 
 
+}
+
+.tryAgain{
+    font-size: 0.5em;
+    border-radius: 2px;
+    border: 1px solid whitesmoke;
+    margin: 1% 40% 0;
+}

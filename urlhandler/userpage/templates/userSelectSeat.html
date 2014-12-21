@@ -38,17 +38,17 @@
                 <div class="Information" style="display: none;">
                   <div class="Info_Activity">
                     <div class = "activity" style="float:left">
-                      <h3>迭代三</h3>
-                      <h6>六教 2014年2月1日 14:00</h6>
+                        <h3>迭代三</h3>
+                        <h6>六教</h6>
+                        <h6>2014年2月1日 14:00</h6>
                     </div>
                       <div class="confirm" onclick="confirm()">确认</div>
                   </div>
                   <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
                   width="100%" color="#987cb9" SIZE=1/>
                   <div class = "seatSelect" style="float:left">
-                      <h6 class="seatSelectWord">您已经选择了</h6>
                       <div class="seatSelectSeats"></div>
-                      <h6 class="totalPrice">180元</h6>
+                      <div class="back" onclick="back()">重新选区</div>
                   </div>
                   <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
                   width="100%" color="#987cb9" SIZE=1/>
@@ -61,13 +61,10 @@
                   <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
                   width="100%" color="#987cb9" SIZE=1/>
 
-                  <div class="seat">
+                  <div class="seat" id="target">
                   </div>
                   <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
                     width="100%" color="#987cb9" SIZE=1/>
-                    <div class="buttons">
-                    <div class="back" onclick="back()">返回</div>
-                    </div>
                 </div>
             </div>
         <!--div id="seat" style="display:none;position:absolute;width:100%;background-color: rgba(50,50,50,1);z-index:999;min-height:85%;">
@@ -77,7 +74,16 @@
             <img src="{% static "img/success.png" %}" />
         </div-->
     </div>
+    <div class ="wholePic" id="result" style="display:none">
+        <div class="slogan success" id="success_info" style="display:none">
+            哇咔咔，选座成功啦O(∩_∩)O
+        </div>
+        <div class="slogan failure" id="failure_info" style="display:none">
+            哎呀，有人比你抢先一步
+            <div class="return tryAgain" id="tryAgain" onclick="back()">重新抢</div>
 
+            </div>
+        </div>
     </div>
 
 </body>
