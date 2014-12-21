@@ -337,10 +337,9 @@ function scale()
     touch.on('#target', 'pinchend', function(ev){
         currentScale = ev.scale - 1;
         currentScale = initialScale + currentScale;
-        currentScale = currentScale > 2 ? 2 : currentScale;
+        currentScale = currentScale > 5 ? 5 : currentScale;
         currentScale = currentScale < 1 ? 1 : currentScale;
         this.style.webkitTransform = 'scale(' + currentScale + ')';
-        log("当前缩放比例为:" + currentScale + ".");
     });
 
     touch.on('#target', 'pinchend', function(ev){
