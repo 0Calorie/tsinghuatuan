@@ -191,7 +191,7 @@ function showSeat_yt(place, section)
         loadSeat(section);
 
         var gridHeight = $("td").css("width").replace("px","");
-        $("tr").css("height", gridHeight);
+        $("td").css("height", gridHeight);
         //$("table").attr("cellspacing", Number(gridHeight));
 
     }
