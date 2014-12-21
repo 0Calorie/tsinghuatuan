@@ -38,7 +38,8 @@ background-size: contain; */
 	position: relative;
 	height: 400px;
 	width: 30%;
-	background: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat_xq.png) no-repeat;
+	background: url(/static1/img/seat_xq.png) no-repeat; 
+	/* background: url({% static "img/seat1.png" %}) no-repeat; */
 	background-size: contain;
 	left: 50%;
 	margin-top: -25%;
