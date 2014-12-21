@@ -596,7 +596,7 @@ def activity_select_seat_lecture(request, actid):
         'seatNum': seatNum,
         'canModify': canModify,
     })
-    else:
+    if activity.place == "新清华学堂":
         return render_to_response('activity_select_seat_tsinghua_school.html', {
             'id' : actid,
             'allSeat': seats,
@@ -604,4 +604,20 @@ def activity_select_seat_lecture(request, actid):
             'seatNum': seatNum,
             'canModify': canModify,
         })
+    if activity.place == "大礼堂":
+        return render_to_response('activity_select_seat_hall.html', {
+            'id' : actid,
+            'allSeat': seats,
+            'activity': activity,
+            'seatNum': seatNum,
+            'canModify': canModify,
+        })
+    return render_to_response('activity_select_seat_error.html', {
+            'id' : actid,
+            'allSeat': seats,
+            'activity': activity,
+            'seatNum': seatNum,
+            'canModify': canModify,
+        })
+
 

@@ -1,4 +1,4 @@
-var floorSeat = new Array(0,0,0);
+
 var priceColor = new Array("#FFFF80",
                            "#FF8080",
                            "#FF8040",

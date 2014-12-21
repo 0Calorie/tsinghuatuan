@@ -1,0 +1,23 @@
+{% extends "activity_base.html" %}
+
+{% load staticfiles %}
+{% block css %}
+
+{% endblock %}
+
+{% block js %}
+       <script src="{% static "js/jquery-1.11.1.js" %}"></script>
+       
+{% endblock %}
+{% block content %}
+      <div id="mainContent" class = "retc" style="position:relative;min-height:200px;height:auto!important;height:200px">
+      	<div style="position:relative;margin:0 auto;width:800px">
+      		<h2  name= "place" style="text-algin:center;">你好，该地点目前还不支持选座~</h2>
+
+           <a id = "return-detail" style="position:relative;top:30px" href="{% url "adminpage.views.activity_detail" actid=id %}"> 
+           <button type="button" id="cancelButton"  class="btn btn-warning" >返回</button>
+           </a>
+                     
+  </div>
+
+{% endblock %}

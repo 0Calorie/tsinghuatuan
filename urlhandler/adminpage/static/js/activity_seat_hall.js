@@ -1,25 +1,26 @@
 var floorSeat = new Array(0,0,0);
 
 $('#region-1').ready(function(){
-    var columnNum = 16;
-    var column = new Array(new Array(5,8,5),
-                          new Array(6,8,5),
-                          new Array(6,8,6),
-                          new Array(6,8,5),
-                          new Array(6,8,5),
-                          new Array(6,8,5),
-                          new Array(6,8,6),
-                          new Array(7,8,6),
-                          new Array(6,8,6),
-                          new Array(7,8,6),
-                          new Array(7,8,7),
-                          new Array(7,8,6),
-                          new Array(7,8,7),
-                          new Array(7,8,6),
-                          new Array(7,8,7),
-                          new Array(8,8,7));
+    var columnNum = 17;
+    var column = new Array(new Array(8,10,10,8),
+                          new Array(9,10,10,9),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(10,10,10,10),
+                          new Array(8,10,10,8),
+                          new Array(3,10,10,3),
+                          new Array(3,10,10,3),
+                          new Array(4,10,10,4));
 
-    var maxColumn = new Array(8,8,7);
+    var maxColumn = new Array(10,10,10,10);
     var table = createTable(1,columnNum,column,maxColumn,1);
 
     $(table).css({
@@ -30,9 +31,12 @@ $('#region-1').append(table);
 });
 
 $('#region-2').ready(function(){
-    var columnNum = 1;
-    var column = new Array(new Array(13,17,13));
-    var maxColumn = new Array(13,17,13);
+    var columnNum = 4;
+    var column = new Array(new Array(11,10,11,9,10,9,11,10,11),
+                          new Array(10,10,11,9,10,9,11,10,10),
+                          new Array(9,10,10,10,10,10,10,10,9),
+                          new Array(9,10,9,6,10,6,9,10,9));
+    var maxColumn = new Array(11,10,11,10,10,10,11,10,11);
     var table = createTable(1,columnNum,column,maxColumn,2);
     $(table).css({
     position: 'relative',
@@ -41,23 +45,7 @@ $('#region-2').ready(function(){
     $('#region-2').append(table);
 });
 
-$('#region-3').ready(function(){
-    var columnNum = 5;
-    var column = new Array(new Array(3,5,12,5,3),
-                           new Array(3,5,12,4,3),
-                           new Array(3,5,12,5,3),
-                           new Array(3,5,12,4,3),
-                           new Array(3,5,12,5,3));
-    var maxColumn = new Array(3,5,12,5,3);
-    var table = createTable(1,columnNum,column,maxColumn,3);
 
-    $(table).css({
-        position: 'relative',
-        margin: '0 auto',
-    });
-
-    $('#region-3').append(table);
-});
 
 $("#selectPrice").ready(function() {
     var tr = document.createElement('tr');

@@ -1,0 +1,89 @@
+{% extends "activity_base.html" %}
+
+{% load staticfiles %}
+{% block css %}
+  <link rel="stylesheet" href="{% static "css/activity_list.css" %}"/>
+    <link rel="stylesheet" href="{% static "css/activity_detail.css" %}"/>
+    <link rel="stylesheet" href="{% static "css/activity_seat.css" %}"/>
+
+{% endblock %}
+
+{% block js %}
+       <script src="{% static "js/jquery-1.11.1.js" %}"></script>
+       <script>
+           var modify = {{canModify}}
+           var actID = {{id}};           
+           var seatNum = {{ seatNum }};
+           var ticketNum = {{activity.total_tickets}};
+           var allSeat = [
+               {% for seat in allSeat %}
+                  { 'floor' : {{seat.seat_floor}},
+                    'column': {{seat.seat_column}},
+                    'row' : {{seat.seat_row}},
+                    'price': {{seat.seat_price}},
+                    'state' :{{seat.status}},
+                    'place' : "{{seat.place}}",
+                  }{% if forloop.last %}{% else %},{% endif %}
+               {% endfor %}
+           ];  
+           //座位所在地点
+           var place = "{{activity.place}}";
+           var price = "{{activity.total_price}}".split(" ");
+           /*$(".place")[0].innerText = place + "座位图" ;*/
+            $(".ticket")[0].innerText = "总共" + ticketNum +"张票"  + "已选择" + seatNum +"个座位";
+           $("#aid").attr("value", actID);
+           $("#submitForm").attr("action", "/saveSeat/"+actID+"/");
+       </script>
+        <script src="{% static "js/activity_seat_common.js" %}"></script>
+       <script src="{% static "js/activity_seat_hall.js" %}"></script>
+{% endblock %}
+{% block content %}
+      <div id="mainContent" class = "retc" style="position:relative;min-height:200px;height:auto!important;height:200px">
+      	<div style="position:relative;margin:0 auto;width:800px">
+      		<h2 class="place" name= "place">大礼堂座位图</h2>
+      		<h2 class="ticket" name = "ticket"></h2>
+           <table class="table table-hover">
+                 <thead>
+                    <tr>
+                       <th>区域</th>
+                       <th>已选票数</th>
+                    </tr>
+                 </thead>
+                 <tbody>
+                    <tr>
+                       <td>一楼</td>
+                       <td id="floor-1">0</td>
+                    </tr>
+                    <tr>
+                       <td>二楼</td>
+                       <td id="floor-2">0</td>
+                    </tr>
+                 </tbody>
+              </table>
+  		</div>
+  		<div style="position:relative;margin:0 auto;width:800px;margin-top:30px">
+  		<table  id="selectPrice">
+  		</table>
+  		</div>
+  		<div id="region-1" style="height:auto!important;height:200px;margin-top:100px;position:relative;width:100%"></div>
+      <div id="region-2" style="height:auto!important;height:200px;margin-top:100px;position:relative;width:210%"></div>
+  		<div id="postSeat" style="position:relative;margin-top:5%;left:10%;width:30%">
+                  <form role="form" id="submitForm" method="POST" action= "">
+                      {% csrf_token %}
+                      <input id="floor" type="text" name="floor" value = "value" style="display:none" />
+                      <input id="row" type="text" name="row"  value = "value" style="display:none" />
+                      <input id="price" type="text" name="price"  value = "value" style="display:none" />
+                      <input id="column" type="text" name="column"  value = "value" style="display:none" />
+                      <input id="aid" type="text" name="aid"  value = "" style="display:none" />
+                      <div style="margin:0 auto;width:43%;">
+                        <button type="button" id="submitButton" onclick="postSeat()" class="btn btn-primary">保存</button>
+                         <a id = "return-detail" href="{% url "adminpage.views.activity_detail" actid=id %}"> 
+                         <button type="button" id="cancelButton"  class="btn btn-warning" >返回</button>
+                         </a>
+                      </div>
+                      <button type="submit" id="submitButton1" class="btn btn-primary" style="margin-top:30px; display:none">保存!</button>
+                  </form>
+            </div>
+  </div>
+
+{% endblock %}
