@@ -320,6 +320,7 @@ $(document).ready(function(){
     addIllustration("不可选",color_onSaleSeat);
     addIllustration("可选",color_defaultSeat);
     addIllustration("选中",color_selectSeat);
+    scale();
 });
 function scale()
 {
