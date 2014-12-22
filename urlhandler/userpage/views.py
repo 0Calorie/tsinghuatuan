@@ -255,7 +255,7 @@ def choose_seat_view(request, openid, uid):
     activityPack = dict()
     activityPack['name'] = theActivity.name
     activityPack['place'] = theActivity.place
-    activityPack['startTime'] = theActivity.startTime
+    activityPack['startTime'] = theActivity.start_time
 
     return render_to_response('userSelectSeat.html', {
         'validity': isValid,
