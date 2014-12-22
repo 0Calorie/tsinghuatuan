@@ -419,6 +419,7 @@ function confirmIsHit_sendRequest(sender){
                         if(response != 'Selected' || response != 'oneSelected' || response != 'twoSelected'){
                             $("#failure_info")[0].innerText = response;
                         }
+                        chooseSeat_seatStatusUpdate();
                         return;
                 }
             }
@@ -451,9 +452,11 @@ function chooseSeat_single(){
     var theChosen = $(this.event.srcElement)[0];
     if (chosenSeat != null) {
         chooseSeat_setSeatToUnchosen(chosenSeat);
+        addToBottom(chosenSeat);
         chosenSeat = null;
     }
     chooseSeat_setSeatToChosen(theChosen);
+    addToBottom(theChosen);
     chosenSeat = theChosen;
 }
 
@@ -461,9 +464,11 @@ function chooseSeat_dualOne(){
     var theChosen = $(this.event.srcElement)[0];
     if(chosenDualOne != null){
         chooseSeat_dualOne_chosenDualOneIsNotNull();
+        addToBottom(chosenDualOne);
         chosenDualOne = null;
     }
     chooseSeat_setSeatToChosen(theChosen);
+    addToBottom(theChosen);
     chosenDualOne = theChosen;
     chooseSeat_dualOne_restrictChoices();
 }
@@ -517,9 +522,11 @@ function chooseSeat_dualTwo(){
     var theChosen = $(this.event.srcElement)[0];
     if(chosenDualTwo != null){ // actually chosenDualTwo must be null here, or there is something wrong.
         chooseSeat_setSeatToUnchosen(chosenDualTwo);
+        addToBottom(chosenDualTwo);
         chosenDualTwo = null;
     }
     chooseSeat_setSeatToChosen(theChosen);
+    addToBottom(theChosen);
     chosenDualTwo = theChosen;
 }
 
@@ -555,8 +562,10 @@ function chooseSeat_seatStatusUpdate(){
             if(updater.status == 200){
                 allSeat = JSON.parse(updater.responseText);
             }
-            else{
-                // show error
+            else {
+                $("#result").css("display","block");
+                $("#failure_info").css("display", "block");
+                $("#failure_info")[0].innerText = '服务器连接异常，请稍后重试。'
             }
         }
     }
