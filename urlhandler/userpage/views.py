@@ -191,6 +191,7 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
 
     return 'Valid'
 
+################chooseSeat###################
 
 def choose_seat_view(request, openid, uid):
     isValid = 'Valid'
@@ -203,7 +204,7 @@ def choose_seat_view(request, openid, uid):
             return render_to_response('mobile_base.html')  #should return error page
     else:
         print 'el1'
-        return render_to_response('mobile_base.html')
+        return validation_view(request, openid)
 
     # has ticket? if objects.get get nothing, will itsTickets be null or an exception will be raised ?
     if Ticket.objects.filter(unique_id=uid).exists():
@@ -216,7 +217,7 @@ def choose_seat_view(request, openid, uid):
         print 'el2'
         return render_to_response('mobile_base.html')
 
-    # check if this activity allow seats choosing. if yes, then get activity's seat picture
+    # check if this activity allow seats choosing.
     try:
         theActivity = itsTickets.activity
     except:
@@ -238,7 +239,7 @@ def choose_seat_view(request, openid, uid):
         isValid = 'Has_Chosen'
     ticketPack = dict()
     ticketPack['ticketID'] = itsTickets.unique_id
-    ticketPack['numOfSeatToChoose'] = itsTickets.additional_ticket_id
+    ticketPack['additionalTicketID'] = itsTickets.additional_ticket_id
 
     print 'dfg'
     # get current seat status
@@ -251,17 +252,22 @@ def choose_seat_view(request, openid, uid):
     seatPack['seatNum'] = seatNum
     seatPack['seats'] = seats
 
+    activityPack = dict()
+    activityPack['name'] = theActivity.name
+    activityPack['place'] = theActivity.place
+    activityPack['startTime'] = theActivity.startTime
+
     return render_to_response('userSelectSeat.html', {
         'validity': isValid,
         'weixinOpenID': openid,
         'ticketPack': ticketPack,
-        'seatPack': seatPack
+        'seatPack': seatPack, 
+        'activityPack' : activityPack
     }, context_instance=RequestContext(request))
 
     ## remember to check everything did above whatever the requested action is!!!
 
-
-def chooseSeat_confirmIsHit(request, weixinOpenID, ticketID, seatRow, seatColumn):
+def chooseSeat_single(request, weixinOpenID, ticketID, seatFloor, seatColumn, seatRow):
     #check validity
     '''validityStatus = chooseSeat_standardValidationChecker(weixinOpenID, activityID)
     if validityStatus != 'Valid':
@@ -274,27 +280,135 @@ def chooseSeat_confirmIsHit(request, weixinOpenID, ticketID, seatRow, seatColumn
     except:
         print 'ex1'
         return HttpResponse('No_Such_Ticket')
+    if theTicket.additional_ticket_id > 0:
+        print 'side'
+        return HttpResponse('Has_Side_Ticket')
 
     theActivity = theTicket.activity
     try:
-        theSeat = Seat.objects.get(activity=theActivity, seat_row=seatRow, seat_column=seatColumn)
+        theSeat = Seat.objects.get(activity=theActivity, seat_floor = seatFloor, seat_row=seatRow, seat_column=seatColumn)
+        theID = theSeat.id
     except:
         print 'ex2'
         return HttpResponse('Error_DB1')
+
     if theSeat.status != 0:
         print '!=0'
         return HttpResponse('Selected')
+    else:
+        theSeat.status = 2
 
+    theSeat.id = theID
     try:
-        Seat.objects.filter(activity=theActivity, seat_row=seatRow, seat_column=seatColumn).update(status=2)
+        theSeat.save()
     except:
         print 'ex3'
+        return HttpResponse('Error_DB2')
+
     try:
         Ticket.objects.filter(unique_id=ticketID).update(seat=theSeat)
     except:
         print 'ex4'
-        return HttpResponse('Error_DB2')
+        return HttpResponse('Error_DB3')
     return HttpResponse('Ok')
+
+def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow, sideID, twoFloor, twoColumn, twoRow):
+    #check validity
+
+    try:
+        theTicket = Ticket.objects.get(unique_id = ticketID)
+    except:
+        print 'ex1'
+        return HttpResponse('No_Such_Ticket')
+    if (sideID != theTicket.additional_ticket_id) or (sideID <= 0):
+        print 'Side'
+        return HttpResponse('No_Such_Side_Ticket')
+
+    theActivity = theTicket.activity
+    try:
+        dualOne = Seat.objects.get(activity = theActivity, seat_floor = oneFloor, seat_row = oneRow, seat_column = oneColumn)
+        dualOneID = dualOne.id
+    except:
+        print 'ex2'
+        return HttpResponse('Error_DB1')
+
+    if dualOne.status !=0:
+        print 'one!=0'
+        return HttpResponse('oneSelected')
+    else:
+        dualOne.id = dualOneID
+        dualOne.status = 2
+
+    try:
+        dualOne.save()
+    except:
+        print 'ex3'
+        return HttpResponse('Error_DB2')
+
+    try:
+        dualTwo = Seat.objects.get(activity = theActivity, seat_floor = twoFloor, seat_row = twoRow, seat_column = twoColumn)
+        dualTwoID = dualTwo.id
+    except:
+        print 'ex4'
+        return HttpResponse('ERROR_DB3')
+
+    if dualTwo.status !=0:
+        print 'two!=0'
+        dualOne.id = dualOneID
+        dualOne.status = 0
+        try:
+            dualOne.save()
+        except:
+            print 'ex5'
+            return HttpResponse('ERROR_DB4')
+        return HttpResponse('twoSelected')
+    else:
+        dualTwo.id = dualTwoID
+        dualTwo.status = 2
+
+    try:
+        dualTwo.save()
+        dualOne.id = dualTwoID
+        dualOne.status = 0
+        try:
+            dualOne.save()
+        except:
+            print 'ex6'
+            return HttpResponse('ERROR_DB5')
+    except:
+        print 'ex7'
+        return HttpResponse('Error_DB6')
+
+    try:
+        Ticket.objects.filter(unique_id = ticketID).update(seat = dualOne)
+        Ticket.objects.filter(unique_id = sideID).update(seat = dualTwo)
+    except:
+        print 'ex8'
+        return HttpResponse('Error_DB7')
+
+    return HttpResponse('Ok')
+
+def chooseSeat_seatStatusUpdate(request, weixinOpenID, ticketID):
+    #check validity
+    try:
+        theTicket = Ticket.objects.get(unique_id=ticketID)
+    except:
+        print 'ex1'
+        return HttpResponse('No_Such_Ticket')
+    if theTicket.additional_ticket_id > 0:
+        print 'side'
+        return HttpResponse('Has_Side_Ticket')
+    theActivity = theTicket.activity
+    # get current seat status
+    seats = []
+    seatmodels = Seat.objects.filter(activity=theActivity)
+    for seat in seatmodels:
+        seats += [model_to_dict(seat)]
+    seatNum = len(seatmodels)
+    seatPack = dict()
+    seatPack['seatNum'] = seatNum
+    seatPack['seats'] = seats
+    return HttpResponse(seatPack)
 
 
 def chooseSeat_refreshIsHit(request, weixinOpenID, activityID):

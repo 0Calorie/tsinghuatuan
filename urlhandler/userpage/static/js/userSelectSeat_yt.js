@@ -1,10 +1,3 @@
-var color_onSaleSeat = "rgb(224, 222, 210)";
-var color_defaultSeat = "rgb(150, 246, 185)";
-var color_selectSeat = "rgb(255, 214, 0)";
-var color_dualNeighborSeat = "rgb(0, 0, 255)";
-var chosenSeat = null;
-var chosenDualOne = null;
-var chosenDualTwo = null;
 var seatObj = {   
     "A":{
         "row":"21",
@@ -114,6 +107,7 @@ var seatObj = {
 var PLACE;
 var SECTION;
 
+var data;
 var clientHeight = document.documentElement.clientHeight;
 var clientWidth = document.documentElement.clientWidth;
 $("#selectRegion").css("width", clientWidth);
@@ -161,23 +155,24 @@ function loadSeat(obj) {
                 $(td).addClass("seat_unit");
                 $(td).attr({
                     id: floor + '-' + (i + 1) + '-' + (j + 1 + nWalkWay),
-                    status: -1,
+                    status: 0,
                     row: (i + 1 + obj.rowStart),
                     column: (Number(j) + 1 - nWalkWay+ columnStart[i]),
                     floor: floor,
+                    onclick: "onclick_seat()"
                 });
             }
             $(tr).append(td);
         }
         $(table).append(tr);
-    }
 
-    //delete some seat
+    }
     $(".seat").append(table);
     $(".seat").attr("draggable","true");
     $("td").attr("draggable","false");
     $("tr").attr("draggable", "false");
     //delete some seat
+
     var len = obj.seat.length;
     var n, seat_start, seat_end, nWalkWay_;
     for (var i = 0; i < len; i++)
@@ -218,7 +213,6 @@ function loadSeat(obj) {
 
     }
 
-    layer2();
 }
 
 function showSeat_yt(place, sec)
@@ -258,9 +252,33 @@ function back()
     $(".seatSelectSeats").empty();
     $("#result").css("display","none");
     $(".failure").css("display","none");
-    chosenSeat = null;
-    chosenDualOne = null;
-    chosenDualTwo = null;
+}
+
+function confirm()
+{
+    $("#result").css("display","block");
+    $(".failure").css("display","block");
+}
+
+function onclick_seat()
+{
+    var element = $(this.event.srcElement)[0];
+    changeColor(element);
+    addToBottom(element);
+}
+
+var color_onSaleSeat = "rgb(224, 222, 210)";
+var color_defaultSeat = "rgb(150, 246, 185)";
+var color_selectSeat = "rgb(255, 214, 0)";
+
+function changeColor(elem)
+{
+    var bg = $(elem).css("background-color");
+    console.log(bg);
+    if(bg == color_onSaleSeat)
+        $(elem).css("background-color",color_selectSeat);
+    else
+        $(elem).css("background-color",color_onSaleSeat);
 }
 
 function addToBottom(elem)
@@ -307,7 +325,9 @@ $(document).ready(function(){
     addIllustration("可选",color_defaultSeat);
     addIllustration("选中",color_selectSeat);
     scale();
+    //Drag("target_drag");
     drag();
+
 });
 function drag()
 {
@@ -356,238 +376,61 @@ function scale()
     });
 }
 
+function Drag(id) {
+    /*
+    var $ = function (flag) {
+        return document.getElementById(flag);
+    }
+    */
+    dv = document.getElementById(id);
+    $(id).onmousedown = function (e) {
+        var d = document;
+        var page = {
+            event: function (evt) {
+                var ev = evt || window.event;
+                return ev;
+            },
+            pageX: function (evt) {
+                var e = this.event(evt);
+                return e.pageX || (e.clientX + document.body.scrollLeft - document.body.clientLeft);
+            },
+            pageY: function (evt) {
+                var e = this.event(evt);
+                return e.pageY || (e.clientY + document.body.scrollTop - document.body.clientTop);
 
-
-function confirmIsHit() {
-    disableOne("backer", 1);
-    disableOne("confirmer", 1);
-    if(ticketPack.additionalTicketID <= 0)
-        confirmIsHit_single();
-    else
-        confirmIsHit_dual();
-    disableOne("backer", 0);
-    disableOne("confirmer", 0);
-}
-
-function confirmIsHit_single(){
-    if(chosenSeat == null)
-        return;
-    var chosenFloor = chosenSeat.getAttribute('floor');
-    var chosenColumn = chosenSeat.getAttribute('column') ;
-    var chosenRow = chosenSeat.getAttribute('row') ;
-    var url = 'http://wx3.igeek.asia/u/chooseSeatSingle/try/' + weixinOpenID + '/' + ticketPack.ticketID + '/' + chosenFloor + '/' + chosenColumn + '/' + chosenRow;
-    sender = new XMLHttpRequest();
-    sender.open('GET', url, true);
-    confirmIsHit_sendRequest(sender);
-}
-
-function confirmIsHit_dual(){
-    if(chosenDualOne == null || chosenDualTwo == null)
-        return;
-
-    var dualOneRow = chosenDualOne.getAttribute('row');
-    var dualOneColumn = chosenDualOne.getAttribute('column');
-    var dualOneFloor = chosenDualOne.getAttribute('floor');
-    var dualTwoRow = chosenDualTwo.getAttribute('row');
-    var dualTwoColumn = chosenDualTwo.getAttribute('column');
-    var dualTwoFloor = chosenDualTwo.getAttribute('column');
-    var url = 'http://wx3.igeek.asia/u/chooseSeatDual/try/' + weixinOpenID + '/' + ticketPack.ticketID + '/' + dualOneFloor + '/'
-     + dualOneColumn + '/' + dualOneRow + '/' + ticketPack.additionalTicketID + '/' + dualTwoFloor + '/' + dualTwoColumn + '/' + dualTwoRow;
-     sender = new XMLHttpRequest();
-     sender.open('GET', url, true);
-     confirmIsHit_sendRequest(sender);
-}
-
-function confirmIsHit_sendRequest(sender){
-    sender.onreadystatechange = function () {
-        if (sender.readyState == 4) {
-            if (sender.status == 200) {
-                var response = sender.responseText;
-                $("#result").css("display","block");
-                switch (response) {
-                    case 'Ok':
-                        $("#success_info").css("display","block");
-                        return;
-                    default:
-                        $("#failure_info").css("display", "block");
-                        if(response != 'Selected' || response != 'oneSelected' || response != 'twoSelected'){
-                            $("#failure_info")[0].innerText = response;
-                        }
-                        return;
-                }
-            }
-            else{
-                $("#result").css("display","block");
-                $("#failure_info").css("display", "block");
-                $("#failure_info")[0].innerText = '服务器连接异常，请稍后重试。'
+            },
+            layerX: function (evt) {
+                var e = this.event(evt);
+                return e.layerX || e.offsetX;
+            },
+            layerY: function (evt) {
+                var e = this.event(evt);
+                return e.layerY || e.offsetY;
             }
         }
-    }
-    sender.send();
-}
-
-/* chooseSeat series start from here */
-function chooseSeat() {
-    if(ticketPack.additionalTicketID <= 0){
-        chooseSeat_single();
-    }
-    else{
-        if(dualSeatCheckShortcut(currentSector) == true){
-            chooseSeat_dualOne();
+        var x = page.layerX(e);
+        var y = page.layerY(e);
+        if (dv.setCapture) {
+            dv.setCapture();
         }
-        else{
-            chooseSeat_dualSingle();
+        else if (window.captureEvents) {
+            window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
         }
-    }
-}
-
-function chooseSeat_single(){
-    var theChosen = $(this.event.srcElement)[0];
-    if (chosenSeat != null) {
-        chooseSeat_setSeatToUnchosen(chosenSeat);
-        chosenSeat = null
-    }
-    chooseSeat_setSeatToChosen(theChosen);
-    chosenSeat = theChosen;
-}
-
-function chooseSeat_dualOne(){
-    var theChosen = $(this.event.srcElement)[0];
-    if(chosenDualOne != null){
-        chooseSeat_dualOne_chosenDualOneIsNotNull();
-        chosenDualOne = null;
-    }
-    chooseSeat_setSeatToChosen(theChosen);
-    chosenDualOne = theChosen;
-    chooseSeat_dualOne_restrictChoices();
-}
-
-function chooseSeat_dualOne_chosenDualOneIsNotNull(){
-    // set old chosenDualOne to Unchosen, set old neighbors' onclick to chooseSeat, and set chosenDualTwo to null
-    chooseSeat_setSeatToUnchosen(chosenDualOne);
-
-    var dualOneRow = chosenDualOne.getAttribute('row');
-    var dualOneColumn = chosenDualOne.getAttribute('column');
-    var dualOneFloor = chosenDualOne.getAttribute('floor');
-    var rightNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow+1);
-    var leftNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow-1);
-
-    var rightNeighbor = document.getElementById(rightNeighborID);
-    var leftNeighbor = document.getElementById(leftNeighborID);
-    if(rightNeighbor != undefined){
-        rightNeighbor.setAttribute('onclick', 'chooseSeat();');
-        chooseSeat_setSeatToUnchosen(rightNeighbor);
-    }
-    if(leftNeighbor != undefined){
-        leftNeighbor.setAttribute('onclick', 'chooseSeat();');
-        chooseSeat_setSeatToUnchosen(leftNeighbor);
-    }
-
-    chosenDualOne = null;
-    chosenDualTwo = null;
-}
-
-function chooseSeat_dualOne_restrictChoices(){
-    // set neighbors' onclick to chooseSeat_dual2, while others don't change a thing
-    var dualOneRow = chosenDualOne.getAttribute('row');
-    var dualOneColumn = chosenDualOne.getAttribute('column');
-    var dualOneFloor = chosenDualOne.getAttribute('floor');
-    var rightNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow+1);
-    var leftNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow-1);
-
-    var rightNeighbor = document.getElementById(rightNeighborID);
-    var leftNeighbor = document.getClientWidth(leftNeighborID);
-    if(rightNeighbor != undefined){
-        rightNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
-        chooseSeat_setSeatToUnchosenDualTwo(rightNeighbor);
-    }
-    if(leftNeighbor != undefined){
-        leftNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
-        chooseSeat_setSeatToUnchosenDualTwo(leftNeighbor);
-    }
-}
-
-function chooseSeat_dualTwo(){
-    var theChosen = $(this.event.srcElement)[0];
-    if(chosenDualTwo != null){ // actually chosenDualTwo must be null here, or there is something wrong.
-        chooseSeat_setSeatToUnchosen(chosenDualTwo);
-        chosenDualTwo = null;
-    }
-    chooseSeat_setSeatToChosen(theChosen);
-    chosenDualTwo = theChosen;
-}
-
-function chooseSeat_dualSingle(){
-    
-}
-
-// not for dualTwo
-function chooseSeat_setSeatToUnchosen(theChosen){
-    //theChosen.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center";
-    //theChosen.style.backgroundSize = "contain";
-    theChosen.style.backgroundColor = color_onSaleSeat;
-}
-
-function chooseSeat_setSeatToChosen(theChosen){
-    //theChosen.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat3.png) no-repeat center";
-    //theChosen.style.backgroundSize = "contain";
-    theChosen.style.backgroundColor = color_selectSeat;
-}
-
-function chooseSeat_setSeatToUnchosenDualTwo(theChosen){
-    //theChosen.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat6.png) no-repeat center";
-    //theChosen.style.backgroundSize = "contain";
-    theChosen.style.backgroundColor = color_dualNeighborSeat;
-}
-
-function chooseSeat_seatStatusUpdate(){
-    var updater = new XMLHttpRequest();
-    var url = 'http://wx3.igeek.asia/u/chooseSeat/update/' + weixinOpenID + '/' + ticketPack.ticketID;
-    updater.open('GET', url, true);
-    updater.onreadystatechange = function(){
-        if(updater.readyState == 4){
-            if(updater.status == 200){
-                allSeat = JSON.parse(updater.responseText);
+        d.onmousemove = function (e) {
+            var tx = page.pageX(e) - x;
+            var ty = page.pageY(e) - y;
+            dv.style.left = tx + "px";
+            dv.style.top = ty + "px";
+        }
+        d.onmouseup = function () {
+            if (dv.releaseCapture) {
+                dv.releaseCapture();
             }
-            else{
-                // show error
+            else if (window.releaseEvents) {
+                window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
             }
+            d.onmousemove = null;
+            d.onmouseup = null;
         }
-    }
-}
-/* chooseSeat series ends here */
-
-function layer2(){
-    len = allSeat.length;
-    for(var i = 0; i < len; i++)
-    {
-        floor = allSeat[i].seat_floor;
-        seatprice = allSeat[i].seat_price;
-        status= allSeat[i].status;
-        row = allSeat[i].seat_row;
-        column = allSeat[i].seat_column;
-        id = floor + "-" + row + "-" + column;
-        ss = document.getElementById(id);
-        if(ss != undefined){
-            ss.setAttribute('price', seatprice);
-            ss.setAttribute('status', status);
-            if(status==0)
-            {
-                //$("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
-                //$("#"+id).css("background-size", "contain");
-                ss.style.backgroundColor = color_defaultSeat;
-                ss.setAttribute('onclick', 'chooseSeat();');
-            }
-
-        }
-    }
-}
-
-function disableOne(id, flag) {
-    var dom = document.getElementById(id);
-    if (flag) {
-        dom.setAttribute('disabled', 'disabled');
-    } else {
-        dom.removeAttribute('disabled');
     }
 }

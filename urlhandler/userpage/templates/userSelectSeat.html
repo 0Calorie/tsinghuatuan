@@ -3,45 +3,119 @@
 <html lang="zh-CN">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=10.0, user-scalable=yes">
-    <link href="{% static "css/chooseSeatBase.css" %}" rel="stylesheet" type="text/css" />
-    <title>清华紫荆之声</title>
-    <script src="{% static "lib/jquery/jquery-1.11.1.min.js" %}?_=5"></script>
-    <script src="{% static "js/userSelectSeat.js" %}?_=5"></script>
-    </head>
-<body>
-<header id = "header">
-        What do you want?
-</header>
-<div id="wrap">
-<hr/>
-<div id="mainbody">
-<div id="mainContent" style="position:relative;width:100%;">
-     <div class = "XQ" id="selectRegion" style="display: none;">          
-      <div class="regionSelectDiv XQ_A" onclick="showSeat(1);"></div>
-      <div class="regionSelectDiv XQ_B" onclick="showSeat(2);"></div>  
-      <div class="regionSelectDiv XQ_C" onclick="showSeat(3);"></div>
-      <div class="regionSelectDiv XQ_D" onclick="showSeat(3);"></div>
-    </div>
-    <div class = "DLT" id="selectRegion" style="display: block;">          
-          <div class="regionSelectDiv DLT_A" onclick="showSeat(1);"></div>
-          <div class="regionSelectDiv DLT_B" onclick="showSeat(2);"></div>  
-          <div class="regionSelectDiv DLT_C" onclick="showSeat(3);"></div>  
-    </div>
-    <div id="activityName"></div>
-  </div>
-  <div id="seat" style="display:none;position:absolute;width:100%;background-color: rgba(50,50,50,1);z-index:999;min-height:85%;">
-     <h2 id="place" style =" margin-top:5%; color: red; text-align:center;"></h2>
-  </div>
-  <div id="successHolder" style="display: none">
-      <img src="{% static "img/success.png" %}" />
-  </div>
-</div>
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1.0,minimum-scale=1.0" name="viewport">
+    <link href="{% static "css/chooseSeatBase_yt.css" %}" rel="stylesheet" type="text/css" />
 
-<footer id="footer">
-    <hr />
-    0Cal<br>
-    &copy; 2014
-</footer>
+    <!--link href="{% static "css/chooseSeatBase.css" %}" rel="stylesheet" type="text/css" /-->
+    <title>清华紫荆之声</title>
+    <script src="{% static "lib/jquery/jquery-1.11.1.min.js" %}"></script>
+
+
+
+</head>
+
+<body>
+    <header id = "header">
+    </header>
+    <div id="wrap">
+    <hr/>
+    <div id="mainbody">
+    <div id="mainContent" style="position:relative;">
+                <div class = "XQ"  style="display: block;">
+                  <div class="regionSelectDiv XQ_A" onclick="showSeat_yt('XQ','A');"></div>
+                  <div class="regionSelectDiv XQ_B" onclick="showSeat_yt('XQ','B');"></div>
+                  <div class="regionSelectDiv XQ_C" onclick="showSeat_yt('XQ','C');"></div>
+                  <div class="regionSelectDiv XQ_D" onclick="showSeat_yt('XQ','D');"></div>
+                    <div class="regionSelectDiv XQ_BB" onclick="showSeat_yt('XQ','BB');"></div>
+                    <div class="regionSelectDiv XQ_CC" onclick="showSeat_yt('XQ','CC');"></div>
+                    <div class="regionSelectDiv XQ_DD" onclick="showSeat_yt('XQ','DD');"></div>
+                </div>
+                <div class = "DLT" style="display: none;">
+                      <div class="regionSelectDiv DLT_A" onclick="showSeat(1);"></div>
+                      <div class="regionSelectDiv DLT_B" onclick="showSeat(2);"></div>
+                      <div class="regionSelectDiv DLT_C" onclick="showSeat(3);"></div>
+                </div>
+                <div class="Information" style="display: none;">
+                  <div class="Info_Activity">
+                    <div class = "activity" style="float:left">
+                        <h3>{{activityPack.name}}</h3>
+                        <h6>{{activityPack.place}}</h6>
+                        <h6>{{activityPack.startTime}}</h6>
+                    </div>
+                      <div id = "confirmer" class="confirm" onclick="confirmIsHit()">确认</div>
+                  </div>
+                  <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
+                  width="100%" color="#987cb9" SIZE=1/>
+                  <div class = "seatSelect" style="float:left">
+                      <div class="seatSelectSeats"></div>
+                      <div id = "backer" class="back" onclick="back()">重新选区</div>
+                  </div>
+                  <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
+                  width="100%" color="#987cb9" SIZE=1/>
+                  <div class="screen"><h6>银幕方向</h6></div>
+                  <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
+                  width="100%" color="#987cb9" SIZE=1/>
+                  <div class="illustration" id = "illustration" >
+
+                  </div>
+                  <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
+                  width="100%" color="#987cb9" SIZE=1/>
+                    <div class="wrap_seat">
+                        <div class="seat_drag" id="target_drag">
+                            <div class="seat" id="target">
+                            </div>
+                        </div>
+                        <div style="overflow-x:auto;overflow-y:hidden">
+                        </div>
+                    </div>
+                  <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
+                    width="100%" color="#987cb9" SIZE=1/>
+                </div>
+            </div>
+        <!--div id="seat" style="display:none;position:absolute;width:100%;background-color: rgba(50,50,50,1);z-index:999;min-height:85%;">
+           <h2 id="place" style =" margin-top:5%; color: red; text-align:center;"></h2>
+        </div>
+        <div id="successHolder" style="display: none">
+            <img src="{% static "img/success.png" %}" />
+        </div-->
+    </div>
+    <div class ="wholePic" id="result" style="display:none">
+        <div class="slogan success" id="success_info" style="display:none">
+            哇咔咔，选座成功啦O(∩_∩)O
+        </div>
+        <div class="slogan failure" id="failure_info" style="display:none">
+            哎呀，有人比你抢先一步
+            <div class="return tryAgain" id="tryAgain" onclick="back()">重新抢</div>
+
+            </div>
+        </div>
+    </div>
+
 </body>
+    <script>
+        var validity = "{{validity}}";
+        var weixinOpenID = "{{weixinOpenID}}";
+        var ticketPack = {
+            'ticketID' : "{{ticketPack.ticketID}}",
+            'additionalTicketID' : "{{ticketPack.additionalTicketID}}"
+        };
+        var allSeat = [
+            {% for seat in seatPack.seats %}{
+                'seat_row' : {{seat.seat_row}},
+                'seat_column' : {{seat.seat_column}},
+                'seat_price' : {{seat.seat_price}},
+                'status' : {{seat.status}},
+                'seat_floor' : {{seat.seat_floor}}
+            }{% if forloop.last %}{% else %}, {% endif %}
+            {% endfor %}
+        ];
+        var activityPack = {
+            'name' : "{{activityPack.name}}",
+            'place' : "{{activityPack.place}}",
+            'startTime' : "{{activityPack.startTime}}"
+        };
+
+    </script>
+    <script src="{% static "js/touch.min.js" %}"></script>
+    <script src="{% static "js/userSelectSeat.js" %}"></script>
 </html>
