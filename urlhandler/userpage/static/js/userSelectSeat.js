@@ -1,5 +1,5 @@
-var color_onSaleSeat = "rgb(224, 222, 210)";
-var color_defaultSeat = "rgb(150, 246, 185)";
+var color_onSaleSeat = "rgb(150, 246, 185)";
+var color_defaultSeat = "rgb(224, 222, 210)";
 var color_selectSeat = "rgb(255, 214, 0)";
 var color_dualNeighborSeat = "rgb(0, 0, 255)";
 var chosenSeat = null;
@@ -174,6 +174,7 @@ function loadSeat(obj) {
 
     //delete some seat
     $(".seat").append(table);
+    $(".seat").css("-webkit-transform","translate3d(0px, 0px, 0px)");//居中
     $(".seat").attr("draggable","true");
     $("td").attr("draggable","false");
     $("tr").attr("draggable", "false");
@@ -321,8 +322,13 @@ function drag()
     touch.on('#target_drag', 'drag', function(ev){
         dx = dx || 0;
         dy = dy || 0;
+
         var offx = dx + ev.x + "px";
         var offy = dy + ev.y + "px";
+        if(dx + ev.x > clientWidth-50 || dx + ev.x + clientWidth -50 < 0)
+            offx = "0px";
+        if(dy + ev.y > 100 || dy + ev.y < -100)
+            offy = "0px";
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
     });
 
@@ -445,7 +451,7 @@ function chooseSeat_single(){
     var theChosen = $(this.event.srcElement)[0];
     if (chosenSeat != null) {
         chooseSeat_setSeatToUnchosen(chosenSeat);
-        chosenSeat = null
+        chosenSeat = null;
     }
     chooseSeat_setSeatToChosen(theChosen);
     chosenSeat = theChosen;
@@ -575,7 +581,7 @@ function layer2(){
             {
                 //$("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
                 //$("#"+id).css("background-size", "contain");
-                ss.style.backgroundColor = color_defaultSeat;
+                ss.style.backgroundColor = color_onSaleSeat;
                 ss.setAttribute('onclick', 'chooseSeat();');
             }
 
