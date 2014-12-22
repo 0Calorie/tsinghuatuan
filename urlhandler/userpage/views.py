@@ -331,6 +331,7 @@ def details_view(request, activityid):
     act_text = activity[0].description
     act_ticket_remian = activity[0].remain_tickets
     act_abstract = act_text
+    act_price = activity[0].total_price
     MAX_LEN = 256
     act_text_status = 0
     if len(act_text) > MAX_LEN:
@@ -357,7 +358,7 @@ def details_view(request, activityid):
                                          'act_place': act_place, 'act_status': act_status, 'act_seconds': act_seconds,
                                          'cur_time': cur_time,
                                          'act_abstract': act_abstract, 'act_text_status': act_text_status,
-                                         'act_ticket_remian': act_ticket_remian})
+                                         'act_ticket_remian': act_ticket_remian,'act_price':act_price})
     return render_to_response('activitydetails.html', variables)
 
 

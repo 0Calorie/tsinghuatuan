@@ -41,7 +41,6 @@
         <div>“抢票 活动代称”对相应活动进行抢票操作。</div>
         <div>“取票 活动代称”对相应活动进行取票操作。</div>
         <div>“退票 活动代称”对相应活动进行退票操作。</div>
-        <div>“节目单 节目代称”可获得相应活动的电子节目单。</div>
         <div>您可以点击菜单项：</div>
         <div class="artical">
             <div>活动抢票进行中，通过点击抢票菜单的该活动，可抢该活动的电子票。</div>
@@ -61,9 +60,13 @@
         <div>【查票】
             查询您抢到的电子票。
         </div>
+         <div>【选座】
+            查询需要选座的活动。
+        </div>
         <div>【绑定】
             用info账号绑定学号，您就可以抢票啦！
         </div>
+
         <div>【帮助】
             快来学习一下{{ name }}如何使用吧！
         </div>
@@ -71,28 +74,12 @@
 
     <hr/>
     <div class="section">
-        <h7>资讯</h7>
+        <h7>约吗</h7>
     </div>
     <div class="artical">
-        &nbsp;&nbsp;&nbsp;&nbsp;不想错过园子里精彩的资讯？又没时间没心情到处搜罗信息？很简单！点我点我！不仅可以点击，还可以直接回复关键字查询哦！
+        &nbsp;&nbsp;&nbsp;&nbsp;想跟男朋友/女朋友/好基友/好闺蜜一起看演出，但是又怕其中一个人抢不到票？很简单！点我点我！不仅可以点击，还接受输入来“约”哦！
     </div>
-    <div class="artical">
-        <div>【文艺】
-            简约小清新的文艺资讯。
-        </div>
-        <div>【讲座】
-            大气上档次的讲座信息。
-        </div>
-        <div>【新闻】
-            高端接地气的清华新闻。
-        </div>
-        <div>【人物】
-            低调有内涵的身边人物。
-        </div>
-        <div>【社团】
-            炫酷有深度的社团介绍。
-        </div>
-    </div>
+
     <div>
         <div class="slidedown" id="sd-query" onclick="sd_query()">
             <a>
@@ -102,22 +89,12 @@
                 <span>点击展开“查询使用详解”</span></a>
         </div>
     </div>
-
-    <div class="artical" id="querydetails" style="display: none">
-    <div> 您可以输入：</div>
-    <div>“活动 xx”查询相关活动。</div>
-    <div>“讲座 xx”查询相关讲座。</div>
-    <div>“新闻 xx”查询相关新闻。</div>
-    <div>“社团 xx”查询相关社团。</div>
-    <div>“部门 xx”查询相关部门。</div>
-
-    <div>您还可以输入：</div>
-    <div>“标题 相关内容”查询标题中含有该内容资讯。</div>
-    <div>“时间 具体时间（段）”查询该时间段的资讯。</div>
-    <div>（例：12月15日18点，15日到18日，明天等时间）</div>
-    <div>“地点 具体地点”查询该地点举行的活动，讲座等。</div>
-
-    <div>您还可以任意输入进行模糊查询。</div>
-    <div>（例：12月的电影，大礼堂的讲座等，我们将为您返回综合内容，时间，地点查询的结果）</div>
+    <div class="artical" id="querydetails" style="display: none;">
+        <div>您可以输入：</div>
+        <div>“约吗 被授权人学号”来“约”对方。</div>
+        <div>“不约”取消当前“约”。</div>
+        <div>“约谁”查看当前“约”</div>
     </div>
+
+
 {% endblock %}

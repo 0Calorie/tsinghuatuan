@@ -152,8 +152,22 @@
             </div>
         </div>
     </div>
-    <div class="details-divider"></div>
 
+    {% if act_price != "0" %}
+    <div class="timer-wrapper">
+    <h7>票价：</h7><!--<div class="clipcopy" id="copykey">点此复制</div>-->
+    </div>
+     <div class="details-wrapper">
+        <div class="text-inner">
+            <div class="trigger">
+                <h7>{{ act_price }}</h7>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="details-divider"></div>
+   
 
     <div class="timer-wrapper">
     <h7>活动详情：</h7>
