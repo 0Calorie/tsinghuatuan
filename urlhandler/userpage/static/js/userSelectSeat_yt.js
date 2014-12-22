@@ -165,8 +165,12 @@ function loadSeat(obj) {
             $(tr).append(td);
         }
         $(table).append(tr);
+
     }
     $(".seat").append(table);
+    $(".seat").attr("draggable","true");
+    $("td").attr("draggable","false");
+    $("tr").attr("draggable", "false");
     //delete some seat
 
     var len = obj.seat.length;
@@ -321,27 +325,28 @@ $(document).ready(function(){
     addIllustration("可选",color_defaultSeat);
     addIllustration("选中",color_selectSeat);
     scale();
-    drag();
+    //Drag("target_drag");
+    //drag();
+
 });
 function drag()
 {
-    touch.on('#target', 'touchstart', function(ev){
+    touch.on('#target_drag', 'touchstart', function(ev){
         ev.preventDefault();
     });
 
-    var target = document.getElementById("target");
+    var target = document.getElementById("target_drag");
     var dx, dy;
 
-    touch.on('#target', 'drag', function(ev){
+    touch.on('#target_drag', 'drag', function(ev){
         dx = dx || 0;
         dy = dy || 0;
-        log("当前x值为:" + dx + ", 当前y值为:" + dy +".");
         var offx = dx + ev.x + "px";
         var offy = dy + ev.y + "px";
-        this.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+        target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
     });
 
-    touch.on('#target', 'dragend', function(ev){
+    touch.on('#target_drag', 'dragend', function(ev){
         dx += ev.x;
         dy += ev.y;
     });
@@ -363,10 +368,69 @@ function scale()
         currentScale = initialScale + currentScale;
         currentScale = currentScale > 5 ? 5 : currentScale;
         currentScale = currentScale < 1 ? 1 : currentScale;
-        this.style.webkitTransform = 'scale(' + currentScale + ')';
+        target.style.webkitTransform = 'scale(' + currentScale + ')';
     });
 
     touch.on('#target', 'pinchend', function(ev){
         initialScale = currentScale;
     });
+}
+
+function Drag(id) {
+    /*
+    var $ = function (flag) {
+        return document.getElementById(flag);
+    }
+    */
+    dv = document.getElementById(id);
+    $(id).onmousedown = function (e) {
+        var d = document;
+        var page = {
+            event: function (evt) {
+                var ev = evt || window.event;
+                return ev;
+            },
+            pageX: function (evt) {
+                var e = this.event(evt);
+                return e.pageX || (e.clientX + document.body.scrollLeft - document.body.clientLeft);
+            },
+            pageY: function (evt) {
+                var e = this.event(evt);
+                return e.pageY || (e.clientY + document.body.scrollTop - document.body.clientTop);
+
+            },
+            layerX: function (evt) {
+                var e = this.event(evt);
+                return e.layerX || e.offsetX;
+            },
+            layerY: function (evt) {
+                var e = this.event(evt);
+                return e.layerY || e.offsetY;
+            }
+        }
+        var x = page.layerX(e);
+        var y = page.layerY(e);
+        if (dv.setCapture) {
+            dv.setCapture();
+        }
+        else if (window.captureEvents) {
+            window.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+        }
+        d.onmousemove = function (e) {
+            var tx = page.pageX(e) - x;
+            var ty = page.pageY(e) - y;
+            dv.style.left = tx + "px";
+            dv.style.top = ty + "px";
+        }
+        d.onmouseup = function () {
+            if (dv.releaseCapture) {
+                dv.releaseCapture();
+            }
+            else if (window.releaseEvents) {
+                window.releaseEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+            }
+            d.onmousemove = null;
+            d.onmouseup = null;
+        }
+    }
 }
