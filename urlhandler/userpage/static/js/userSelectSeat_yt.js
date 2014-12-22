@@ -326,7 +326,7 @@ $(document).ready(function(){
     addIllustration("选中",color_selectSeat);
     scale();
     //Drag("target_drag");
-    //drag();
+    drag();
 
 });
 function drag()
@@ -366,7 +366,7 @@ function scale()
     touch.on('#target', 'pinchend', function(ev){
         currentScale = ev.scale - 1;
         currentScale = initialScale + currentScale;
-        currentScale = currentScale > 5 ? 5 : currentScale;
+        currentScale = currentScale > 8 ? 8 : currentScale;
         currentScale = currentScale < 1 ? 1 : currentScale;
         target.style.webkitTransform = 'scale(' + currentScale + ')';
     });
