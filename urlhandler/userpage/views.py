@@ -551,7 +551,7 @@ def authorize_view(request, stuid):
             if authorization.apply_time + authorization_duration < now:
                 Authorization.object.filter(id=authorization.id).update(status=2)
             if authorization.status == 1:
-                hasAuthorzation = 1;
+                hasAuthorzation = 1
 
     studentid = ''
     if request.GET:
