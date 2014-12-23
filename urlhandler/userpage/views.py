@@ -208,7 +208,7 @@ def choose_seat_view(request, openid, uid):
         except:
             isValid = 'ex'
             print 'ex1'
-            return return chooseSeat_returnIncompleteView(request, isValid, openid)
+            return chooseSeat_returnIncompleteView(request, isValid, openid)
     else:
         print 'el1'
         return validation_view(request, openid)
@@ -220,11 +220,11 @@ def choose_seat_view(request, openid, uid):
         except:
             isValid = 'ex'
             print 'ex2'
-            return return chooseSeat_returnIncompleteView(request, isValid, openid)
+            return chooseSeat_returnIncompleteView(request, isValid, openid)
     else:
         isValid = 'No_Such_Ticket'
         print 'el2'
-        return return chooseSeat_returnIncompleteView(request, isValid, openid)
+        return chooseSeat_returnIncompleteView(request, isValid, openid)
 
     # check if this activity allow seats choosing.
     try:
@@ -232,7 +232,7 @@ def choose_seat_view(request, openid, uid):
     except:
         isValid = 'ex'
         print 'ex3'
-        return return chooseSeat_returnIncompleteView(request, isValid, openid)
+        return chooseSeat_returnIncompleteView(request, isValid, openid)
     if theActivity.seat_status == 0:
         isValid = 'No_Seat_Choosing'
         print 'el3'
