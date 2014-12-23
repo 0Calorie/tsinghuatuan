@@ -2,7 +2,7 @@ var color_onSaleSeat = "rgb(150, 246, 185)";
 var color_defaultSeat = "rgb(224, 222, 210)";
 var color_selectSeat = "rgb(255, 214, 0)";
 var color_dualNeighborSeat = "rgb(0, 0, 255)";
-var seatPalatte= ["#FFFF80", "#FF8080","#FF8040","#8080FF","#808000", "#FF0000","#008080","#800040"];
+var seatPalette= ["#FFFF80", "#FF8080","#FF8040","#8080FF","#808000", "#FF0000","#008080","#800040"];
 var chosenSeat = null;
 var chosenDualOne = null;
 var chosenDualTwo = null;
@@ -588,11 +588,12 @@ function chooseSeat_setSeatToUnchosen(theChosen){
     //theChosen.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center";
     //theChosen.style.backgroundSize = "contain";
     var colorIndex = 0;
+    var seatPrice = theChosen.getAttribute("price");
     for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
-        if(price == totalPrice[colorIndex])
+        if(seatPrice == totalPrice[colorIndex])
             break;
     }
-    theChosen.style.backgroundColor = colorPalette[colorIndex];
+    theChosen.style.backgroundColor = seatPalette[colorIndex];
 }
 
 function chooseSeat_setSeatToChosen(theChosen){
