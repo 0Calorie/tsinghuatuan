@@ -255,7 +255,7 @@ def choose_seat_view(request, openid, uid):
     activityPack = dict()
     activityPack['name'] = theActivity.name
     activityPack['place'] = theActivity.place
-    activityPack['startTime'] = theActivity.startTime
+    activityPack['startTime'] = theActivity.start_time
 
     return render_to_response('userSelectSeat.html', {
         'validity': isValid,
@@ -306,7 +306,7 @@ def chooseSeat_single(request, weixinOpenID, ticketID, seatFloor, seatColumn, se
         return HttpResponse('Error_DB2')
 
     try:
-        Ticket.objects.filter(unique_id=ticketID).update(seat=theSeat)
+        Ticket.objects.filter(unique_id=ticketID).update(seat=theSeat, seat_status = 1)
     except:
         print 'ex4'
         return HttpResponse('Error_DB3')
@@ -380,8 +380,8 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
         return HttpResponse('Error_DB6')
 
     try:
-        Ticket.objects.filter(unique_id = ticketID).update(seat = dualOne)
-        Ticket.objects.filter(unique_id = sideID).update(seat = dualTwo)
+        Ticket.objects.filter(unique_id = ticketID).update(seat = dualOne, seat_status = 1)
+        Ticket.objects.filter(unique_id = sideID).update(seat = dualTwo, seat_status = 1)
     except:
         print 'ex8'
         return HttpResponse('Error_DB7')
@@ -551,7 +551,7 @@ def authorize_view(request, stuid):
             if authorization.apply_time + authorization_duration < now:
                 Authorization.object.filter(id=authorization.id).update(status=2)
             if authorization.status == 1:
-                hasAuthorzation = 1;
+                hasAuthorzation = 1
 
     studentid = ''
     if request.GET:

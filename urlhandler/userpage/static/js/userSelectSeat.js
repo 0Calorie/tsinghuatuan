@@ -1,10 +1,13 @@
-var color_onSaleSeat = "rgb(224, 222, 210)";
-var color_defaultSeat = "rgb(150, 246, 185)";
+var color_onSaleSeat = "rgb(150, 246, 185)";
+var color_defaultSeat = "rgb(224, 222, 210)";
 var color_selectSeat = "rgb(255, 214, 0)";
 var color_dualNeighborSeat = "rgb(0, 0, 255)";
+var seatPalette= ["#FFFF80", "#FF8080","#FF8040","#8080FF","#808000", "#FF0000","#008080","#800040"];
 var chosenSeat = null;
 var chosenDualOne = null;
 var chosenDualTwo = null;
+var totalPrice = activityPack.totalPrice.split(" ");
+var totalPriceLength = totalPrice.length;
 var seatObj = {   
     "A":{
         "row":"21",
@@ -119,6 +122,25 @@ var clientWidth = document.documentElement.clientWidth;
 $("#selectRegion").css("width", clientWidth);
 $("#selectRegion").css("height", clientHeight);
 
+$(document).ready(function(){
+    switch(validity)
+    {
+        case "Valid":showPlace();break;
+        case "Not_Now":$("#notNow_info").css("block", "display");break;
+        case "Has_Chosen":$("#hasChosen_info").css("block", "display");break;
+    }
+});
+
+function showPlace()
+{
+    $(".XQ").css("display", "block");
+    addIllustration("不可选",color_defaultSeat);
+    addIllustration("可选",color_onSaleSeat);
+    addIllustration("选中",color_selectSeat);
+    scale();
+    drag();
+}
+
 function isWalkWay(row, walkWay)
 {
     for(var i = 0; i < walkWay.length; i++)
@@ -174,6 +196,7 @@ function loadSeat(obj) {
 
     //delete some seat
     $(".seat").append(table);
+    $(".seat").css("-webkit-transform","translate3d(0px, 0px, 0px)");//居中
     $(".seat").attr("draggable","true");
     $("td").attr("draggable","false");
     $("tr").attr("draggable", "false");
@@ -217,7 +240,6 @@ function loadSeat(obj) {
         }
 
     }
-
     layer2();
 }
 
@@ -250,6 +272,7 @@ function showSeat_yt(place, sec)
     }
 }
 
+//返回到选区界面
 function back()
 {
     $(".XQ").css("display","block");
@@ -262,7 +285,7 @@ function back()
     chosenDualOne = null;
     chosenDualTwo = null;
 }
-
+//添加选中过的座位到上方信息栏
 function addToBottom(elem)
 {
     var click = elem;
@@ -288,6 +311,7 @@ function addToBottom(elem)
     }
 }
 
+//添加颜色说明
 function addIllustration(word, color)
 {
     var div_illu = document.createElement("div");
@@ -302,13 +326,8 @@ function addIllustration(word, color)
     $(".illustration").append(div_illu);
 }
 
-$(document).ready(function(){
-    addIllustration("不可选",color_onSaleSeat);
-    addIllustration("可选",color_defaultSeat);
-    addIllustration("选中",color_selectSeat);
-    scale();
-    drag();
-});
+
+//拖动
 function drag()
 {
     touch.on('#target_drag', 'touchstart', function(ev){
@@ -321,9 +340,27 @@ function drag()
     touch.on('#target_drag', 'drag', function(ev){
         dx = dx || 0;
         dy = dy || 0;
+
         var offx = dx + ev.x + "px";
         var offy = dy + ev.y + "px";
+        target_width = document.getElementById("target_drag").clientWidth;
+        target_height = document.getElementById("target_drag").clientHeight;
+        var backx;
+        var backy;
+        if(dx + ev.x < 50 - clientWidth)
+            backx = 50 - clientWidth + "px";
+        else if(dx +ev.x > target_width - 50)
+            backx = target_width - 50 + "px";
+        if(dy + ev.y < 30 - target_height/ 2)
+            backy  = 30 - target_height/ 2 + "px";
+        else if(dy + ev.y > target_height/ 2)
+            backy = target_height/2 + "px";
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+        if(backx != "undefined") {
+            target.style.webkitTransform = "translate3d(" + backx + "," + offy + ",0)";
+        }
+        if(backy != "undefined")
+             target.style.webkitTransform = "translate3d(" + offx + "," + backy + ",0)";
     });
 
     touch.on('#target_drag', 'dragend', function(ev){
@@ -331,6 +368,7 @@ function drag()
         dy += ev.y;
     });
 }
+//双指缩放
 function scale()
 {
     var target = document.getElementById("target");
@@ -354,9 +392,8 @@ function scale()
     touch.on('#target', 'pinchend', function(ev){
         initialScale = currentScale;
     });
+
 }
-
-
 
 function confirmIsHit() {
     disableOne("backer", 1);
@@ -413,6 +450,7 @@ function confirmIsHit_sendRequest(sender){
                         if(response != 'Selected' || response != 'oneSelected' || response != 'twoSelected'){
                             $("#failure_info")[0].innerText = response;
                         }
+                        chooseSeat_seatStatusUpdate();
                         return;
                 }
             }
@@ -440,31 +478,31 @@ function chooseSeat() {
         }
     }
 }
-
+/*选择单人座*/
 function chooseSeat_single(){
     var theChosen = $(this.event.srcElement)[0];
     if (chosenSeat != null) {
-        chooseSeat_setSeatToUnchosen(chosenSeat);
-        chosenSeat = null
+        chooseSeat_interfaceProcess(0, chosenSeat);
+        chosenSeat = null;
     }
-    chooseSeat_setSeatToChosen(theChosen);
+    chooseSeat_interfaceProcess(1, theChosen);
     chosenSeat = theChosen;
 }
-
+/*选择双人座*/
 function chooseSeat_dualOne(){
     var theChosen = $(this.event.srcElement)[0];
     if(chosenDualOne != null){
+        chooseSeat_interfaceProcess(0, chosenDualOne);
         chooseSeat_dualOne_chosenDualOneIsNotNull();
         chosenDualOne = null;
     }
-    chooseSeat_setSeatToChosen(theChosen);
+    chooseSeat_interfaceProcess(1, theChosen);
     chosenDualOne = theChosen;
     chooseSeat_dualOne_restrictChoices();
 }
 
 function chooseSeat_dualOne_chosenDualOneIsNotNull(){
-    // set old chosenDualOne to Unchosen, set old neighbors' onclick to chooseSeat, and set chosenDualTwo to null
-    chooseSeat_setSeatToUnchosen(chosenDualOne);
+    // set chosenDualOne's neighbors' onclick to chooseSeat, and set chosenDualTwo to null
 
     var dualOneRow = chosenDualOne.getAttribute('row');
     var dualOneColumn = chosenDualOne.getAttribute('column');
@@ -477,10 +515,16 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     if(rightNeighbor != undefined){
         rightNeighbor.setAttribute('onclick', 'chooseSeat();');
         chooseSeat_setSeatToUnchosen(rightNeighbor);
+        if(chosenDualTwo == rightNeighbor){
+            addToBottom(chosenDualTwo);
+        }
     }
     if(leftNeighbor != undefined){
         leftNeighbor.setAttribute('onclick', 'chooseSeat();');
         chooseSeat_setSeatToUnchosen(leftNeighbor);
+        if(chosenDualTwo == leftNeighbor){
+            addToBottom(chosenDualTwo);
+        }
     }
 
     chosenDualOne = null;
@@ -509,23 +553,59 @@ function chooseSeat_dualOne_restrictChoices(){
 
 function chooseSeat_dualTwo(){
     var theChosen = $(this.event.srcElement)[0];
-    if(chosenDualTwo != null){ // actually chosenDualTwo must be null here, or there is something wrong.
-        chooseSeat_setSeatToUnchosen(chosenDualTwo);
+    if(chosenDualTwo != null){
+        chooseSeat_interfaceProcess(0, chosenDualTwo);
         chosenDualTwo = null;
     }
-    chooseSeat_setSeatToChosen(theChosen);
+    chooseSeat_interfaceProcess(1, theChosen);
     chosenDualTwo = theChosen;
 }
 
 function chooseSeat_dualSingle(){
-    
+    var theChosen = $(this.event.srcElement)[0];
+    if(chosenDualOne == theChosen){
+        chooseSeat_interfaceProcess(0, chosenDualOne);
+        chosenDualOne = null;
+        return;
+    }
+    if(chosenDualTwo == theChosen){
+        chooseSeat_interfaceProcess(0, chosenDualTwo);
+        chosenDualTwo = null;
+        return;
+    }
+    if(chosenDualOne == null){
+        chooseSeat_interfaceProcess(1, theChosen);
+        chosenDualOne = theChosen;
+        return;
+    }
+    if(chosenDualTwo == null){
+        chooseSeat_interfaceProcess(1, theChosen);
+        chosenDualTwo = theChosen;
+        return;
+    }
+
 }
 
-// not for dualTwo
+function chooseSeat_interfaceProcess(toChosenOrUnchosen, theChosen){
+    addToBottom(theChosen)
+    if(toChosenOrUnchosen == 1){
+        chooseSeat_setSeatToChosen(theChosen);
+    }
+    else if(toChosenOrUnchosen == 0){
+        chooseSeat_setSeatToUnchosen(theChosen);
+    }
+}
+
 function chooseSeat_setSeatToUnchosen(theChosen){
     //theChosen.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center";
     //theChosen.style.backgroundSize = "contain";
-    theChosen.style.backgroundColor = color_onSaleSeat;
+    var colorIndex = 0;
+    var seatPrice = theChosen.getAttribute("price");
+    for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
+        if(seatPrice == totalPrice[colorIndex])
+            break;
+    }
+    theChosen.style.backgroundColor = seatPalette[colorIndex];
 }
 
 function chooseSeat_setSeatToChosen(theChosen){
@@ -549,39 +629,151 @@ function chooseSeat_seatStatusUpdate(){
             if(updater.status == 200){
                 allSeat = JSON.parse(updater.responseText);
             }
-            else{
-                // show error
+            else {
+                $("#result").css("display","block");
+                $("#failure_info").css("display", "block");
+                $("#failure_info")[0].innerText = '服务器连接异常，请稍后重试。'
             }
         }
     }
 }
-/* chooseSeat series ends here */
 
 function layer2(){
-    len = allSeat.length;
+    var colorIndex = 0;
+    for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
+        addIllustration(totalPrice[colorIndex], seatPalette[colorIndex]);
+    }
+
+    var len = allSeat.length;
     for(var i = 0; i < len; i++)
     {
-        floor = allSeat[i].seat_floor;
-        seatprice = allSeat[i].seat_price;
-        status= allSeat[i].status;
-        row = allSeat[i].seat_row;
-        column = allSeat[i].seat_column;
-        id = floor + "-" + row + "-" + column;
-        ss = document.getElementById(id);
+        var floor = allSeat[i].seat_floor;
+        var seatprice = allSeat[i].seat_price;
+        var status= allSeat[i].status;
+        var row = allSeat[i].seat_row;
+        var column = allSeat[i].seat_column;
+        var id = floor + "-" + row + "-" + column;
+        var ss = document.getElementById(id);
         if(ss != undefined){
-            ss.setAttribute('price', seatprice);
-            ss.setAttribute('status', status);
             if(status==0)
             {
                 //$("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
                 //$("#"+id).css("background-size", "contain");
-                ss.style.backgroundColor = color_defaultSeat;
-                ss.setAttribute('onclick', 'chooseSeat();');
+                ss.setAttribute('price', seatprice);
+                ss.setAttribute('status', status);
+                chooseSeat_setSeatToUnchosen(ss);
+                //ss.setAttribute('onclick', 'chooseSeat();');
+                touch.on(ss, 'tap', function(ev){
+                    chooseSeat();
+                });
             }
-
         }
     }
 }
+
+/* chooseSeat series ends here */
+
+/* dualSeat Checker series will check if there are two seats that are consecutive*/
+/* dualSeat Checker series starts here */
+var firstFloorPoolSeats = new Array(new Array(5,21,5),
+                          new Array(6,21,6),
+                          new Array(7,21,7),
+                          new Array(8,21,8),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(8,21,8),
+                          new Array(7,21,7),
+                          new Array(6,21,6),
+                          new Array(5,21,5));
+
+var firstFloorStairSeats = new Array(new Array(16,14,22,14,16),
+                           new Array(15,17,22,17,15),
+                           new Array(14,19,22,19,14),
+                           new Array(0,14,22,14,0),
+                           new Array(0,10,22,10,0),
+                           new Array(0,4,18,4,0));
+
+var secondFloorStairSeats = new Array(new Array(16,16,20,16,16),
+                           new Array(15,18,20,18,15),
+                           new Array(14,19,20,19,14),
+                           new Array(0,17,20,17,0),
+                           new Array(0,12,20,12,0),
+                           new Array(0,8,20,8,0),
+                           new Array(0,4,12,4,0));
+
+var thirdFloorStairSeats = new Array(new Array(16,0,13,20,13,0,16),
+                           new Array(10,0,15,20,15,0,10),
+                           new Array(10,3,17,20,17,3,10),
+                           new Array(0,0,17,20,17,0,0),
+                           new Array(0,0,11,20,11,0,0),
+                           new Array(0,0,8,20,8,0,0),
+                           new Array(0,0,4,20,4,0,0));
+
+function dualSeatChecker(floor, seats, numberOfColumn, numberOfRow){
+    var dualCounter = 0;
+    var column = 0, row = 0, sectorIndex = 1, seatIndex = 1;
+    for(column = 0; column < numberOfColumn; column++){
+        seatIndex = 1;
+        for(row = 0; row < numberOfRow; row++){
+            dualCounter = 0;
+            for(sectorIndex = 1; sectorIndex <= seats[column][row]; sectorIndex++, seatIndex++){
+                var seatID = floor + "-" + column + "-" + seatIndex;
+                if($("#" + seatID)[0].getAttribute('status') == 0){
+                    dualCounter++;
+                    if(dualCounter == 2){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+function firstFloorDualSeatCheck_pool(){
+    var poolSeatState = dualSeatChecker(1, firstFloorPoolSeats, 19, 3);
+    return poolSeatState;
+}
+
+function firstFloorDualSeatCheck_stair(){
+    var stairSeatState = dualSeatChecker(1, firstFloorStairSeats, 6, 5);
+    return stairSeatState;
+}
+
+function secondFloorDualSeatCheck(){
+    var stairSeatState = dualSeatChecker(2, secondFloorStairSeats, 7, 5);
+    return stairSeatState;
+}
+
+function thirdFloorDualSeatCheck(){
+    var stairSeatState = dualSeatChecker(3, thirdFloorStairSeats, 7, 7);
+    return stairSeatState;
+}
+
+function dualSeatCheckShortcut(targetSector){
+    if(targetSector == 0){
+        return dualSeatChecker(1, firstFloorPoolSeats, 19, 3);
+    }
+    if(targetSector == 1){
+        return dualSeatChecker(1, firstFloorStairSeats, 6, 5);
+    }
+    if(targetSector == 2){
+        return dualSeatChecker(2, secondFloorStairSeats, 7, 5);
+    }
+    if(targetSector == 3){
+        return dualSeatChecker(3, thirdFloorStairSeats, 7, 7);
+    }
+}
+/* dualSeat Checker series ends here */
 
 function disableOne(id, flag) {
     var dom = document.getElementById(id);

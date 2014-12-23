@@ -356,9 +356,10 @@ function scale()
     var target = document.getElementById("target");
     target.style.webkitTransition = 'all ease 1s';
 
-    touch.on('#target', 'touchstart', function(ev){
+   touch.on('#target', 'touchstart', function(ev){
         ev.preventDefault();
     });
+
 
     var initialScale = 1;
     var currentScale;

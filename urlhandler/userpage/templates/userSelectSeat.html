@@ -21,7 +21,7 @@
     <hr/>
     <div id="mainbody">
     <div id="mainContent" style="position:relative;">
-                <div class = "XQ"  style="display: block;">
+                <div class = "XQ"  style="display: none;">
                   <div class="regionSelectDiv XQ_A" onclick="showSeat_yt('XQ','A');"></div>
                   <div class="regionSelectDiv XQ_B" onclick="showSeat_yt('XQ','B');"></div>
                   <div class="regionSelectDiv XQ_C" onclick="showSeat_yt('XQ','C');"></div>
@@ -61,7 +61,7 @@
                   <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
                   width="100%" color="#987cb9" SIZE=1/>
                     <div class="wrap_seat">
-                        <div class="seat_drag" id="target_drag">
+                        <div class="seat_drag" id="target_drag" style="height:100%">
                             <div class="seat" id="target">
                             </div>
                         </div>
@@ -83,16 +83,22 @@
         <div class="slogan success" id="success_info" style="display:none">
             哇咔咔，选座成功啦O(∩_∩)O
         </div>
+        <div class="slogan failure" id="notNow_info" style="display:none">
+            对不起，现在不是您的选座时间。请耐心等待。
+        </div>
+        <div class="slogan success" id="hasChosen_info" style="display:none">
+            忘了吗？你已经选过座位了~
+        </div>
         <div class="slogan failure" id="failure_info" style="display:none">
             哎呀，有人比你抢先一步
             <div class="return tryAgain" id="tryAgain" onclick="back()">重新抢</div>
-
-            </div>
         </div>
     </div>
+</div>
 
 </body>
     <script>
+        /* "Valid" "Not_Now" "Has_Chosen" */
         var validity = "{{validity}}";
         var weixinOpenID = "{{weixinOpenID}}";
         var ticketPack = {
@@ -112,7 +118,8 @@
         var activityPack = {
             'name' : "{{activityPack.name}}",
             'place' : "{{activityPack.place}}",
-            'startTime' : "{{activityPack.startTime}}"
+            'startTime' : "{{activityPack.startTime}}",
+            'totalPrice' : "{{activityPack.totalPrice}}"
         };
 
     </script>
