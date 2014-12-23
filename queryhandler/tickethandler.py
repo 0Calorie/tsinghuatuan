@@ -349,7 +349,11 @@ def response_cancel_ticket(msg):
             if tickets.exists():  # user has already booked the activity
                 for ticket in tickets:
                     ticket.status = 0
-                    ticket.seat.status = 0
+                    seat = ticket.seat
+                    print seat
+                    if(seat):
+                        seat.status = 0
+                        seat.save()
                     ticket.save()
                     Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') + 1)
                 return get_reply_text_xml(msg, get_text_success_cancel_ticket())
