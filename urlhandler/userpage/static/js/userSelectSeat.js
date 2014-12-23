@@ -157,6 +157,7 @@ function showPlace()
 {
     $(".XQ").css("display", "block");
     addIllustration("不可选",color_defaultSeat);
+    addIllustration("可选",color_onSaleSeat);
     addIllustration("选中",color_selectSeat);
     /*var colorIndex = 0;
     for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
