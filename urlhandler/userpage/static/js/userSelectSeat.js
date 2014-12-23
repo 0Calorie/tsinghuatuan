@@ -437,49 +437,43 @@ function confirmIsHit_sendRequest(sender){
 
 /* chooseSeat series start from here */
 function chooseSeat() {
-   if(ticketPack.additionalTicketID <= 0){
+    if(ticketPack.additionalTicketID <= 0){
         chooseSeat_single();
     }
-    else {
-       if (dualSeatCheckShortcut(currentSector) == true) {
-           chooseSeat_dualOne();
-       }
-       else {
-           chooseSeat_dualSingle();
-       }
-   }
-
+    else{
+        if(dualSeatCheckShortcut(currentSector) == true){
+            chooseSeat_dualOne();
+        }
+        else{
+            chooseSeat_dualSingle();
+        }
+    }
 }
 /*选择单人座*/
 function chooseSeat_single(){
     var theChosen = $(this.event.srcElement)[0];
-    console.log(theChosen);
     if (chosenSeat != null) {
-        chooseSeat_setSeatToUnchosen(chosenSeat);
-        addToBottom(chosenSeat);
+        chooseSeat_interfaceProcess(0, chosenSeat);
         chosenSeat = null;
     }
-    chooseSeat_setSeatToChosen(theChosen);
-    addToBottom(theChosen);
+    chooseSeat_interfaceProcess(1, theChosen)
     chosenSeat = theChosen;
 }
 /*选择双人座*/
 function chooseSeat_dualOne(){
     var theChosen = $(this.event.srcElement)[0];
     if(chosenDualOne != null){
+        chooseSeat_interfaceProcess(0, chosenDualOne);
         chooseSeat_dualOne_chosenDualOneIsNotNull();
-        addToBottom(chosenDualOne);
         chosenDualOne = null;
     }
-    chooseSeat_setSeatToChosen(theChosen);
-    addToBottom(theChosen);
+    chooseSeat_interfaceProcess(1, theChosen);
     chosenDualOne = theChosen;
     chooseSeat_dualOne_restrictChoices();
 }
 
 function chooseSeat_dualOne_chosenDualOneIsNotNull(){
-    // set old chosenDualOne to Unchosen, set old neighbors' onclick to chooseSeat, and set chosenDualTwo to null
-    chooseSeat_setSeatToUnchosen(chosenDualOne);
+    // set chosenDualOne's neighbors' onclick to chooseSeat, and set chosenDualTwo to null
 
     var dualOneRow = chosenDualOne.getAttribute('row');
     var dualOneColumn = chosenDualOne.getAttribute('column');
@@ -492,10 +486,16 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     if(rightNeighbor != undefined){
         rightNeighbor.setAttribute('onclick', 'chooseSeat();');
         chooseSeat_setSeatToUnchosen(rightNeighbor);
+        if(chosenDualTwo == rightNeighbor){
+            addToBottom(chosenDualTwo);
+        }
     }
     if(leftNeighbor != undefined){
         leftNeighbor.setAttribute('onclick', 'chooseSeat();');
         chooseSeat_setSeatToUnchosen(leftNeighbor);
+        if(chosenDualTwo == leftNeighbor){
+            addToBottom(chosenDualTwo);
+        }
     }
 
     chosenDualOne = null;
@@ -524,18 +524,47 @@ function chooseSeat_dualOne_restrictChoices(){
 
 function chooseSeat_dualTwo(){
     var theChosen = $(this.event.srcElement)[0];
-    if(chosenDualTwo != null){ // actually chosenDualTwo must be null here, or there is something wrong.
-        chooseSeat_setSeatToUnchosen(chosenDualTwo);
-        addToBottom(chosenDualTwo);
+    if(chosenDualTwo != null){
+        chooseSeat_interfaceProcess(0, chosenDualTwo);
         chosenDualTwo = null;
     }
-    chooseSeat_setSeatToChosen(theChosen);
-    addToBottom(theChosen);
+    chooseSeat_interfaceProcess(1, theChosen);
     chosenDualTwo = theChosen;
 }
 
 function chooseSeat_dualSingle(){
-    
+    var theChosen = $(this.event.srcElement)[0];
+    if(chosenDualOne == theChosen){
+        chooseSeat_interfaceProcess(0, chosenDualOne);
+        chosenDualOne = null;
+        return;
+    }
+    if(chosenDualTwo == theChosen){
+        chooseSeat_interfaceProcess(0, chosenDualTwo);
+        chosenDualTwo = null;
+        return;
+    }
+    if(chosenDualOne == null){
+        chooseSeat_interfaceProcess(1, theChosen);
+        chosenDualOne = theChosen;
+        return;
+    }
+    if(chosenDualTwo == null){
+        chooseSeat_interfaceProcess(1, theChosen);
+        chosenDualTwo = theChosen;
+        return;
+    }
+
+}
+
+function chooseSeat_interfaceProcess(toChosenOrUnchosen, theChosen){
+    addToBottom(theChosen)
+    if(toChosenOrUnchosen = 1){
+        chooseSeat_setSeatToChosen(theChosen);
+    }
+    else if(toChosenOrUnchosen = 0){
+        chooseSeat_setSeatToUnchosen(theChosen);
+    }
 }
 
 // not for dualTwo
