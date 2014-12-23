@@ -531,7 +531,7 @@ function chooseSeat() {
         chooseSeat_single();
     }
     else{
-        if(dualSeatCheckShortcut(currentSector) == true){
+        if(dualSeatCheckShortcut(chooseSeat_SECTIONTransformer(SECTION)) == true){
             chooseSeat_dualOne();
         }
         else{
@@ -727,6 +727,17 @@ function layer2(){
             }
         }
     }
+}
+
+function chooseSeat_SECTIONTransformer(section){
+    if(section == 'A')
+        return 0;
+    if(section == 'B' || section == 'BB')
+        return 1;
+    if(section == 'C' || section == 'CC')
+        return 2;
+    if(section == 'D' || section == 'DD')
+        return 3;
 }
 
 /* chooseSeat series ends here */
