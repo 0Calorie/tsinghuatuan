@@ -37,8 +37,8 @@ $('#region-1').ready(function(){
 						  new Array(9,21,9),
 						  new Array(8,21,8),
 						  new Array(7,21,7),
-						  new Array(6,21,6),
-						  new Array(5,21,5));
+						  new Array(5,21,5),
+						  new Array(0,21,0));
 
  	var maxColumn = new Array(9,21,9);
  	var table = createTable(1,rowNum,seatDetail,maxColumn,1);
