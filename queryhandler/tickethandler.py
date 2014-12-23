@@ -104,7 +104,8 @@ def response_exam_tickets(msg):
     for activity in activities:
         tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1)
         if tickets.exists():
-            all_tickets.append(tickets[0])
+            for ticket in tickets:
+                all_tickets.append(ticket)
 
     if len(all_tickets) == 1:
         ticket = all_tickets[0]
@@ -729,7 +730,7 @@ def response_cancel_authorization(msg):
             authorized.status = 2
             authorized.save()
             User.objects.filter(id=user.id).update(authorization=None)
-            User.objects.filter(stu_id=authorizer.authoizer_stu_id).update(authorization=None)
+            User.objects.filter(stu_id=authorized.authoizer_stu_id).update(authorization=None)
             return get_reply_text_xml(msg, get_text_cancel_authorization_success(authorized.authorizer_stu_id))
         else:
             return get_reply_text_xml(msg, get_text_cancel_no_authorization())
@@ -754,10 +755,10 @@ def response_check_authorization(msg):
         if authorization.apply_time + authorization_duration < now:
             Authorization.object.filter(id=authorization.id).update(status=2)
         if authorization.status == 1:
-            if user.id == authorization.authorizer_stu_id:
-                return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorizer_stu_id))
-            else:
+            if user.stu_id == authorization.authorizer_stu_id:
                 return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorized_person_stu_id))
+            else:
+                return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorizer_stu_id))
         else:
             return get_reply_text_xml(msg, get_text_no_check_authorization())
 
