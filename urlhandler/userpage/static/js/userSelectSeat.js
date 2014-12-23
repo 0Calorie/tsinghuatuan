@@ -306,8 +306,8 @@ function addIllustration(word, color)
 }
 
 $(document).ready(function(){
-    addIllustration("不可选",color_onSaleSeat);
-    addIllustration("可选",color_defaultSeat);
+    addIllustration("不可选",color_defaultSeat);
+    addIllustration("可选",color_onSaleSeat);
     addIllustration("选中",color_selectSeat);
     scale();
     drag();
@@ -328,7 +328,12 @@ function drag()
 
         var offx = dx + ev.x + "px";
         var offy = dy + ev.y + "px";
-
+        var target_width = document.getElementById("target_drag").clientWidth;
+        var tatget_height = document.getElementById("target_drag").clientHeight;
+        if(dx + ev.x < 50 - clientWidth)
+            offx = 50 - clientWidth + "px";
+        else if(dx +ev.x > target_width - 50)
+            offx = target_width - 50 + "px";
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
     });
 
