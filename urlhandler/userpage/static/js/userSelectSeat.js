@@ -126,10 +126,32 @@ $(document).ready(function(){
     switch(validity)
     {
         case "Valid":showPlace();break;
-        case "Not_Now":$("#notNow_info").css("block", "display");break;
-        case "Has_Chosen":$("#hasChosen_info").css("block", "display");break;
+        case "ex":
+            showException("出现了奇怪的错误，我们已经记下来了");
+            break;
+        case "Has_Chosen":
+            showException("你已经选过座位了，忘记了吗？快去查票");
+            break;
+        case "Not_Now":
+            showException("现在不是你的选座时间");
+            break;
+        case "No_Such_Ticket":
+            showException("查无此票");
+            break;
+        case "No_Seat_Choosing":
+            showException("当前活动不能选座");
+            break;
+        default:
+            showException("出现了奇怪的错误，我们已经记下来了，请稍后重试");
+            break;
     }
 });
+function showException(info)
+{
+    $("#result").css("display", "block");
+    $("#exception_info").css("display", "block");
+    $("#exception_info").text(info);
+}
 
 function showPlace()
 {
@@ -445,12 +467,25 @@ function confirmIsHit_sendRequest(sender){
                     case 'Ok':
                         $("#success_info").css("display","block");
                         return;
+                    case 'No_Such_Ticket':
+                        showException("查无此票");
+                        return;
+                    case 'Has_Side_Ticket':
+                        showException("你的票在你的小伙伴手里~");
+                        return;
+                    case 'No_Such_Side_Ticket':
+                        showException("出现了奇怪的双人票错误");
+                        return;
+                    case 'ex':
+                        showException("出现了奇怪的错误");
+                        return;
                     default:
                         $("#failure_info").css("display", "block");
                         if(response != 'Selected' || response != 'oneSelected' || response != 'twoSelected'){
                             $("#failure_info")[0].innerText = response;
+                            chooseSeat_seatStatusUpdate();
                         }
-                        chooseSeat_seatStatusUpdate();
+
                         return;
                 }
             }
