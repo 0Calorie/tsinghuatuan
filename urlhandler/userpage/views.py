@@ -193,6 +193,12 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
 
 ################chooseSeat###################
 
+def chooseSeat_returnIncompleteView(request, isValid, weixinOpenID):
+    return render_to_response('userSelectSeat.html', {
+        'validity': isValid,
+        'weixinOpenID': openid,
+    }, context_instance=RequestContext(request))
+
 def choose_seat_view(request, openid, uid):
     isValid = 'Valid'
     # has been validated?
@@ -200,8 +206,9 @@ def choose_seat_view(request, openid, uid):
         try:
             currentUser = User.objects.get(weixin_id=openid)
         except:
+            isValid = 'ex'
             print 'ex1'
-            return render_to_response('mobile_base.html')  #should return error page
+            return return chooseSeat_returnIncompleteView(request, isValid, openid)
     else:
         print 'el1'
         return validation_view(request, openid)
@@ -211,21 +218,25 @@ def choose_seat_view(request, openid, uid):
         try:
             itsTickets = Ticket.objects.get(unique_id=uid)
         except:
+            isValid = 'ex'
             print 'ex2'
-            return render_to_response('mobile_base.html')
+            return return chooseSeat_returnIncompleteView(request, isValid, openid)
     else:
+        isValid = 'No_Such_Ticket'
         print 'el2'
-        return render_to_response('mobile_base.html')
+        return return chooseSeat_returnIncompleteView(request, isValid, openid)
 
     # check if this activity allow seats choosing.
     try:
         theActivity = itsTickets.activity
     except:
+        isValid = 'ex'
         print 'ex3'
-        return render_to_response('mobile_base.html')
+        return return chooseSeat_returnIncompleteView(request, isValid, openid)
     if theActivity.seat_status == 0:
+        isValid = 'No_Seat_Choosing'
         print 'el3'
-        return render_to_response('mobile_base.html')
+        return chooseSeat_returnIncompleteView(request, isValid, openid)
 
     print 'asd'
     # can that ticket choose its seat now?  has this ticket choose its seat before?
@@ -237,6 +248,7 @@ def choose_seat_view(request, openid, uid):
     if itsTickets.seat_status != 0:
         print 'chosen'
         isValid = 'Has_Chosen'
+
     ticketPack = dict()
     ticketPack['ticketID'] = itsTickets.unique_id
     ticketPack['additionalTicketID'] = itsTickets.additional_ticket_id
@@ -402,23 +414,6 @@ def chooseSeat_seatStatusUpdate(request, weixinOpenID, ticketID):
     # get current seat status
     seats = []
     seatmodels = Seat.objects.filter(activity=theActivity)
-    for seat in seatmodels:
-        seats += [model_to_dict(seat)]
-    seatNum = len(seatmodels)
-    seatPack = dict()
-    seatPack['seatNum'] = seatNum
-    seatPack['seats'] = seats
-    return HttpResponse(seatPack)
-
-
-def chooseSeat_refreshIsHit(request, weixinOpenID, activityID):
-    # check validity
-    validityStatus = chooseSeat_standardValidationChecker(weixinOpenID, activityID)
-    if validityStatus != 'Valid':
-        return HttpResponse('Error_Validity')
-
-    seats = []
-    seatmodels = Seat.objects.filter(s_activity_id=activityID)
     for seat in seatmodels:
         seats += [model_to_dict(seat)]
     seatNum = len(seatmodels)
