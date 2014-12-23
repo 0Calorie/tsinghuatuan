@@ -251,6 +251,7 @@ function showSeat_yt(place, sec)
     }
 }
 
+//返回到选区界面
 function back()
 {
     $(".XQ").css("display","block");
@@ -263,7 +264,7 @@ function back()
     chosenDualOne = null;
     chosenDualTwo = null;
 }
-
+//添加选中过的座位到上方信息栏
 function addToBottom(elem)
 {
     var click = elem;
@@ -289,6 +290,7 @@ function addToBottom(elem)
     }
 }
 
+//添加颜色说明
 function addIllustration(word, color)
 {
     var div_illu = document.createElement("div");
@@ -310,6 +312,7 @@ $(document).ready(function(){
     scale();
     drag();
 });
+//拖动
 function drag()
 {
     touch.on('#target_drag', 'touchstart', function(ev){
@@ -325,10 +328,7 @@ function drag()
 
         var offx = dx + ev.x + "px";
         var offy = dy + ev.y + "px";
-        if(dx + ev.x > clientWidth-50 || dx + ev.x + clientWidth -50 < 0)
-            offx = "0px";
-        if(dy + ev.y > 100 || dy + ev.y < -100)
-            offy = "0px";
+
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
     });
 
@@ -337,6 +337,7 @@ function drag()
         dy += ev.y;
     });
 }
+//双指缩放
 function scale()
 {
     var target = document.getElementById("target");
@@ -360,6 +361,7 @@ function scale()
     touch.on('#target', 'pinchend', function(ev){
         initialScale = currentScale;
     });
+
 }
 
 
@@ -435,21 +437,23 @@ function confirmIsHit_sendRequest(sender){
 
 /* chooseSeat series start from here */
 function chooseSeat() {
-    if(ticketPack.additionalTicketID <= 0){
+   if(ticketPack.additionalTicketID <= 0){
         chooseSeat_single();
     }
-    else{
-        if(dualSeatCheckShortcut(currentSector) == true){
-            chooseSeat_dualOne();
-        }
-        else{
-            chooseSeat_dualSingle();
-        }
-    }
-}
+    else {
+       if (dualSeatCheckShortcut(currentSector) == true) {
+           chooseSeat_dualOne();
+       }
+       else {
+           chooseSeat_dualSingle();
+       }
+   }
 
+}
+/*选择单人座*/
 function chooseSeat_single(){
     var theChosen = $(this.event.srcElement)[0];
+    console.log(theChosen);
     if (chosenSeat != null) {
         chooseSeat_setSeatToUnchosen(chosenSeat);
         addToBottom(chosenSeat);
@@ -459,7 +463,7 @@ function chooseSeat_single(){
     addToBottom(theChosen);
     chosenSeat = theChosen;
 }
-
+/*选择双人座*/
 function chooseSeat_dualOne(){
     var theChosen = $(this.event.srcElement)[0];
     if(chosenDualOne != null){
@@ -591,7 +595,10 @@ function layer2(){
                 //$("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
                 //$("#"+id).css("background-size", "contain");
                 ss.style.backgroundColor = color_onSaleSeat;
-                ss.setAttribute('onclick', 'chooseSeat();');
+                //ss.setAttribute('onclick', 'chooseSeat();');
+                touch.on(ss, 'tap', function(ev){
+                    chooseSeat();
+                });
             }
 
         }
