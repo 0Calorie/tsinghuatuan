@@ -599,8 +599,8 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
                 apply_time=datetime.datetime.now()
             )
             newAuthorization.save()
-            User.objects.filter(id=authorizerID).update(authorization=newAuthorization)
-            User.objects.filter(id=authorizedID).update(authorization=newAuthorization)
+            User.objects.filter(stu_id=authorizerID).update(authorization=newAuthorization)
+            User.objects.filter(stu_id=authorizedID).update(authorization=newAuthorization)
         except:
             return 'Error_DB3'
     return 'Accepted'

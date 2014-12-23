@@ -720,7 +720,7 @@ def response_cancel_authorization(msg):
         authorizer.status = 2
         authorizer.save()
         User.objects.filter(id=user.id).update(authorization=None)
-        User.objects.filter(id=authorizer.authorized_person_stu_id).update(authorization=None)
+        User.objects.filter(stu_id=authorizer.authorized_person_stu_id).update(authorization=None)
         return get_reply_text_xml(msg, get_text_cancel_authorization_success(authorizer.authorized_person_stu_id))
     else:
         authorizeds = Authorization.objects.select_for_update().filter(authorized_person_stu_id=user.stu_id, status=1)
@@ -729,7 +729,7 @@ def response_cancel_authorization(msg):
             authorized.status = 2
             authorized.save()
             User.objects.filter(id=user.id).update(authorization=None)
-            User.objects.filter(id=authorizer.authoizer_stu_id).update(authorization=None)
+            User.objects.filter(stu_id=authorizer.authoizer_stu_id).update(authorization=None)
             return get_reply_text_xml(msg, get_text_cancel_authorization_success(authorized.authorizer_stu_id))
         else:
             return get_reply_text_xml(msg, get_text_cancel_no_authorization())
