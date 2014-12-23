@@ -601,7 +601,7 @@ function chooseSeat_dualOne_restrictChoices(){
     var leftNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (dualOneColumn-1);
 
     var rightNeighbor = document.getElementById(rightNeighborID);
-    var leftNeighbor = document.getClientWidth(leftNeighborID);
+    var leftNeighbor = document.getElementById(leftNeighborID);
     if(rightNeighbor != undefined){
         rightNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
         chooseSeat_setSeatToUnchosenDualTwo(rightNeighbor);
