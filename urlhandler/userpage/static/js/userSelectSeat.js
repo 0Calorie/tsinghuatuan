@@ -160,7 +160,7 @@ function showPlace()
     addIllustration("选中",color_selectSeat);
     var colorIndex = 0;
     for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
-        addIllustration(totalPrice[colorIndex] + " ", seatPalette[colorIndex]);
+        addIllustration((" " + totalPrice[colorIndex] + " "), seatPalette[colorIndex]);
     }
     scale();
     drag();
