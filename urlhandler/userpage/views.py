@@ -196,7 +196,7 @@ def chooseSeat_standardValidationChecker(weixinOpenID, activityID):
 def chooseSeat_returnIncompleteView(request, isValid, weixinOpenID):
     return render_to_response('userSelectSeat.html', {
         'validity': isValid,
-        'weixinOpenID': openid,
+        'weixinOpenID': weixinOpenID,
     }, context_instance=RequestContext(request))
 
 def choose_seat_view(request, openid, uid):
