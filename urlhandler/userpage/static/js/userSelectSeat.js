@@ -6,6 +6,8 @@ var seatPalatte= ["#FFFF80", "#FF8080","#FF8040","#8080FF","#808000", "#FF0000",
 var chosenSeat = null;
 var chosenDualOne = null;
 var chosenDualTwo = null;
+var totalPrice = activityPack.totalPrice.split(" ");
+var totalPriceLength = totalPrice.length;
 var seatObj = {   
     "A":{
         "row":"21",
@@ -381,8 +383,6 @@ function scale()
 
 }
 
-
-
 function confirmIsHit() {
     disableOne("backer", 1);
     disableOne("confirmer", 1);
@@ -469,8 +469,6 @@ function chooseSeat() {
 /*选择单人座*/
 function chooseSeat_single(){
     var theChosen = $(this.event.srcElement)[0];
-    console.log(theChosen);
-    console.log(chosenSeat);
     if (chosenSeat != null) {
         chooseSeat_interfaceProcess(0, chosenSeat);
         chosenSeat = null;
@@ -577,7 +575,7 @@ function chooseSeat_dualSingle(){
 }
 
 function chooseSeat_interfaceProcess(toChosenOrUnchosen, theChosen){
-    addToBottom(theChosen);
+    addToBottom(theChosen)
     if(toChosenOrUnchosen == 1){
         chooseSeat_setSeatToChosen(theChosen);
     }
@@ -586,11 +584,15 @@ function chooseSeat_interfaceProcess(toChosenOrUnchosen, theChosen){
     }
 }
 
-// not for dualTwo
 function chooseSeat_setSeatToUnchosen(theChosen){
     //theChosen.style.background = "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center";
     //theChosen.style.backgroundSize = "contain";
-    theChosen.style.backgroundColor = color_onSaleSeat;
+    var colorIndex = 0;
+    for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
+        if(price == totalPrice[colorIndex])
+            break;
+    }
+    theChosen.style.backgroundColor = colorPalette[colorIndex];
 }
 
 function chooseSeat_setSeatToChosen(theChosen){
@@ -622,6 +624,36 @@ function chooseSeat_seatStatusUpdate(){
         }
     }
 }
+
+function layer2(){
+    var len = allSeat.length;
+
+    for(var i = 0; i < len; i++)
+    {
+        var floor = allSeat[i].seat_floor;
+        var seatprice = allSeat[i].seat_price;
+        var status= allSeat[i].status;
+        var row = allSeat[i].seat_row;
+        var column = allSeat[i].seat_column;
+        var id = floor + "-" + row + "-" + column;
+        var ss = document.getElementById(id);
+        if(ss != undefined){
+            if(status==0)
+            {
+                //$("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
+                //$("#"+id).css("background-size", "contain");
+                ss.setAttribute('price', seatprice);
+                ss.setAttribute('status', status);
+                chooseSeat_setSeatToUnchosen(ss);
+                //ss.setAttribute('onclick', 'chooseSeat();');
+                touch.on(ss, 'tap', function(ev){
+                    chooseSeat();
+                });
+            }
+        }
+    }
+}
+
 /* chooseSeat series ends here */
 
 /* dualSeat Checker series will check if there are two seats that are consecutive*/
@@ -712,48 +744,19 @@ function thirdFloorDualSeatCheck(){
 
 function dualSeatCheckShortcut(targetSector){
     if(targetSector == 0){
-        return firstFloorDualSeatCheck_pool();
+        return dualSeatChecker(1, firstFloorPoolSeats, 19, 3);
     }
     if(targetSector == 1){
-        return firstFloorDualSeatCheck_stair();
+        return dualSeatChecker(1, firstFloorStairSeats, 6, 5);
     }
     if(targetSector == 2){
-        return secondFloorDualSeatCheck();
+        return dualSeatChecker(2, secondFloorStairSeats, 7, 5);
     }
     if(targetSector == 3){
-        return thirdFloorDualSeatCheck();
+        return dualSeatChecker(3, thirdFloorStairSeats, 7, 7);
     }
 }
 /* dualSeat Checker series ends here */
-
-function layer2(){
-    len = allSeat.length;
-    for(var i = 0; i < len; i++)
-    {
-        floor = allSeat[i].seat_floor;
-        seatprice = allSeat[i].seat_price;
-        status= allSeat[i].status;
-        row = allSeat[i].seat_row;
-        column = allSeat[i].seat_column;
-        id = floor + "-" + row + "-" + column;
-        ss = document.getElementById(id);
-        if(ss != undefined){
-            ss.setAttribute('price', seatprice);
-            ss.setAttribute('status', status);
-            if(status==0)
-            {
-                //$("#"+id).css("background", "url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat4.png) no-repeat center");
-                //$("#"+id).css("background-size", "contain");
-                ss.style.backgroundColor = color_onSaleSeat;
-                //ss.setAttribute('onclick', 'chooseSeat();');
-                touch.on(ss, 'tap', function(ev){
-                    chooseSeat();
-                });
-            }
-
-        }
-    }
-}
 
 function disableOne(id, flag) {
     var dom = document.getElementById(id);
