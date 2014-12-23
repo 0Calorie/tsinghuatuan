@@ -373,10 +373,21 @@ function drag()
         target_height = document.getElementById("target_drag").clientHeight;
         var backx;
         var backy;
-        if(dx + ev.x < 50 - target_width)
-            backx = 50 - target_width + "px";
-        else if(dx +ev.x > target_width - 50)
-            backx = target_width - 50 + "px";
+        if(target_width > clientWidth)
+        {
+            if(dx + ev.x < 50 - target_width)
+                backx = 50 - target_width + "px";
+            else if(dx +ev.x > target_width - 50)
+                backx = target_width - 50 + "px";
+        }
+        else{
+            if(dx + ev.x < 50 - clientWidth)
+                backx = 50 - clientWidth + "px";
+            else if(dx +ev.x > target_width - 50)
+                backx = target_width - 50 + "px";
+
+        }
+
         if(dy + ev.y < 30 - target_height/ 2)
             backy  = 30 - target_height/ 2 + "px";
         else if(dy + ev.y > target_height/ 2)
