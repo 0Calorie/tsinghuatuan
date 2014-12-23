@@ -563,13 +563,13 @@ function chooseSeat_dualOne(){
 }
 
 function touchOff(target, func){
-    touch.off(target, 'tag', function(ev){
+    touch.off(target, 'tap', function(ev){
         func;
     })
 }
 
 function touchOn(target, func){
-    touch.on(target, 'tag', function(ev){
+    touch.on(target, 'tap', function(ev){
         func;
     })
 }
@@ -587,10 +587,10 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     var leftNeighbor = document.getElementById(leftNeighborID);
     if(rightNeighbor != undefined){
         rightNeighbor.removeAttribute('onclick');
-        touch.off(rightNeighbor, 'tag', function(ev){
+        touch.off(rightNeighbor, 'tap', function(ev){
             chooseSeat_dualTwo();
         })
-        touch.on(rightNeighbor, 'tag', function(ev){
+        touch.on(rightNeighbor, 'tap', function(ev){
             chooseSeat();
         })
         rightNeighbor.setAttribute('onclick', 'chooseSeat();');
