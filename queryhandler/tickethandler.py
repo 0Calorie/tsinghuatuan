@@ -104,7 +104,8 @@ def response_exam_tickets(msg):
     for activity in activities:
         tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status=1)
         if tickets.exists():
-            all_tickets.append(tickets[0])
+            for ticket in tickets:
+                all_tickets.append(ticket)
 
     if len(all_tickets) == 1:
         ticket = all_tickets[0]
