@@ -796,6 +796,8 @@ function dualSeatChecker(floor, seats, numberOfColumn, numberOfRow){
             dualCounter = 0;
             for(sectorIndex = 1; sectorIndex <= seats[column][row]; sectorIndex++, seatIndex++){
                 var seatID = floor + "-" + column + "-" + seatIndex;
+                if($("#" + seatID) == undefined)
+                    continue;
                 if($("#" + seatID)[0].getAttribute('status') == 0){
                     dualCounter++;
                     if(dualCounter == 2){
