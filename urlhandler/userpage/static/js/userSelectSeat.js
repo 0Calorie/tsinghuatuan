@@ -568,8 +568,8 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     var dualOneRow = chosenDualOne.getAttribute('row');
     var dualOneColumn = chosenDualOne.getAttribute('column');
     var dualOneFloor = chosenDualOne.getAttribute('floor');
-    var rightNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow+1);
-    var leftNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow-1);
+    var rightNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (dualOneColumn+1);
+    var leftNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (dualOneColumn-1);
 
     var rightNeighbor = document.getElementById(rightNeighborID);
     var leftNeighbor = document.getElementById(leftNeighborID);
@@ -597,8 +597,8 @@ function chooseSeat_dualOne_restrictChoices(){
     var dualOneRow = chosenDualOne.getAttribute('row');
     var dualOneColumn = chosenDualOne.getAttribute('column');
     var dualOneFloor = chosenDualOne.getAttribute('floor');
-    var rightNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow+1);
-    var leftNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow-1);
+    var rightNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (dualOneColumn+1);
+    var leftNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (dualOneColumn-1);
 
     var rightNeighbor = document.getElementById(rightNeighborID);
     var leftNeighbor = document.getClientWidth(leftNeighborID);
