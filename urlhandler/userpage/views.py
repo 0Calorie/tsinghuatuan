@@ -268,6 +268,7 @@ def choose_seat_view(request, openid, uid):
     activityPack['name'] = theActivity.name
     activityPack['place'] = theActivity.place
     activityPack['startTime'] = theActivity.start_time
+    activityPack['totalPrice'] = theActivity.total_price
 
     return render_to_response('userSelectSeat.html', {
         'validity': isValid,
