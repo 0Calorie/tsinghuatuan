@@ -627,8 +627,12 @@ function chooseSeat_seatStatusUpdate(){
 }
 
 function layer2(){
-    var len = allSeat.length;
+    var colorIndex = 0;
+    for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
+        addIllustration(totalPrice[colorIndex], seatPalette[colorIndex]);
+    }
 
+    var len = allSeat.length;
     for(var i = 0; i < len; i++)
     {
         var floor = allSeat[i].seat_floor;
