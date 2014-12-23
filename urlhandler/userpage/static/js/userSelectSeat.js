@@ -1,13 +1,15 @@
 var color_onSaleSeat = "rgb(150, 246, 185)";
-var color_defaultSeat = "rgb(224, 222, 210)";
-var color_selectSeat = "rgb(255, 214, 0)";
-var color_dualNeighborSeat = "rgb(0, 0, 255)";
+var color_defaultSeat = "rgb(224, 222, 210)";//不可选作为
+var color_selectSeat = "rgb(255, 214, 0)";//选中座位
+var color_dualNeighborSeat = "rgb(0, 0, 255)";//邻居座位
+//不同票价座位颜色
 var seatPalette= ["#FFFF80", "#FF8080","#FF8040","#8080FF","#808000", "#FF0000","#008080","#800040"];
 var chosenSeat = null;
 var chosenDualOne = null;
 var chosenDualTwo = null;
 var totalPrice = activityPack.totalPrice.split(" ");
 var totalPriceLength = totalPrice.length;
+//新清华学堂座位图
 var seatObj = {   
     "A":{
         "row":"21",
@@ -123,6 +125,7 @@ $("#selectRegion").css("width", clientWidth);
 $("#selectRegion").css("height", clientHeight);
 
 $(document).ready(function(){
+    //检验用户的合法性
     switch(validity)
     {
         case "Valid":showPlace();break;
@@ -146,6 +149,8 @@ $(document).ready(function(){
             break;
     }
 });
+
+//显示错误提示，参数：文本
 function showException(info)
 {
     $("#result").css("display", "block");
@@ -153,6 +158,7 @@ function showException(info)
     $("#exception_info").text(info);
 }
 
+//显示分区座位图
 function showPlace()
 {
     $(".XQ").css("display", "block");
@@ -162,10 +168,11 @@ function showPlace()
     for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
         addIllustration((" " + totalPrice[colorIndex] + " "), seatPalette[colorIndex]);
     }
-    scale();
-    drag();
-}
 
+    scale();//缩放
+    drag();//拖动
+}
+//判断是否是过道
 function isWalkWay(row, walkWay)
 {
     for(var i = 0; i < walkWay.length; i++)
@@ -175,7 +182,7 @@ function isWalkWay(row, walkWay)
     }
     return false;
 }
-
+//载入座位图
 function loadSeat(obj) {
     //load basic table
     var row = Number(obj.row);
@@ -185,6 +192,7 @@ function loadSeat(obj) {
     var table = document.createElement('table');
     var rowStart = obj.rowStart;
     var columnStart = [0,0,0,0,0, 0,0,0,0,0 ,0,0,0,0,0, 0,0,0,0,0,0,0];
+    //ABCD区，行列号开始数量
     if(SECTION == "B" || SECTION == "C" || SECTION == "A" || SECTION == "D")
         columnStart = obj.columnStart;
 
@@ -225,7 +233,7 @@ function loadSeat(obj) {
     $(".seat").attr("draggable","true");
     $("td").attr("draggable","false");
     $("tr").attr("draggable", "false");
-    //delete some seat
+    //更改掉删除座位的ID
     var len = obj.seat.length;
     var n, seat_start, seat_end, nWalkWay_;
     for (var i = 0; i < len; i++)
@@ -265,9 +273,11 @@ function loadSeat(obj) {
         }
 
     }
+    //载入可以选择的座位
     layer2();
 }
 
+//根据地点和显示的区域展示座位
 function showSeat_yt(place, sec)
 {
     var row;
@@ -290,10 +300,9 @@ function showSeat_yt(place, sec)
             default:alert("none Select");break;
         }
         loadSeat(section);
+        //设置宽度
         var gridHeight = $("td").css("width").replace("px","");
         $("td").css("height", gridHeight);
-        //$("table").attr("cellspacing", Number(gridHeight));
-
     }
 }
 
@@ -311,7 +320,7 @@ function back()
     chosenDualOne = null;
     chosenDualTwo = null;
 }
-//添加选中过的座位到上方信息栏
+//添加选中的座位到上方信息栏
 function addToBottom(elem)
 {
     var click = elem;
