@@ -1,4 +1,5 @@
 
+/*定义全局变量*/
 var priceColor = new Array("#FFFF80",
                            "#FF8080",
                            "#FF8040",
@@ -9,22 +10,22 @@ var priceColor = new Array("#FFFF80",
                            "#800040");
 var defaultSeat = "gray";
 
+
+/*显示座位号*/
 function cancelShowSeatCursor(){
 	 var id = $(this.event.srcElement)[0].id;
 	  $('#'+id+' .seatCursor').css("display","none");
 }
-
-
 function showSeatCursor(){
      var id = $(this.event.srcElement)[0].id;
       $('#'+id+' .seatCursor').css("display","block");
 }
 
-
-function alignLeft(tr,i,j,column,maxColumn,row,leftColumn,floor){
+/*将座位左对齐*/
+function alignLeft(tr,i,j,seatDetail,maxColumn,row,leftColumn,floor){
 	for(var k=0;k<maxColumn[j];k++){
 		var td = document.createElement('td');
-		if(k >= column[i][j])
+		if(k >= seatDetail[i][j])
 		{
 			$(td).css({
 				width: "25px",
@@ -55,10 +56,12 @@ function alignLeft(tr,i,j,column,maxColumn,row,leftColumn,floor){
 	return tr;
 }
 
-function alignCenter(tr,i,j,column,maxColumn,row,leftColumn,floor){
+
+/*将座位居中排列*/
+function alignCenter(tr,i,j,seatDetail,maxColumn,row,leftColumn,floor){
 	for(var k=0;k<maxColumn[j];k++){
 	var td = document.createElement('td');
-	if(k < (maxColumn[j] - column[i][j])/2||k >= (maxColumn[j]-(maxColumn[j] - column[i][j])/2))
+	if(k < (maxColumn[j] - seatDetail[i][j])/2||k >= (maxColumn[j]-(maxColumn[j] - seatDetail[i][j])/2))
 	{
 		$(td).css({
 			width: "25px",
@@ -71,16 +74,16 @@ function alignCenter(tr,i,j,column,maxColumn,row,leftColumn,floor){
 			onclick: "changeColor()",
 			onmouseover: "showSeatCursor()",
 			onmouseout: "cancelShowSeatCursor()",
-			id: floor+"-"+row+"-"+(k+1+leftColumn-(maxColumn[j] - column[i][j])/2),
+			id: floor+"-"+row+"-"+(k+1+leftColumn-(maxColumn[j] - seatDetail[i][j])/2),
 			state: 0,
 			price: 0,
 			row: row,
-			column: (k+1+leftColumn-(maxColumn[j] - column[i][j])/2),
+			column: (k+1+leftColumn-(maxColumn[j] - seatDetail[i][j])/2),
 			floor: floor
 			});
 		var div = document.createElement('div');
 			$(div).addClass("seatCursor");
-			div.innerText = (k+1+leftColumn-(maxColumn[j] - column[i][j])/2);
+			div.innerText = (k+1+leftColumn-(maxColumn[j] - seatDetail[i][j])/2);
 			$(td).append(div);
 	}
 	$(tr).append(td);
@@ -88,10 +91,12 @@ function alignCenter(tr,i,j,column,maxColumn,row,leftColumn,floor){
 	return tr;
 }
 
-function alignRight(tr,i,j,column,maxColumn,row,leftColumn,floor){
+
+/*将座位右对齐*/
+function alignRight(tr,i,j,seatDetail,maxColumn,row,leftColumn,floor){
 	for(var k=0;k<maxColumn[j];k++){
 		var td = document.createElement('td');
-		if(k < (maxColumn[j] - column[i][j]))
+		if(k < (maxColumn[j] - seatDetail[i][j]))
 		{
 			$(td).css({
 				width: "25px",
@@ -104,16 +109,16 @@ function alignRight(tr,i,j,column,maxColumn,row,leftColumn,floor){
 				onclick: "changeColor()",
 				onmouseover: "showSeatCursor()",
 				onmouseout: "cancelShowSeatCursor()",
-				id: floor+"-"+row+"-"+(k+1+leftColumn-(maxColumn[j] - column[i][j])),
+				id: floor+"-"+row+"-"+(k+1+leftColumn-(maxColumn[j] - seatDetail[i][j])),
 				state: 0,
 				price: 0,
 				row: row,
-				column: (k+1+leftColumn-(maxColumn[j] - column[i][j])),
+				column: (k+1+leftColumn-(maxColumn[j] - seatDetail[i][j])),
 				floor: floor
 				});
 			var div = document.createElement('div');
 			$(div).addClass("seatCursor");
-			div.innerText = (k+1+leftColumn-(maxColumn[j] - column[i][j]));
+			div.innerText = (k+1+leftColumn-(maxColumn[j] - seatDetail[i][j]));
 			$(td).append(div);
 		}
 		$(tr).append(td);
@@ -121,13 +126,15 @@ function alignRight(tr,i,j,column,maxColumn,row,leftColumn,floor){
 	return tr;
 }
 
-function createTable(num,columnNum,column,maxColumn,floor){
+
+/*创建座位表*/
+function createTable(num,columnNum,seatDetail,maxColumn,floor){
 	var table = document.createElement('table');
 	for(var i=0;i<columnNum;i++){
 		var tr = document.createElement('tr');
 		for(var j=0;j<maxColumn.length;j++){
 			if(j==0){
-				tr = alignRight(tr,i,j,column,maxColumn,i+num,0,floor);
+				tr = alignRight(tr,i,j,seatDetail,maxColumn,i+num,0,floor);
 				var b = document.createElement('td');
                         $(b).addClass("colNum");
                         $(b).attr({
@@ -144,9 +151,9 @@ function createTable(num,columnNum,column,maxColumn,floor){
 			else if(j < (maxColumn.length-1)/2){
 				var sum = 0;
 				for(var k=0;k<j;k++){
-					sum += column[i][k];
+					sum += seatDetail[i][k];
 				}
-				tr = alignRight(tr,i,j,column,maxColumn,i+num,sum,floor);
+				tr = alignRight(tr,i,j,seatDetail,maxColumn,i+num,sum,floor);
 				var b = document.createElement('td');
                         $(b).css('width', '50px');
                         $(b).css('height', '25px');
@@ -157,16 +164,16 @@ function createTable(num,columnNum,column,maxColumn,floor){
 			else if(j == maxColumn.length-1){
 				var sum = 0;
 				for(var k=0;k<j;k++){
-					sum += column[i][k];
+					sum += seatDetail[i][k];
 				}
-				tr = alignLeft(tr,i,j,column,maxColumn,i+num,sum ,floor)
+				tr = alignLeft(tr,i,j,seatDetail,maxColumn,i+num,sum ,floor)
 			}
 			else if(j == (maxColumn.length-1)/2){
 				var sum = 0;
 				for(var k=0;k<j;k++){
-					sum += column[i][k];
+					sum += seatDetail[i][k];
 				}
-				tr = alignCenter(tr,i,j,column,maxColumn,i+num,sum ,floor);
+				tr = alignCenter(tr,i,j,seatDetail,maxColumn,i+num,sum ,floor);
 				var b = document.createElement('td');
                         $(b).css('width', '50px');
                         $(b).css('height', '25px');
@@ -177,9 +184,9 @@ function createTable(num,columnNum,column,maxColumn,floor){
 			else{		
 				var sum = 0;
 				for(var k=0;k<j;k++){
-					sum += column[i][k];
+					sum += seatDetail[i][k];
 				}
-				tr = alignLeft(tr,i,j,column,maxColumn,i+num,sum,floor);
+				tr = alignLeft(tr,i,j,seatDetail,maxColumn,i+num,sum,floor);
 				var b = document.createElement('td');
                         $(b).css('width', '50px');
                         $(b).css('height', '25px');
@@ -192,6 +199,9 @@ function createTable(num,columnNum,column,maxColumn,floor){
 	}
 	return table;
 }
+
+
+/*座位点击函数*/
 function changeColor(){
     var id = $(this.event.srcElement)[0].id;
     var color;
@@ -255,6 +265,8 @@ function changeColor(){
     }
 }
 
+
+/*选择价位的点击函数*/
 function selectPrice(){
     if($(this.event.srcElement)[0].getAttribute("state")==1)
     {
@@ -272,6 +284,7 @@ function selectPrice(){
     }
 }
 
+/*显示全选或者取消*/
 function showButton(){
 	var id2 = $(this.event.srcElement)[0].id;
 	if($(this.event.srcElement)[0].getAttribute("state") == 0)
@@ -290,6 +303,9 @@ function showNum(id){
  var id2 = $(this.event.srcElement)[0].id;
 	$('#'+id2)[0].innerText = id;
 }
+
+
+/*选择一排函数*/
 function selectOneRow(){
 
     for(i=0;i<$('#selectPrice td').length;i++)
@@ -328,6 +344,8 @@ function selectOneRow(){
     }
 }
 
+
+/*取消全选一排*/
 function cancelselectOneRow(){
 
     var row = $(this.event.srcElement)[0].getAttribute("id");
@@ -351,27 +369,15 @@ function cancelselectOneRow(){
     	$('#floor-'+(i+1))[0].innerText = floorSeat[i];
     }
 }
+
+/*提交座位*/
 function postSeat() {
+
+    /*如果座位数和数据库一致，则可以提交*/
     if(ticketNum == seatNum)
     {
         postSeat_();
         $("#submitButton1").click();
-        /*
-        var url = "http://127.0.0.1:8000/saveSeat/"+actID+"/";
-        var data = {
-            'aid'   : actID,
-            'floor' : $("#floor").attr("value"),
-            'column': $("#column").attr("value"),
-            'price' : $("#price").attr("value"),
-            'row'   : $("#row").attr("value")
-        }
-        $.Ajaxs
-        timeGeter = new XMLHttpRequest();
-        timeGeter.onreadystatechange = function (){            
-        }
-        timeGeter.open('POST', url, true);
-        timeGeter.send(data);
-        */
     }
     else
     {
@@ -379,6 +385,8 @@ function postSeat() {
     }
 
 }
+
+/*提交数据到数据库*/
 function postSeat_() {
     var price = "";
     var row = "";
@@ -455,7 +463,7 @@ function showSeat(allSeat)
             }
         }        
     }
-    for(var i=0;i<3;i++){
+    for(var i=0;i<floorSeat.length;i++){
     	$('#floor-'+(i+1))[0].innerText = floorSeat[i];
     }
 }

@@ -2,8 +2,6 @@
     width: 25px;
     height: 25px;
     cursor: pointer;
-/*     background: url(https://raw.githubusercontent.com/0Calorie/tsinghuatuan/master/img/seat2.png) no-repeat;
-background-size: contain; */
 	background: gray;
 	padding: 2px;
 	border: 2px solid #fff;
@@ -12,7 +10,7 @@ background-size: contain; */
 }
 
 .price-seat{
-	width: 50px;
+	width: 75px;
     cursor: pointer;
     height: 50px;
     font-size: 20px;
@@ -21,7 +19,18 @@ background-size: contain; */
 	-moz-border-radius: 10px;
     -webkit-border-radius: 10px;
 }
-#mainContent{
+
+.center{
+	position: relative;
+	margin: 0 auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.mainWidth{
+	width: 80%;
+}
+.retc{
 	position: relative;
 	min-height: 200px;
 	height: auto!important;
@@ -39,7 +48,6 @@ background-size: contain; */
 	height: 400px;
 	width: 30%;
 	background: url(/static1/img/seat_xq.png) no-repeat; 
-	/* background: url({% static "img/seat1.png" %}) no-repeat; */
 	background-size: contain;
 	left: 50%;
 	margin-top: -25%;
@@ -85,13 +93,14 @@ background-size: contain; */
     width: 162px;
     height: 30px;
     border: 2px solid pink;
-    -moz-border-radius: 10px;  -webkit-border-radius: 10px;
+    -moz-border-radius: 10px; 
+    -webkit-border-radius: 10px;
     margin: 0 auto;
     left: -40px;
     display: none;
     text-align: center;
 }
-#seatNum{
+.seatNum{
 	position: relative;
 	left: 10%;
 	width: 30%;

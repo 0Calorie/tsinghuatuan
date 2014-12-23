@@ -1,8 +1,10 @@
 var floorSeat = new Array(0,0,0);
 
+
+/*一楼座位*/
 $('#region-1').ready(function(){
-    var columnNum = 16;
-    var column = new Array(new Array(5,8,5),
+    var rowNum = 16;
+    var seatDetail = new Array(new Array(5,8,5),
                           new Array(6,8,5),
                           new Array(6,8,6),
                           new Array(6,8,5),
@@ -20,7 +22,7 @@ $('#region-1').ready(function(){
                           new Array(8,8,7));
 
     var maxColumn = new Array(8,8,7);
-    var table = createTable(1,columnNum,column,maxColumn,1);
+    var table = createTable(1,rowNum,seatDetail,maxColumn,1);
 
     $(table).css({
         position: 'relative',
@@ -29,11 +31,13 @@ $('#region-1').ready(function(){
 $('#region-1').append(table);
 });
 
+
+/*二楼座位*/
 $('#region-2').ready(function(){
-    var columnNum = 1;
-    var column = new Array(new Array(13,17,13));
+    var rowNum = 1;
+    var seatDetail = new Array(new Array(13,17,13));
     var maxColumn = new Array(13,17,13);
-    var table = createTable(1,columnNum,column,maxColumn,2);
+    var table = createTable(1,rowNum,seatDetail,maxColumn,2);
     $(table).css({
     position: 'relative',
     margin: '0 auto',
@@ -41,15 +45,17 @@ $('#region-2').ready(function(){
     $('#region-2').append(table);
 });
 
+
+/*三楼座位*/
 $('#region-3').ready(function(){
-    var columnNum = 5;
-    var column = new Array(new Array(3,5,12,5,3),
+    var rowNum = 5;
+    var seatDetail = new Array(new Array(3,5,12,5,3),
                            new Array(3,5,12,4,3),
                            new Array(3,5,12,5,3),
                            new Array(3,5,12,4,3),
                            new Array(3,5,12,5,3));
     var maxColumn = new Array(3,5,12,5,3);
-    var table = createTable(1,columnNum,column,maxColumn,3);
+    var table = createTable(1,rowNum,seatDetail,maxColumn,3);
 
     $(table).css({
         position: 'relative',
@@ -59,22 +65,17 @@ $('#region-3').ready(function(){
     $('#region-3').append(table);
 });
 
+
+/*设置座位区*/
 $("#selectPrice").ready(function() {
     var tr = document.createElement('tr');
     for(var i=0;i<price.length;i++)
     {
         var td = document.createElement('td');
-        $(td).css({
-            width: '75px',
-            cursor: 'pointer',
-            height: '50px',
-            "font-size": '20px',
-            background: priceColor[i],
-            padding: '2px',
-            border: '2px solid #fff',
-            "-moz-border-radius": '10px',
-            "-webkit-border-radius": '10px'
+       $(td).css({
+            background: priceColor[i]
         });
+        $(td).addClass("price-seat");
         $(td).attr({
             align: 'center',
             onclick: 'selectPrice()',

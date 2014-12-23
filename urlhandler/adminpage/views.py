@@ -589,7 +589,7 @@ def activity_select_seat_lecture(request, actid):
     seatNum = len(seatmodels)
 
     if activity.place == "蒙民伟音乐厅":
-        return render_to_response('activity_select_seat_lecture.html', {
+        return render_to_response('activity_select_seat_music.html', {
         'id' : actid,
         'allSeat': seats,
         'activity': activity,

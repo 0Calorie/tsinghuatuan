@@ -38,8 +38,8 @@
        <script src="{% static "js/activity_seat_hall.js" %}"></script>
 {% endblock %}
 {% block content %}
-      <div id="mainContent" class = "retc" style="position:relative;min-height:200px;height:auto!important;height:200px">
-      	<div style="position:relative;margin:0 auto;width:800px">
+      <div id="mainContent" class = "retc">
+      	<div class="center mainWidth">
       		<h2 class="place" name= "place">大礼堂座位图</h2>
       		<h2 class="ticket" name = "ticket"></h2>
            <table class="table table-hover">
@@ -61,13 +61,13 @@
                  </tbody>
               </table>
   		</div>
-  		<div style="position:relative;margin:0 auto;width:800px;margin-top:30px">
+  		<div class="center mainWidth">
   		<table  id="selectPrice">
   		</table>
   		</div>
-  		<div id="region-1" style="height:auto!important;height:200px;margin-top:100px;position:relative;width:100%"></div>
-      <div id="region-2" style="height:auto!important;height:200px;margin-top:100px;position:relative;width:210%"></div>
-  		<div id="postSeat" style="position:relative;margin-top:5%;left:10%;width:30%">
+  		<div id="region-1" style="width:100%" class="center"></div>
+      <div id="region-2" style="width:210%" class="center"></div>
+  		<div id="postSeat" class="center" style="left:-20%;">
                   <form role="form" id="submitForm" method="POST" action= "">
                       {% csrf_token %}
                       <input id="floor" type="text" name="floor" value = "value" style="display:none" />

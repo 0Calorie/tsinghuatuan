@@ -10,46 +10,45 @@
 
 {% block js %}
        <script src="{% static "js/jquery-1.11.1.js" %}"></script>
-       <script>
-           var modify = {{canModify}}
-           var actID = {{id}};           
-           var seatNum = {{ seatNum }};
-           var ticketNum = {{activity.total_tickets}};
-           var allSeat = [
-               {% for seat in allSeat %}
-                  { 'floor' : {{seat.seat_floor}},
-                    'column': {{seat.seat_column}},
-                    'row' : {{seat.seat_row}},
-                    'price': {{seat.seat_price}},
-                    'state' :{{seat.status}},
-                    'place' : "{{seat.place}}",
-                  }{% if forloop.last %}{% else %},{% endif %}
-               {% endfor %}
-           ];  
-           //座位所在地点
-           var place = "{{activity.place}}";
-           var price = "{{activity.total_price}}".split(" ");
-           /*$(".place")[0].innerText = place + "座位图" ;*/
-            $(".ticket")[0].innerText = "总共" + ticketNum +"张票"  + " 已选择" + seatNum +"个座位";
-           $("#aid").attr("value", actID);
-           $("#submitForm").attr("action", "/saveSeat/"+actID+"/");
-       </script>
+     <script>
+         var modify = {{canModify}}
+         var actID = {{id}};           
+         var seatNum = {{ seatNum }};
+         var ticketNum = {{activity.total_tickets}};
+         var allSeat = [
+             {% for seat in allSeat %}
+                { 'floor' : {{seat.seat_floor}},
+                  'column': {{seat.seat_column}},
+                  'row' : {{seat.seat_row}},
+                  'price': {{seat.seat_price}},
+                  'state' :{{seat.status}},
+                  'place' : "{{seat.place}}",
+                }{% if forloop.last %}{% else %},{% endif %}
+             {% endfor %}
+         ];  
+         //座位所在地点
+         var place = "{{activity.place}}";
+         var price = "{{activity.total_price}}".split(" ");
+          $(".ticket")[0].innerText = "总共" + ticketNum +"张票"  + " 已选择" + seatNum +"个座位";
+         $("#aid").attr("value", actID);
+         $("#submitForm").attr("action", "/saveSeat/"+actID+"/");
+     </script> 
         <script src="{% static "js/activity_seat_common.js" %}"></script>
        <script src="{% static "js/activity_seat_tsinghua_school.js" %}"></script>
 {% endblock %}
 {% block content %}
       <div id="mainContent" class = "retc">
-      	<div style="position:relative;margin:0 auto;width:80%">
+      	<div  class="center mainWidth">
       		<h2 class="place" name= "place">新清华学堂座位图</h2>
   		  </div>
-       <div style="position:relative;margin:0 auto;width:80%;margin-top:30px;margin-bottom:30px;display:none" id="selectPriceDiv">
+       <div style="display:none" class="center mainWidth" id="selectPriceDiv">
          <div>
           <table  id="selectPrice">
           </table>
          </div>
         </div>
       <div id="main-xq">
-            <div id="seatNum">
+            <div id="seatNum" class="seatNum">
               <h3 class="ticket" name = "ticket"></h3>
               <table class="table table-hover">
                  <thead>
@@ -107,11 +106,11 @@
 
         </div>
         </div>
-        <div id="region-1"  style="display:none;">
+        <div id="region-1"  style="display:none;" class="center">
         </div>
-        <div id="region-2"  style="display:none;width:200%;margin:0 auto;"></div>
-        <div id="region-3"  style="display:none;width:200%;margin:0 auto;"></div>
-        <div id="region-4"  style="display:none;width:200%;margin:0 auto;"></div>
+        <div id="region-2"  style="display:none;width:200%;" class="center"></div>
+        <div id="region-3"  style="display:none;width:200%;" class="center"></div>
+        <div id="region-4"  style="display:none;width:200%;" class="center"></div>
   </div>
 <script type="text/javascript">
 </script>
