@@ -159,6 +159,10 @@ function showPlace()
     addIllustration("不可选",color_defaultSeat);
     addIllustration("可选",color_onSaleSeat);
     addIllustration("选中",color_selectSeat);
+    var colorIndex = 0;
+    for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
+        addIllustration(totalPrice[colorIndex], seatPalette[colorIndex]);
+    }
     scale();
     drag();
 }
@@ -674,10 +678,7 @@ function chooseSeat_seatStatusUpdate(){
 }
 
 function layer2(){
-    var colorIndex = 0;
-    for(colorIndex;colorIndex<totalPriceLength;colorIndex++){
-        addIllustration(totalPrice[colorIndex], seatPalette[colorIndex]);
-    }
+
 
     var len = allSeat.length;
     for(var i = 0; i < len; i++)
