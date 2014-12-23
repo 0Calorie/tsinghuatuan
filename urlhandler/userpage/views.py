@@ -581,10 +581,11 @@ def authorize_through_AuthTHU(request):
 
 
 def authorize_addNewbieToDataBase(authorizerID, authorizedID):
+    now =datetime.datetime.now()
     try:
         currentAuthorization = Authorization.objects.get(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
-        currentAuthorization.apply_time = datetime.datetime.now()
+        currentAuthorization.apply_time = now()
         currentAuthorization.status = 1
         try:
             currentAuthorization.save()
@@ -592,11 +593,29 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
             return 'Error_DB2'
     except:
         try:
+            able_to_authorize = True
+            users = User.objects.filter(stu_id=authorizerID)
+            if users.exists:
+                authorization = users[0].authorization
+                if authorization.apply_time + authorization_duration < now:
+                    Authorization.objects.filter(id=authorization.id).update(state=2)
+                if authorization == 1:
+                    able_to_authorize = False
+            users = User.objects.filter(stu_id=authorizedID)
+            if users.exists:
+                authorization = users[0].authorization
+                if authorization.apply_time + authorization_duration < now:
+                    Authorization.objects.filter(id=authorization.id).update(state=2)
+                if authorization == 1:
+                    able_to_authorize = False
+            if not able_to_authorize:
+                return 'Error'
+            
             newAuthorization = Authorization.objects.create(
                 authorizer_stu_id=authorizerID,
                 authorized_person_stu_id=authorizedID,
                 status=1,
-                apply_time=datetime.datetime.now()
+                apply_time=now
             )
             newAuthorization.save()
             User.objects.filter(stu_id=authorizerID).update(authorization=newAuthorization)
