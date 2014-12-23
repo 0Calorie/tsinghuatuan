@@ -122,6 +122,25 @@ var clientWidth = document.documentElement.clientWidth;
 $("#selectRegion").css("width", clientWidth);
 $("#selectRegion").css("height", clientHeight);
 
+$(document).ready(function(){
+    switch(validity)
+    {
+        case "Valid":showPlace();break;
+        case "Not_Now":$("#notNow_info").css("block", "display");break;
+        case "Has_Chosen":$("#hasChosen_info").css("block", "display");break;
+    }
+});
+
+function showPlace()
+{
+    $(".XQ").css("display", "block");
+    addIllustration("不可选",color_defaultSeat);
+    addIllustration("可选",color_onSaleSeat);
+    addIllustration("选中",color_selectSeat);
+    scale();
+    drag();
+}
+
 function isWalkWay(row, walkWay)
 {
     for(var i = 0; i < walkWay.length; i++)
@@ -221,7 +240,6 @@ function loadSeat(obj) {
         }
 
     }
-
     layer2();
 }
 
@@ -308,13 +326,7 @@ function addIllustration(word, color)
     $(".illustration").append(div_illu);
 }
 
-$(document).ready(function(){
-    addIllustration("不可选",color_defaultSeat);
-    addIllustration("可选",color_onSaleSeat);
-    addIllustration("选中",color_selectSeat);
-    scale();
-    drag();
-});
+
 //拖动
 function drag()
 {
