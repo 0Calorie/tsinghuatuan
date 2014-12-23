@@ -302,7 +302,7 @@ def chooseSeat_single(request, weixinOpenID, ticketID, seatFloor, seatColumn, se
         theID = theSeat.id
     except:
         print 'ex2'
-        return HttpResponse('Error_DB1')
+        return HttpResponse('ex')
 
     if theSeat.status != 0:
         print '!=0'
@@ -315,13 +315,13 @@ def chooseSeat_single(request, weixinOpenID, ticketID, seatFloor, seatColumn, se
         theSeat.save()
     except:
         print 'ex3'
-        return HttpResponse('Error_DB2')
+        return HttpResponse('ex')
 
     try:
         Ticket.objects.filter(unique_id=ticketID).update(seat=theSeat, seat_status = 1)
     except:
         print 'ex4'
-        return HttpResponse('Error_DB3')
+        return HttpResponse('ex')
     return HttpResponse('Ok')
 
 def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow, sideID, twoFloor, twoColumn, twoRow):
@@ -342,7 +342,7 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
         dualOneID = dualOne.id
     except:
         print 'ex2'
-        return HttpResponse('Error_DB1')
+        return HttpResponse('ex')
 
     if dualOne.status !=0:
         print 'one!=0'
@@ -355,14 +355,14 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
         dualOne.save()
     except:
         print 'ex3'
-        return HttpResponse('Error_DB2')
+        return HttpResponse('ex')
 
     try:
         dualTwo = Seat.objects.get(activity = theActivity, seat_floor = twoFloor, seat_row = twoRow, seat_column = twoColumn)
         dualTwoID = dualTwo.id
     except:
         print 'ex4'
-        return HttpResponse('ERROR_DB3')
+        return HttpResponse('ex')
 
     if dualTwo.status !=0:
         print 'two!=0'
@@ -372,7 +372,7 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
             dualOne.save()
         except:
             print 'ex5'
-            return HttpResponse('ERROR_DB4')
+            return HttpResponse('ex')
         return HttpResponse('twoSelected')
     else:
         dualTwo.id = dualTwoID
@@ -386,17 +386,17 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
             dualOne.save()
         except:
             print 'ex6'
-            return HttpResponse('ERROR_DB5')
+            return HttpResponse('ex')
     except:
         print 'ex7'
-        return HttpResponse('Error_DB6')
+        return HttpResponse('ex')
 
     try:
         Ticket.objects.filter(unique_id = ticketID).update(seat = dualOne, seat_status = 1)
         Ticket.objects.filter(unique_id = sideID).update(seat = dualTwo, seat_status = 1)
     except:
         print 'ex8'
-        return HttpResponse('Error_DB7')
+        return HttpResponse('ex')
 
     return HttpResponse('Ok')
 
@@ -407,9 +407,6 @@ def chooseSeat_seatStatusUpdate(request, weixinOpenID, ticketID):
     except:
         print 'ex1'
         return HttpResponse('No_Such_Ticket')
-    if theTicket.additional_ticket_id > 0:
-        print 'side'
-        return HttpResponse('Has_Side_Ticket')
     theActivity = theTicket.activity
     # get current seat status
     seats = []
