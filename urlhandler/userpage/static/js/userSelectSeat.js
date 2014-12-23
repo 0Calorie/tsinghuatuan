@@ -562,6 +562,18 @@ function chooseSeat_dualOne(){
     chooseSeat_dualOne_restrictChoices();
 }
 
+function touchOff(target, func){
+    touch.off(target, 'tag', function(ev){
+        func;
+    })
+}
+
+function touchOn(target, func){
+    touch.on(target, 'tag', function(ev){
+        func;
+    })
+}
+
 function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     // set chosenDualOne's neighbors' onclick to chooseSeat, and set chosenDualTwo to null
 
@@ -575,6 +587,12 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     var leftNeighbor = document.getElementById(leftNeighborID);
     if(rightNeighbor != undefined){
         rightNeighbor.removeAttribute('onclick');
+        touch.off(rightNeighbor, 'tag', function(ev){
+            chooseSeat_dualTwo();
+        })
+        touch.on(rightNeighbor, 'tag', function(ev){
+            chooseSeat();
+        })
         rightNeighbor.setAttribute('onclick', 'chooseSeat();');
         chooseSeat_setSeatToUnchosen(rightNeighbor);
         if(chosenDualTwo == rightNeighbor){
@@ -584,6 +602,8 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     if(leftNeighbor != undefined){
         leftNeighbor.removeAttribute('onclick');
         leftNeighbor.setAttribute('onclick', 'chooseSeat();');
+        touchOff(leftNeighbor, chooseSeat_dualTwo());
+        touchOn(leftNeighbor, chooseSeat());
         chooseSeat_setSeatToUnchosen(leftNeighbor);
         if(chosenDualTwo == leftNeighbor){
             addToBottom(chosenDualTwo);
@@ -607,11 +627,15 @@ function chooseSeat_dualOne_restrictChoices(){
     if(rightNeighbor != undefined){
         rightNeighbor.removeAttribute('onclick');
         rightNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
+        touchOff(rightNeighbor, chooseSeat());
+        touchOn(rightNeighbor, chooseSeat_dualTwo());
         chooseSeat_setSeatToUnchosenDualTwo(rightNeighbor);
     }
     if(leftNeighbor != undefined){
         leftNeighbor.removeAttribute('onclick');
         leftNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
+        touchOff(leftNeighbor, chooseSeat());
+        touchOn(leftNeighbor, chooseSeat_dualTwo());
         chooseSeat_setSeatToUnchosenDualTwo(leftNeighbor);
     }
 }
