@@ -12,7 +12,7 @@ var totalPriceLength = totalPrice.length;
 //新清华学堂座位图
 var seatObj = {   
     "A":{
-        "row":"21",
+        "row":"19",
         "column":"41",
         "floor":"1",
         "walkWay":[9,31],
@@ -24,11 +24,11 @@ var seatObj = {
             {"row":"3",  "seat":"33"},
             {"row":"4",  "seat":"35"},
             {"row":"5",  "seat":"37"},
-            {"row":"21",  "seat":"21"},
-            {"row":"20",  "seat":"31"},
-            {"row":"19",  "seat":"33"},
-            {"row":"18",  "seat":"35"},
-            {"row":"17",  "seat":"37"}
+            {"row":"19",  "seat":"21"},
+            {"row":"18",  "seat":"31"},
+            {"row":"17",  "seat":"33"},
+            {"row":"16",  "seat":"35"},
+            {"row":"15",  "seat":"37"}
         ]
     },
     "B":{
@@ -36,7 +36,7 @@ var seatObj = {
         "column":"60",
         "floor":"1",
         "walkWay":[19, 40],
-        "rowStart":21,
+        "rowStart":19,
         "columnStart":[16,15,14,0,0,0],
         "seat":[
             {"row":"1",  "seat":"60"},
@@ -52,7 +52,7 @@ var seatObj = {
         "column":"34",
         "floor":"1",
         "walkWay":[16,17],
-        "rowStart":22,
+        "rowStart":19,
         "columnStart":[76,71,72,0,0,0],
         "seat":[
             {"row":"2",  "seat":"30"},
@@ -79,10 +79,10 @@ var seatObj = {
     "CC":{
         "row":"3",
         "column":"34",
-        "floor":"1",
+        "floor":"2",
         "walkWay":[16,17],
         "rowStart":0,
-        "columnStart":[68,71,72],
+        "columnStart":[52,56,58],
         "seat":[
             {"row":"2",  "seat":"30"},
             {"row":"3",  "seat":"28"},
@@ -98,6 +98,8 @@ var seatObj = {
         "seat":[
             {"row":"1",  "seat":"46"},
             {"row":"2",  "seat":"50"},
+            {"row":"3",  "seat":"56"},
+            {"row":"4",  "seat":"56"},
             {"row":"5",  "seat":"42"},
             {"row":"6",  "seat":"36"},
             {"row":"7",  "seat":"28"},
@@ -106,7 +108,7 @@ var seatObj = {
     "DD":{
         "row":"3",
         "column":"34",
-        "floor":"1",
+        "floor":"3",
         "walkWay":[16,17],
         "rowStart":0,
         "columnStart":[62,60,55],
@@ -215,7 +217,7 @@ function loadSeat(obj) {
             else {
                 $(td).addClass("seat_unit");
                 $(td).attr({
-                    id: floor + '-' + (i + 1) + '-' + (j + 1 + nWalkWay),
+                    id: floor + '-' + (i + 1 + obj.rowStart) + '-' + (j + 1 - nWalkWay + columnStart[i]),
                     status: -1,
                     row: (i + 1 + obj.rowStart),
                     column: (Number(j) + 1 - nWalkWay+ columnStart[i]),
@@ -327,6 +329,7 @@ function addToBottom(elem)
     var children = $(".seatSelectSeats").children();
     var row = $(click).attr("row");
     var column = $(click).attr("column");
+    var floor = $(click).attr("floor");
     var flag = 0; //尚未选中
     for(var i = 0; i < children.length; i++)
     {
@@ -340,7 +343,7 @@ function addToBottom(elem)
         var div = document.createElement('div');
         $(div).addClass("userSelect");
         $(div).attr({row: row, column: column});
-        div.innerText = row + "排" + column + "座";
+        div.innerText = floor+"层" + row + "排" + column + "座";
         console.log(div);
         $(".seatSelectSeats").append(div);
     }
@@ -398,8 +401,8 @@ function drag()
 
         if(dy + ev.y < 20 - target_height)
             backy  = 20 - target_height + "px";
-        else if(dy + ev.y > target_height -20)
-            backy = target_height -20 + "px";
+        else if(dy + ev.y > clientHeight-300)
+            backy = clientHeight-300 + "px";
 
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
         if(backx != "undefined") {
