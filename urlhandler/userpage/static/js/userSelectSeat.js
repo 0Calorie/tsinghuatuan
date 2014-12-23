@@ -307,6 +307,7 @@ function back()
     $(".seatSelectSeats").empty();
     $("#result").css("display","none");
     $(".failure").css("display","none");
+    $("#target_drag").css("-webkit-transform", "translate3d(0px, 0px, 0px)");
     chosenSeat = null;
     chosenDualOne = null;
     chosenDualTwo = null;
@@ -369,29 +370,29 @@ function drag()
 
         var offx = dx + ev.x + "px";
         var offy = dy + ev.y + "px";
-        target_width = document.getElementById("target_drag").clientWidth;
-        target_height = document.getElementById("target_drag").clientHeight;
+        target_width = document.getElementById("target").clientWidth;
+        target_height = document.getElementById("target").clientHeight;
         var backx;
         var backy;
-        if(target_width > clientWidth)
-        {
+        console.log("dx dy" + dx+" " + dy);
+        console.log("evx evy" + ev.x+" " + ev.y);
+
+        if(target_width > clientWidth) {
             if(dx + ev.x < 50 - target_width)
                 backx = 50 - target_width + "px";
-            else if(dx +ev.x > target_width - 50)
-                backx = target_width - 50 + "px";
         }
         else{
             if(dx + ev.x < 50 - clientWidth)
                 backx = 50 - clientWidth + "px";
-            else if(dx +ev.x > target_width - 50)
-                backx = target_width - 50 + "px";
-
         }
-
+        if(dx +ev.x > target_width - 50)
+            backx = target_width - 50 + "px";
+        /*
         if(dy + ev.y < 30 - target_height/ 2)
             backy  = 30 - target_height/ 2 + "px";
         else if(dy + ev.y > target_height/ 2)
             backy = target_height/2 + "px";
+        */
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
         if(backx != "undefined") {
             target.style.webkitTransform = "translate3d(" + backx + "," + offy + ",0)";
