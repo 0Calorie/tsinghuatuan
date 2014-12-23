@@ -2,6 +2,7 @@ var color_onSaleSeat = "rgb(150, 246, 185)";
 var color_defaultSeat = "rgb(224, 222, 210)";
 var color_selectSeat = "rgb(255, 214, 0)";
 var color_dualNeighborSeat = "rgb(0, 0, 255)";
+var seatPalatte= ["#FFFF80", "#FF8080","#FF8040","#8080FF","#808000", "#FF0000","#008080","#800040"];
 var chosenSeat = null;
 var chosenDualOne = null;
 var chosenDualTwo = null;
@@ -328,13 +329,24 @@ function drag()
 
         var offx = dx + ev.x + "px";
         var offy = dy + ev.y + "px";
-        var target_width = document.getElementById("target_drag").clientWidth;
-        var tatget_height = document.getElementById("target_drag").clientHeight;
+        target_width = document.getElementById("target_drag").clientWidth;
+        target_height = document.getElementById("target_drag").clientHeight;
+        var backx;
+        var backy;
         if(dx + ev.x < 50 - clientWidth)
-            offx = 50 - clientWidth + "px";
+            backx = 50 - clientWidth + "px";
         else if(dx +ev.x > target_width - 50)
-            offx = target_width - 50 + "px";
+            backx = target_width - 50 + "px";
+        if(dy + ev.y < 30 - target_height/ 2)
+            backy  = 30 - target_height/ 2 + "px";
+        else if(dy + ev.y > target_height/ 2)
+            backy = target_height/2 + "px";
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
+        if(backx != "undefined") {
+            target.style.webkitTransform = "translate3d(" + backx + "," + offy + ",0)";
+        }
+        if(backy != "undefined")
+             target.style.webkitTransform = "translate3d(" + offx + "," + backy + ",0)";
     });
 
     touch.on('#target_drag', 'dragend', function(ev){
@@ -457,11 +469,13 @@ function chooseSeat() {
 /*选择单人座*/
 function chooseSeat_single(){
     var theChosen = $(this.event.srcElement)[0];
+    console.log(theChosen);
+    console.log(chosenSeat);
     if (chosenSeat != null) {
         chooseSeat_interfaceProcess(0, chosenSeat);
         chosenSeat = null;
     }
-    chooseSeat_interfaceProcess(1, theChosen)
+    chooseSeat_interfaceProcess(1, theChosen);
     chosenSeat = theChosen;
 }
 /*选择双人座*/
@@ -563,11 +577,11 @@ function chooseSeat_dualSingle(){
 }
 
 function chooseSeat_interfaceProcess(toChosenOrUnchosen, theChosen){
-    addToBottom(theChosen)
-    if(toChosenOrUnchosen = 1){
+    addToBottom(theChosen);
+    if(toChosenOrUnchosen == 1){
         chooseSeat_setSeatToChosen(theChosen);
     }
-    else if(toChosenOrUnchosen = 0){
+    else if(toChosenOrUnchosen == 0){
         chooseSeat_setSeatToUnchosen(theChosen);
     }
 }
