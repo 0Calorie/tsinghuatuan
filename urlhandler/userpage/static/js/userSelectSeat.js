@@ -387,12 +387,12 @@ function drag()
         }
         if(dx +ev.x > target_width - 50)
             backx = target_width - 50 + "px";
-        /*
-        if(dy + ev.y < 30 - target_height/ 2)
-            backy  = 30 - target_height/ 2 + "px";
-        else if(dy + ev.y > target_height/ 2)
-            backy = target_height/2 + "px";
-        */
+
+        if(dy + ev.y < 20 - target_height)
+            backy  = 20 - target_height + "px";
+        else if(dy + ev.y > target_height -20)
+            backy = target_height -20 + "px";
+
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
         if(backx != "undefined") {
             target.style.webkitTransform = "translate3d(" + backx + "," + offy + ",0)";
