@@ -574,6 +574,7 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     var rightNeighbor = document.getElementById(rightNeighborID);
     var leftNeighbor = document.getElementById(leftNeighborID);
     if(rightNeighbor != undefined){
+        rightNeighbor.removeAttribute('onclick');
         rightNeighbor.setAttribute('onclick', 'chooseSeat();');
         chooseSeat_setSeatToUnchosen(rightNeighbor);
         if(chosenDualTwo == rightNeighbor){
@@ -581,6 +582,7 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
         }
     }
     if(leftNeighbor != undefined){
+        leftNeighbor.removeAttribute('onclick');
         leftNeighbor.setAttribute('onclick', 'chooseSeat();');
         chooseSeat_setSeatToUnchosen(leftNeighbor);
         if(chosenDualTwo == leftNeighbor){
@@ -603,10 +605,12 @@ function chooseSeat_dualOne_restrictChoices(){
     var rightNeighbor = document.getElementById(rightNeighborID);
     var leftNeighbor = document.getElementById(leftNeighborID);
     if(rightNeighbor != undefined){
+        rightNeighbor.removeAttribute('onclick');
         rightNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
         chooseSeat_setSeatToUnchosenDualTwo(rightNeighbor);
     }
     if(leftNeighbor != undefined){
+        leftNeighbor.removeAttribute('onclick');
         leftNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
         chooseSeat_setSeatToUnchosenDualTwo(leftNeighbor);
     }
