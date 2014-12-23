@@ -605,6 +605,108 @@ function chooseSeat_seatStatusUpdate(){
 }
 /* chooseSeat series ends here */
 
+/* dualSeat Checker series will check if there are two seats that are consecutive*/
+/* dualSeat Checker series starts here */
+var firstFloorPoolSeats = new Array(new Array(5,21,5),
+                          new Array(6,21,6),
+                          new Array(7,21,7),
+                          new Array(8,21,8),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(9,21,9),
+                          new Array(8,21,8),
+                          new Array(7,21,7),
+                          new Array(6,21,6),
+                          new Array(5,21,5));
+
+var firstFloorStairSeats = new Array(new Array(16,14,22,14,16),
+                           new Array(15,17,22,17,15),
+                           new Array(14,19,22,19,14),
+                           new Array(0,14,22,14,0),
+                           new Array(0,10,22,10,0),
+                           new Array(0,4,18,4,0));
+
+var secondFloorStairSeats = new Array(new Array(16,16,20,16,16),
+                           new Array(15,18,20,18,15),
+                           new Array(14,19,20,19,14),
+                           new Array(0,17,20,17,0),
+                           new Array(0,12,20,12,0),
+                           new Array(0,8,20,8,0),
+                           new Array(0,4,12,4,0));
+
+var thirdFloorStairSeats = new Array(new Array(16,0,13,20,13,0,16),
+                           new Array(10,0,15,20,15,0,10),
+                           new Array(10,3,17,20,17,3,10),
+                           new Array(0,0,17,20,17,0,0),
+                           new Array(0,0,11,20,11,0,0),
+                           new Array(0,0,8,20,8,0,0),
+                           new Array(0,0,4,20,4,0,0));
+
+function dualSeatChecker(floor, seats, numberOfColumn, numberOfRow){
+    var dualCounter = 0;
+    var column = 0, row = 0, sectorIndex = 1, seatIndex = 1;
+    for(column = 0; column < numberOfColumn; column++){
+        seatIndex = 1;
+        for(row = 0; row < numberOfRow; row++){
+            dualCounter = 0;
+            for(sectorIndex = 1; sectorIndex <= seats[column][row]; sectorIndex++, seatIndex++){
+                var seatID = floor + "-" + column + "-" + seatIndex;
+                if($("#" + seatID)[0].getAttribute('status') == 0){
+                    dualCounter++;
+                    if(dualCounter == 2){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+function firstFloorDualSeatCheck_pool(){
+    var poolSeatState = dualSeatChecker(1, firstFloorPoolSeats, 19, 3);
+    return poolSeatState;
+}
+
+function firstFloorDualSeatCheck_stair(){
+    var stairSeatState = dualSeatChecker(1, firstFloorStairSeats, 6, 5);
+    return stairSeatState;
+}
+
+function secondFloorDualSeatCheck(){
+    var stairSeatState = dualSeatChecker(2, secondFloorStairSeats, 7, 5);
+    return stairSeatState;
+}
+
+function thirdFloorDualSeatCheck(){
+    var stairSeatState = dualSeatChecker(3, thirdFloorStairSeats, 7, 7);
+    return stairSeatState;
+}
+
+function dualSeatCheckShortcut(targetSector){
+    if(targetSector == 0){
+        return firstFloorDualSeatCheck_pool();
+    }
+    if(targetSector == 1){
+        return firstFloorDualSeatCheck_stair();
+    }
+    if(targetSector == 2){
+        return secondFloorDualSeatCheck();
+    }
+    if(targetSector == 3){
+        return thirdFloorDualSeatCheck();
+    }
+}
+/* dualSeat Checker series ends here */
+
 function layer2(){
     len = allSeat.length;
     for(var i = 0; i < len; i++)
