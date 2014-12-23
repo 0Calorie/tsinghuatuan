@@ -755,9 +755,9 @@ def response_check_authorization(msg):
             Authorization.object.filter(id=authorization.id).update(status=2)
         if authorization.status == 1:
             if user.stu_id == authorization.authorizer_stu_id:
-                return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorizer_stu_id))
-            else:
                 return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorized_person_stu_id))
+            else:
+                return get_reply_text_xml(msg, get_text_check_authorization(authorization.authorizer_stu_id))
         else:
             return get_reply_text_xml(msg, get_text_no_check_authorization())
 
