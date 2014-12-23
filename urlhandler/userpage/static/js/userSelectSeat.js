@@ -317,7 +317,8 @@ function back()
     $(".seatSelectSeats").empty();
     $("#result").css("display","none");
     $(".failure").css("display","none");
-    $("#target_drag").css("-webkit-transform", "translate3d(0px, 0px, 0px)");
+    //$("#target_drag").css("-webkit-transform", "translate3d(0px, 0px, 0px)");
+    chosenSeat = null;
     chosenSeat = null;
     chosenDualOne = null;
     chosenDualTwo = null;
@@ -388,21 +389,19 @@ function drag()
         console.log("dx dy" + dx+" " + dy);
         console.log("evx evy" + ev.x+" " + ev.y);
 
-        if(target_width > clientWidth) {
-            if(dx + ev.x < 50 - target_width)
-                backx = 50 - target_width + "px";
-        }
-        else{
-            if(dx + ev.x < 50 - clientWidth)
-                backx = 50 - clientWidth + "px";
-        }
-        if(dx +ev.x > target_width - 50)
-            backx = target_width - 50 + "px";
+        if(dx + ev.x < 50 - target_width)
+            backx = 50 - target_width + "px";
+
+        else if(dx +ev.x > target_width - 20)
+            backx = target_width - 20 + "px";
 
         if(dy + ev.y < 20 - target_height)
             backy  = 20 - target_height + "px";
-        else if(dy + ev.y > clientHeight-300)
-            backy = clientHeight-300 + "px";
+        else
+        {
+            if (dy + ev.y > clientHeight/2)
+                backy = clientHeight/2 + "px";
+        }
 
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
         if(backx != "undefined") {
