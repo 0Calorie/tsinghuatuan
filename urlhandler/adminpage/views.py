@@ -182,8 +182,8 @@ def activity_create(activity):
     for k in ['start_time', 'end_time', 'book_start', 'book_end']:
        preDict[k] = str_to_datetime(activity[k])
     if not (activity['seat_status'] == u'0'):
-        preDict['group_interval'] = activity['group_interval'] * 60
-        preDict['group_size'] = activity['group_size']
+        for k in ['group_interval','group_size']:
+            preDict[k] = activity[k]
         for k in ['select_start','select_end']:
             preDict[k] = str_to_datetime(activity[k])
     else:
