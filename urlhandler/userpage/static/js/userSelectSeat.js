@@ -904,20 +904,25 @@ var thirdFloorStairSeats = new Array(new Array(16,0,13,20,13,0,16),
 function dualSeatChecker(floor, seats, numberOfColumn, numberOfRow){
     var dualCounter = 0;
     var column = 0, row = 0, sectorIndex = 1, seatIndex = 1;
-    for(column = 0; column < numberOfColumn; column++){
+    for(row = 0; row < numberOfRow; row++){
         seatIndex = 1;
-        for(row = 0; row < numberOfRow; row++){
+        for(column = 0; column < numberOfColumn; column++){
             dualCounter = 0;
-            for(sectorIndex = 1; sectorIndex <= seats[column][row]; sectorIndex++, seatIndex++){
-                var seatID = floor + "-" + column + "-" + seatIndex;
+            for(sectorIndex = 1; sectorIndex <= seats[row][column]; sectorIndex++, seatIndex++){
+                var seatID = floor + "-" + (row+1) + "-" + seatIndex;
                 var seat = document.getElementById(seatID);
-                if(seat == null)
+                if(seat == null){
+                    dualCounter = 0;
                     continue;
+                }
                 if(seat.getAttribute('status') == 0){
                     dualCounter++;
                     if(dualCounter == 2){
                         return true;
                     }
+                }
+                else{
+                    dualCounter = 0;
                 }
             }
         }
@@ -947,13 +952,13 @@ function thirdFloorDualSeatCheck(){
 
 function dualSeatCheckShortcut(targetSector){
     if(targetSector == 0){
-        return dualSeatChecker(1, firstFloorPoolSeats, 19, 3);
+        return dualSeatChecker(1, firstFloorPoolSeats, 3, 19);
     }
     if(targetSector == 1){
-        return dualSeatChecker(1, firstFloorStairSeats, 6, 5);
+        return dualSeatChecker(1, firstFloorStairSeats, 5, 6);
     }
     if(targetSector == 2){
-        return dualSeatChecker(2, secondFloorStairSeats, 7, 5);
+        return dualSeatChecker(2, secondFloorStairSeats, 5, 7);
     }
     if(targetSector == 3){
         return dualSeatChecker(3, thirdFloorStairSeats, 7, 7);
