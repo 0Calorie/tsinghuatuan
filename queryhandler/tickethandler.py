@@ -190,7 +190,10 @@ def response_book_ticket(msg):
         if ticket is None:
             return get_reply_text_xml(msg, get_text_fail_book_ticket(activities[0], now))
         else:
-            return get_reply_single_ticket(msg, ticket, now, get_text_success_book_ticket(ticket))
+            num = 1
+            if auth:
+                num = 2
+            return get_reply_single_ticket(msg, ticket, now, get_text_success_book_ticket(ticket, num))
 
 
 def book_ticket(user, key, now, auth):
@@ -351,9 +354,9 @@ def response_cancel_ticket(msg):
                 for ticket in tickets:
                     ticket.status = 0
                     seat = ticket.seat
-                    if(seat):
-                        seat.status = 0
-                        seat.save()
+                    print seat
+                    if not seat is None:
+                        Seat.objects.fiter(id=seat.id).update(status=0)
                     ticket.save()
                     Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') + 1)
                 return get_reply_text_xml(msg, get_text_success_cancel_ticket())
@@ -420,7 +423,10 @@ def response_book_event(msg):
     if ticket is None:
         return get_reply_text_xml(msg, get_text_fail_book_ticket(activities[0], now))
     else:
-        return get_reply_single_ticket(msg, ticket, now, get_text_success_book_ticket(ticket))
+        num = 1
+        if auth:
+            num += 1
+        return get_reply_single_ticket(msg, ticket, now, get_text_success_book_ticket(ticket, num))
 
 
 #check unsubscribe event

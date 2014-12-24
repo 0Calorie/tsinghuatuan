@@ -88,7 +88,7 @@ def get_text_one_ticket_description(ticket, now):
     tmp = '活动开始前45分钟凭本电子票入场。\n活动时间：' + get_text_time_standard(
         ticket.activity.start_time) + '\n活动地点：' + ticket.activity.place
     if not (ticket.seat is None):
-        tmp += ('\n' + '你的座位是：'+ticket.seat.description)
+        tmp += ('\n' + '你的座位在：'+ticket.seat.description)
     if ticket.activity.book_end > now:
         tmp += ('\n回复“退票 ' + ticket.activity.key + '”即可退票。')
     return tmp
@@ -145,12 +145,12 @@ def get_text_fail_book_ticket(activity, now):
     return '很抱歉，已经没有余票了，过一段时间再来试试吧:)\n该活动距离抢票结束还有' + time_chs_format(activity.book_end - now)
 
 
-def get_text_success_book_ticket(ticket):
-    response = '恭喜您，抢票成功！\n'
+def get_text_success_book_ticket(ticket, num):
+    response = '恭喜您，成功抢到'+num+'张票！\n'
     if ticket.seat_status >= 0:
         response += '请在' + get_text_time_standard(ticket.select_start) + '到' + get_text_time_standard(
             ticket.select_end) + '之间进行选座 \n'
-        response += '否则，系统将为你随机分配座位哟~ \n'
+        response += '否则，请自行到相关部门选座~ \n'
     return response
 
 
@@ -242,7 +242,7 @@ def get_text_usage_select_seat():
 
 
 def get_text_no_ticket_to_select_seat(activity):
-    return '很抱歉，你没有抢到' + activity.name + '的票，不能进行选座'
+    return '很抱歉，你没有抢到"' + activity.name + '"的票，不能进行选座'
 
 
 def get_text_no_ticket_need_select_seat():
@@ -274,7 +274,7 @@ def get_text_show_all_seat_selection(openid, tickets):
     response = "你好，现在你可以为以下活动选座\n"
     for ticket in tickets:
         response += '请到' + get_text_link(s_reverse_select_seat(openid, ticket.unique_id),
-                                         '这里') + '进行' + ticket.activity.name + '的选座\n'
+                                         '这里') + '进行"' + ticket.activity.name + '"的选座\n'
     return response
 
 
@@ -321,11 +321,11 @@ def get_text_authorization_success():
 
 
 def get_text_invalid_receive_authorization():
-    return '你好，格式不正确，请输入“约约约 对方学号”。\n如：“约约约 2012012333”'
+    return '你好，格式不正确，请输入"约约约 对方学号"。\n如："约约约 2012012333"'
 
 
 def get_text_cancel_authorization_success(stu_id):
-    return '你好，你和'+stu_id+'的“约”已经成功解除'
+    return '你好，你和'+stu_id+'的"约"已经成功解除'
 
 
 def get_text_cancel_no_authorization():
@@ -347,5 +347,6 @@ def get_text_no_check_authorization():
 def get_text_already_authorized_can_not_book_ticket(stu_id):
     return '对不起，你已经和'+stu_id+'“约约约”了，不能进行抢票\n'+stu_id+'会帮你抢票的哟'
 
+
 def get_text_authorization_link(stu_id):
-    return '生成"约吗"链接成功\n转发此链接\n'+encode(s_reverse_authorize(stu_id))+'\n给你想约的人完成"约约约"';
+    return '生成"约吗"链接成功\n转发此链接\n'+encode(s_reverse_authorize(stu_id))+'\n给你想约的人完成"约约约"\n'+'"约约约"将在10天后自动失效'

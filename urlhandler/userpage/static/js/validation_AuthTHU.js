@@ -223,6 +223,17 @@ function showValidation(isValidated) {
         document.getElementById('inputUsername').focus();
     } else {
         showElem('successHolder');
+        $('#response').text('“约约约”成功，“约约约”将在10天后自动失效');
+        hideElem('validationHolder');
+    }
+}
+
+function showhasAuthorization(hasAuthorization) {
+    if (!hasAuthorization) {
+        document.getElementById('inputUsername').focus();
+    } else {
+        showElem('successHolder');
+        $('#response').text('对方已经有“约约约”了');
         hideElem('validationHolder');
     }
 }
