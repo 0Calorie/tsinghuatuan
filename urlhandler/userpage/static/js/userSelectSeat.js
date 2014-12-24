@@ -400,7 +400,7 @@ function drag()
         console.log("dx"+dx + "dy" + dy);
         target_width = $("table")[0].clientWidth;
         target_height = $("table")[0].clientHeight;
-
+        width1 = $(".seat")[0].clientWidth;
         var backx;
         var backy;
         console.log("w" + target_width + "h" + target_height);
@@ -423,7 +423,7 @@ function drag()
         target.style.webkitTransform = "translate3d(" + backx + "px," + backy + "px,0)";
         dx = backx;
         dy = backy;
-        $(".back").text("backx"+backx + "backy" + backy + "h" + target_height + "w" + target_width);
+        $(".back").text("seat"+width1+ "backx"+backx + "backy" + backy + "h" + target_height + "w" + target_width);
         console.log("backx"+backx + "backy" + backy);
     });
 }
