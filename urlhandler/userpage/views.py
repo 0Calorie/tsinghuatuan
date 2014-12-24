@@ -592,6 +592,7 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
         if not authorization is None:
             if authorization.apply_time + authorization_duration < now:
                 Authorization.objects.filter(id=authorization.id).update(state=2)
+        print 'debug 1.3'
         if authorization.status == 1:
             able_to_authorize = False
     users = User.objects.filter(stu_id=authorizedID)
