@@ -618,13 +618,14 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
                                                          authorized_person_stu_id=authorizedID)
         if currentAuthorizations.exists():
             print 'debug auth exists'
-            currentAuthorization = currentAuthorizations
+            currentAuthorization = currentAuthorizations[0]
             currentAuthorization.apply_time = now
             currentAuthorization.status = 1
             try:
                 User.objects.filter(stu_id=authorizerID).update(authorization=currentAuthorization)
                 User.objects.filter(stu_id=authorizedID).update(authorization=currentAuthorization)
-            print 'debug 3'
+            except:
+                print 'user update'
             try:
                 currentAuthorization.save()
             except:
@@ -640,8 +641,11 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
                     apply_time=now
                 )
                 newAuthorization.save()
-                User.objects.filter(stu_id=authorizerID).update(authorization=newAuthorization)
-                User.objects.filter(stu_id=authorizedID).update(authorization=newAuthorization)
+                try:
+                    User.objects.filter(stu_id=authorizerID).update(authorization=newAuthorization)
+                    User.objects.filter(stu_id=authorizedID).update(authorization=newAuthorization)
+                except:
+                    print 'user update'
             except:
                 return 'Error_DB3'
     except:
