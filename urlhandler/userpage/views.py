@@ -595,8 +595,8 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
         print 'debug 1.3'
         if authorization.status == 1:
             able_to_authorize = False
-    users = User.objects.filter(stu_id=authorizedID)
     print 'debug 1.1'
+    users = User.objects.filter(stu_id=authorizedID)
     if users.exists():
         authorization = users[0].authorization
         if not authorization is None:
