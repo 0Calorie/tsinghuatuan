@@ -406,19 +406,18 @@ function drag()
         var backy;
 
         var target_width = Number($("table")[0].clientWidth) * Number(INIT);
-        var target_height = $("table")[0].clientHeight;
+        var target_height = Number($("table")[0].clientHeight) * Number(INIT);
 
         if( dx + target_width/2 < 0) {
             backx = 0- target_width/2;
-            console.log("backx" + backx);
         }
         else if(dx> target_width/2)
             backx = target_width/2;
 
-        if(dy + target_height *4/5 < 0)
-            backy  = 0 - target_height *4/5;
-        else if (dy> clientHeight/2)
-            backy = clientHeight/2;
+        if(dy + target_height/2 < 0)
+            backy  = 0 - target_height/2;
+        else if (dy > target_height *2/3)
+            backy = target_height*2/3;
 
         if(typeof(backx) == "undefined")
             backx = dx;
@@ -427,7 +426,7 @@ function drag()
         target.style.webkitTransform = "translate3d(" + backx + "px," + backy + "px,0)";
         dx = backx;
         dy = backy;
-        $(".back").text("seat"+ target_width+ "backx"+backx + "backy" + backy + "h" + target_height + "w" + target_width);
+        //$(".back").text("seat"+ target_width+ "backx"+backx + "backy" + backy + "h" + target_height + "w" + target_width);
         console.log("backx"+backx + "backy" + backy);
     });
 }
