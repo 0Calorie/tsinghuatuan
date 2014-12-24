@@ -582,46 +582,53 @@ def authorize_through_AuthTHU(request):
 
 def authorize_addNewbieToDataBase(authorizerID, authorizedID):
     now = datetime.datetime.now()
+    able_to_authorize = True
+    users = User.objects.filter(stu_id=authorizerID)
+    if users.exists:
+        authorization = users[0].authorization
+        if not authorization is None:
+            if authorization.apply_time + authorization_duration < now:
+                Authorization.objects.filter(id=authorization.id).update(state=2)
+        if authorization.status == 1:
+            able_to_authorize = False
+    users = User.objects.filter(stu_id=authorizedID)
+    if users.exists:
+        authorization = users[0].authorization
+        if not authorization is None:
+            if authorization.apply_time + authorization_duration < now:
+                Authorization.objects.filter(id=authorization.id).update(state=2)
+        if authorization.status == 1:
+            able_to_authorize = False
+    if not able_to_authorize:
+        return 'Already'
     try:
-        currentAuthorization = Authorization.objects.get(authorizer_stu_id=authorizerID,
+        currentAuthorizations = Authorization.objects.filter(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
-        currentAuthorization.apply_time = now
-        currentAuthorization.status = 1
-        try:
-            currentAuthorization.save()
-        except:
-            return 'Error_DB2'
+        if currentAuthorizations.exists:
+            currentAuthorization = currentAuthorizations
+            currentAuthorization.apply_time = now
+            currentAuthorization.status = 1
+            User.objects.filter(stu_id=authorizerID).update(authorization=currentAuthorization)
+            User.objects.filter(stu_id=authorizedID).update(authorization=currentAuthorization)
+            try:
+                currentAuthorization.save()
+            except:
+                return 'Error_DB2'
+        else:
+            try:
+
+
+                newAuthorization = Authorization.objects.create(
+                    authorizer_stu_id=authorizerID,
+                    authorized_person_stu_id=authorizedID,
+                    status=1,
+                    apply_time=now
+                )
+                newAuthorization.save()
+                User.objects.filter(stu_id=authorizerID).update(authorization=newAuthorization)
+                User.objects.filter(stu_id=authorizedID).update(authorization=newAuthorization)
+            except:
+                return 'Error_DB3'
     except:
-        try:
-            able_to_authorize = True
-            users = User.objects.filter(stu_id=authorizerID)
-            if users.exists:
-                authorization = users[0].authorization
-                if not authorization is None:
-                    if authorization.apply_time + authorization_duration < now:
-                        Authorization.objects.filter(id=authorization.id).update(state=2)
-                if authorization == 1:
-                    able_to_authorize = False
-            users = User.objects.filter(stu_id=authorizedID)
-            if users.exists:
-                authorization = users[0].authorization
-                if not authorization is None:
-                    if authorization.apply_time + authorization_duration < now:
-                        Authorization.objects.filter(id=authorization.id).update(state=2)
-                if authorization == 1:
-                    able_to_authorize = False
-            if not able_to_authorize:
-                return 'Reject'
-            
-            newAuthorization = Authorization.objects.create(
-                authorizer_stu_id=authorizerID,
-                authorized_person_stu_id=authorizedID,
-                status=1,
-                apply_time=now
-            )
-            newAuthorization.save()
-            User.objects.filter(stu_id=authorizerID).update(authorization=newAuthorization)
-            User.objects.filter(stu_id=authorizedID).update(authorization=newAuthorization)
-        except:
-            return 'Error_DB3'
+        return 'Error_DB1'
     return 'Accepted'

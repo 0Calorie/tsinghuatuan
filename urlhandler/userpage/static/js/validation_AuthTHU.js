@@ -91,6 +91,9 @@ function readyStateChanged() {
                 case 'Error':
                     showError('submitGroup', 'helpSubmit', '出现了奇怪的错误，我们已经记录下来了，请稍后重试。')
                     break;
+                case 'Already':
+                    showError('submitGroup', 'helpSubmit', '你或者对方已经有过“约约约”了，不能同时约多个人')
+                    break;
                 default:
                     showError('submitGroup', 'helpSubmit', '出现了奇怪的错误，我们已经记录下来了，请稍后重试。')
                     break;
@@ -223,19 +226,7 @@ function showValidation(isValidated) {
         document.getElementById('inputUsername').focus();
     } else {
         showElem('successHolder');
-        var dom = document.getElementById('response');
-        dom.innerText = '“约约约”成功，“约约约”将在10天后自动失效';
         hideElem('validationHolder');
     }
 }
 
-function showhasAuthorization(hasAuthorization) {
-    if (!hasAuthorization) {
-        document.getElementById('inputUsername').focus();
-    } else {
-        showElem('successHolder');
-        var dom = document.getElementById('response');
-        dom.innerText = '对方已经有“约约约”了';
-        hideElem('validationHolder');
-    }
-}
