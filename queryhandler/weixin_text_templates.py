@@ -287,7 +287,7 @@ def get_text_usage_authorize():
 
 
 def get_text_unable_to_authorize():
-    return '对不起，你已经有约啦，不能再约另一个:('
+    return '对不起，你已经有约在身，不能再约另一个:(\n'+'请先输入"不约"解除当前的"约约约"'
 
 
 def get_text_authorization_update_time(stu_id, invalid_time):

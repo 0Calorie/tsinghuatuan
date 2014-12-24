@@ -541,7 +541,7 @@ def authorize_view(request, stuid):
         user = users[0]
         authorization = user.authorization
         if not authorization is None:
-            if authorization.apply_time + authorization_duration < now:
+            if authorization.apply_time + authorization_duration < datetime.datetime.now():
                 Authorization.object.filter(id=authorization.id).update(status=2)
             if authorization.status == 1:
                 hasAuthorzation = 1
@@ -581,7 +581,7 @@ def authorize_through_AuthTHU(request):
 
 
 def authorize_addNewbieToDataBase(authorizerID, authorizedID):
-    now =datetime.datetime.now()
+    now = datetime.datetime.now()
     try:
         currentAuthorization = Authorization.objects.get(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
@@ -609,7 +609,7 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
                 if authorization == 1:
                     able_to_authorize = False
             if not able_to_authorize:
-                return 'Error'
+                return 'Reject'
             
             newAuthorization = Authorization.objects.create(
                 authorizer_stu_id=authorizerID,

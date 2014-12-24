@@ -773,4 +773,13 @@ def response_click_authorize(msg):
     if user is None:
         return get_reply_text_xml(msg, get_text_unbinded_authorize(fromuser))
 
+    now = datetime.datetime.fromtimestamp(get_msg_create_time(msg))
+    able_to_authorize = True
+    authorization = user.authorization
+    if authorization.apply_time + authorization_duration < now:
+        Authorization.objects.filter(id=authorization.id).update(state=2)
+    if authorization == 1:
+        able_to_authorize = False
+    if not able_to_authorize:
+        return get_reply_text_xml(msg, get_text_unable_to_authorize())
     return get_reply_text_xml(msg, get_text_authorization_link(user.stu_id))
