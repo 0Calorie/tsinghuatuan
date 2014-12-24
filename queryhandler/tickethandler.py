@@ -351,7 +351,6 @@ def response_cancel_ticket(msg):
                 for ticket in tickets:
                     ticket.status = 0
                     seat = ticket.seat
-                    print seat
                     if(seat):
                         seat.status = 0
                         seat.save()
