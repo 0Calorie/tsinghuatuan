@@ -17,7 +17,7 @@ urlpatterns = patterns('',
                        url(r'^chooseSeat/update/(?P<weixinOpenID>\S+)/(?P<ticketID>\S+)/$', 'userpage.views.chooseSeat_seatStatusUpdate'),
                        url(r'^chooseSeatSingle/try/(?P<weixinOpenID>\S+)/(?P<ticketID>\S+)/(?P<seatFloor>\d+)/(?P<seatColumn>\d+)/(?P<seatRow>\d+)/$'
                         , 'userpage.views.chooseSeat_single'),
-                       url(r'^chooseSeatDual/try/(?P<weixinOpenID>\S+)/(?P<ticketID>\S+)/(?P<oneFloor>\d+)/(?P<oneColumn>\d+)/(?P<oneRow>\d+)/(?P<sideID>\S+)/(?P<twoFloor>\d+)/(?P<twoColumn>\d+)/(?P<twoRow>\d+)/$'
+                       url(r'^chooseSeatDual/try/(?P<weixinOpenID>\S+)/(?P<ticketID>\S+)/(?P<oneFloor>\d+)/(?P<oneColumn>\d+)/(?P<oneRow>\d+)/(?P<sideID>\d+)/(?P<twoFloor>\d+)/(?P<twoColumn>\d+)/(?P<twoRow>\d+)/$'
                         , 'userpage.views.chooseSeat_dual'),
                        url(r'^authorize/(?P<stuid>\d+)/$', 'userpage.views.authorize_view'),
                        url(r'^authorize/AuthTHU/$', 'userpage.views.authorize_through_AuthTHU')

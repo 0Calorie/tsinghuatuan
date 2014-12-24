@@ -394,7 +394,7 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
 
     try:
         Ticket.objects.filter(unique_id = ticketID).update(seat = dualOne, seat_status = 1)
-        Ticket.objects.filter(unique_id = sideID).update(seat = dualTwo, seat_status = 1)
+        Ticket.objects.filter(id = sideID).update(seat = dualTwo, seat_status = 1)
     except:
         print 'ex8'
         return HttpResponse('ex')

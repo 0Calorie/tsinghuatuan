@@ -599,10 +599,20 @@ function chooseSeat_dualOne_newDualOne_newNeighbor(){
     chosenDualOneRightNeighbor = document.getElementById(rightNeighborID);
     chosenDualOneLeftNeighbor = document.getElementById(leftNeighborID);
     if(chosenDualOneRightNeighbor != undefined && chosenDualOneRightNeighbor != null){
-        chooseSeat_setSeatToUnchosenDualTwo(chosenDualOneRightNeighbor);
+        if(chosenDualOneRightNeighbor.getAttribute('status') == 0){
+            chooseSeat_setSeatToUnchosenDualTwo(chosenDualOneRightNeighbor);
+        }
+        else{
+            chosenDualOneRightNeighbor = null;
+        }
     }
     if(chosenDualOneLeftNeighbor != undefined && chosenDualOneLeftNeighbor != null){
-        chooseSeat_setSeatToUnchosenDualTwo(chosenDualOneLeftNeighbor);
+        if(chosenDualOneLeftNeighbor.getAttribute('status') == 0){
+            chooseSeat_setSeatToUnchosenDualTwo(chosenDualOneLeftNeighbor);
+        }
+        else{
+            chosenDualOneLeftNeighbor = null;
+        }
     }
 }
 
