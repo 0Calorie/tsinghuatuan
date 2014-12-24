@@ -382,48 +382,51 @@ function drag()
     touch.on('#target_drag', 'drag', function(ev){
         dx = dx || 0;
         dy = dy || 0;
-
         var offx = dx + ev.x + "px";
         var offy = dy + ev.y + "px";
-        target_width = document.getElementById("target").clientWidth;
-        target_height = document.getElementById("target").clientHeight;
-        var backx;
-        var backy;
-        console.log("dx dy" + dx+" " + dy);
-        console.log("evx evy" + ev.x+" " + ev.y);
-
-        if(dx + ev.x < 50 - target_width)
-            backx = 50 - target_width + "px";
-
-        else if(dx +ev.x > target_width - 20)
-            backx = target_width - 20 + "px";
-
-        if(dy + ev.y < 20 - target_height)
-            backy  = 20 - target_height + "px";
-        else
-        {
-            if (dy + ev.y > clientHeight/2)
-                backy = clientHeight/2 + "px";
-        }
 
         target.style.webkitTransform = "translate3d(" + offx + "," + offy + ",0)";
-        if(backx != "undefined") {
-            target.style.webkitTransform = "translate3d(" + backx + "," + offy + ",0)";
-        }
-        if(backy != "undefined")
-             target.style.webkitTransform = "translate3d(" + offx + "," + backy + ",0)";
+
     });
 
     touch.on('#target_drag', 'dragend', function(ev){
+
         dx += ev.x;
         dy += ev.y;
+        console.log("dx"+dx + "dy" + dy);
+        target_width = $("table")[0].clientWidth;
+        target_height = $("table")[0].clientHeight;
+
+        var backx;
+        var backy;
+        console.log("w" + target_width + "h" + target_height);
+        if( dx + target_width*4/5 < 0) {
+            backx = 0- target_width*4/5;
+            console.log("backx" + backx);
+        }
+        else if(dx> clientWidth*4/5)
+            backx = clientWidth*4/5;
+
+        if(dy + target_height *4/5 < 0)
+            backy  = 0 - target_height *4/5;
+        else if (dy> clientHeight/2)
+            backy = clientHeight/2;
+
+        if(typeof(backx) == "undefined")
+            backx = dx;
+        if(typeof(backy) == "undefined")
+            backy = dy;
+        target.style.webkitTransform = "translate3d(" + backx + "px," + backy + "px,0)";
+        dx = backx;
+        dy = backy;
+        console.log("backx"+backx + "backy" + backy);
     });
 }
 //双指缩放
 function scale()
 {
     var target = document.getElementById("target");
-    target.style.webkitTransition = 'all ease 1s';
+    target.style.webkitTransition = 'all ease 0.2s';
 
     touch.on('#target', 'touchstart', function(ev){
         ev.preventDefault();
