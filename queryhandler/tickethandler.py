@@ -356,7 +356,7 @@ def response_cancel_ticket(msg):
                     seat = ticket.seat
                     print seat
                     if not seat is None:
-                        Seat.objects.fiter(id=seat.id).update(status=0)
+                        Seat.objects.filter(id=seat.id).update(status=0)
                     ticket.save()
                     Activity.objects.filter(id=activity.id).update(remain_tickets=F('remain_tickets') + 1)
                 return get_reply_text_xml(msg, get_text_success_cancel_ticket())
