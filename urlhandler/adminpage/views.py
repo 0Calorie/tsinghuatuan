@@ -175,7 +175,7 @@ def str_to_datetime_(strg):
     return datetime.strptime(strg, '%Y %m %d %H %M %S')
 
 def activity_create(activity):
-    print activity
+    # print activity
     preDict = dict()
     for k in ['name','key', 'description', 'place', 'pic_url', 'seat_status', 'total_tickets']:
         preDict[k] = activity[k]
@@ -200,8 +200,8 @@ def activity_create(activity):
 
 
 def activity_modify(activity):
-    print "MODIFY"
-    print activity
+    # print "MODIFY"
+    # print activity
     nowact = Activity.objects.get(id=activity['id'])
     now = datetime.now()
     if nowact.status == 0:
@@ -298,7 +298,7 @@ class DatetimeJsonEncoder(json.JSONEncoder):
 
 
 def activity_post(request):
-    print "POST"
+    # print "POST"
     if not request.user.is_authenticated():
         return HttpResponseRedirect(s_reverse_admin_home())
 
@@ -517,7 +517,7 @@ def activity_export_stunum(request, actid):
     ##########################################保存
     wb.save(response)
     return response
-
+# 创建座位
 def seat_create(seat):
     preDict = dict()
     preDict['activity'] = Activity.objects.get(id = seat['activity'])
@@ -525,24 +525,20 @@ def seat_create(seat):
         preDict[k] = seat[k]
     preDict['status'] = 0
     preDict['seat_type'] = "A"
-    print preDict
+    preDict['description'] = u"你的座位" + str(preDict["seat_floor"])+ u"层"+  str(preDict['seat_row'])+u"排"+ str(preDict['seat_column'])+u"座"
     newSeat = Seat.objects.create(**preDict)
     return newSeat
 
 @csrf_exempt
 def activity_save_seat(request, actid):
-    print "activity_save_seat"
-    print request
     if not request.POST:
         return Http404
     else:
         print "POST"
         rtnJSON = {}
         activity = Activity.objects.filter(id = actid)
-        print activity
         Seat.objects.filter(activity = activity).delete()
         post = request.POST
-        print post
         aid = post.get('aid','')
         floorList = post.get('floor','').split(" ")
         columnList = post.get('column','').split(" ")
@@ -559,7 +555,6 @@ def activity_save_seat(request, actid):
             seat['seat_price'] = int(priceList[i])
             seat['activity'] = int(actid)
             seat['place'] = place
-            print seat
             try:
                 newact = seat_create(seat)
             except:
@@ -578,7 +573,7 @@ def activity_select_seat_lecture(request, actid):
     seats = []
     activity = Activity.objects.get(id = actid)
     now = datetime.now()
-    print now
+    ## print now
     if activity.select_start < now:
         canModify = 0 # administer can not modify seat 
     else:
