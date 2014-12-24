@@ -337,7 +337,8 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
         print 'Side:'
         print type(sideID)
         print type(theTicket.additional_ticket_id)
-        print (sideID == theTicket.additional_ticket_id)
+        print type(weixinOpenID)
+        print type(oneRow)
         print '----------'
         return HttpResponse('No_Such_Side_Ticket')
 
