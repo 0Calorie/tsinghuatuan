@@ -613,6 +613,7 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
     except:
         print 'debug check'
     try:
+        print 'debug abc'
         currentAuthorizations = Authorization.objects.filter(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
         if currentAuthorizations.exists():
