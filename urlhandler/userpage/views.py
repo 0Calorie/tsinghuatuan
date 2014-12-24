@@ -585,7 +585,7 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
     try:
         currentAuthorization = Authorization.objects.get(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
-        currentAuthorization.apply_time = now()
+        currentAuthorization.apply_time = now
         currentAuthorization.status = 1
         try:
             currentAuthorization.save()
