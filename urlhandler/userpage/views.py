@@ -582,31 +582,35 @@ def authorize_through_AuthTHU(request):
 
 
 def authorize_addNewbieToDataBase(authorizerID, authorizedID):
+    print authorizerID + ' ' + authorizedID
     now = datetime.datetime.now()
     able_to_authorize = True
-    users = User.objects.filter(stu_id=authorizerID)
-    print 'debug 1'
-    if users.exists():
-        print 'debug 1.2'
-        authorization = users[0].authorization
-        if not authorization is None:
-            if authorization.apply_time + authorization_duration < now:
-                Authorization.objects.filter(id=authorization.id).update(state=2)
-        print 'debug 1.3'
-        if authorization.status == 1:
-            able_to_authorize = False
-    print 'debug 1.1'
-    users = User.objects.filter(stu_id=authorizedID)
-    if users.exists():
-        authorization = users[0].authorization
-        if not authorization is None:
-            if authorization.apply_time + authorization_duration < now:
-                Authorization.objects.filter(id=authorization.id).update(state=2)
-        if authorization.status == 1:
-            able_to_authorize = False
-    if not able_to_authorize:
-        return 'Already'
-    print 'debug 2'
+    try:
+        users = User.objects.filter(stu_id=authorizerID)
+        print 'debug 1'
+        if users.exists():
+            print 'debug 1.2'
+            authorization = users[0].authorization
+            if not authorization is None:
+                if authorization.apply_time + authorization_duration < now:
+                    Authorization.objects.filter(id=authorization.id).update(state=2)
+            print 'debug 1.3'
+            if authorization.status == 1:
+                able_to_authorize = False
+        print 'debug 1.1'
+        users = User.objects.filter(stu_id=authorizedID)
+        if users.exists():
+            authorization = users[0].authorization
+            if not authorization is None:
+                if authorization.apply_time + authorization_duration < now:
+                    Authorization.objects.filter(id=authorization.id).update(state=2)
+            if authorization.status == 1:
+                able_to_authorize = False
+        if not able_to_authorize:
+            return 'Already'
+        print 'debug 2'
+    except:
+        print 'debug check'
     try:
         currentAuthorizations = Authorization.objects.filter(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
