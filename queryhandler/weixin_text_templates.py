@@ -146,7 +146,7 @@ def get_text_fail_book_ticket(activity, now):
 
 
 def get_text_success_book_ticket(ticket, num):
-    response = '恭喜您，成功抢到'+num+'张票！\n'
+    response = '恭喜您，成功抢到'+str(num)+'张票！\n'
     if ticket.seat_status >= 0:
         response += '请在' + get_text_time_standard(ticket.select_start) + '到' + get_text_time_standard(
             ticket.select_end) + '之间进行选座 \n'
