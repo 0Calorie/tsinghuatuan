@@ -558,6 +558,7 @@ function chooseSeat_dualOne(){
     if(chosenDualOne != null){
         if(theChosen == chosenDualOneLeftNeighbor || theChosen == chosenDualOneRightNeighbor){
             chooseSeat_dualTwo(theChosen);
+            return;
         }
         else{
             chooseSeat_interfaceProcess(0, chosenDualOne);
