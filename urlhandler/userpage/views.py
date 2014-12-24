@@ -381,14 +381,14 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
 
     try:
         dualTwo.save()
-        dualOne.id = dualTwoID
+    except:
+        dualOne.id = dualOneID
         dualOne.status = 0
         try:
             dualOne.save()
         except:
             print 'ex6'
             return HttpResponse('ex')
-    except:
         print 'ex7'
         return HttpResponse('ex')
 
