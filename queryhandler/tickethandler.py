@@ -407,7 +407,7 @@ def response_book_event(msg):
 
     tickets = Ticket.objects.filter(stu_id=user.stu_id, activity=activity, status__gt=0)
     if tickets.exists():
-        return get_reply_single_ticket(msg, tickets[0], now, get_text_existed_book_event())
+            return get_reply_text_xml(msg, get_text_existed_book_ticket(tickets[0]))
     if activity.book_end < now:
         return get_reply_text_xml(msg, get_text_timeout_book_event())
     authorizations = Authorization.objects.select_for_update().filter(status=1, authorizer_stu_id=user.stu_id)

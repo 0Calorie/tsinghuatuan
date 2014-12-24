@@ -2,3 +2,5 @@
 *.orig
 .idea
 urlhandler/userpage/views.py
+
+*.conf
