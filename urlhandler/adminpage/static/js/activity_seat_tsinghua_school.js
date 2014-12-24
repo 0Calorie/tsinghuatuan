@@ -136,6 +136,11 @@ $("#selectPrice").ready(function() {
     $(button).addClass("btn");
     $(button).addClass("btn-warning");
     $(button).attr("onclick","returnMain();");
+    $(button).css({
+    	width: "75px",
+    	height: "50px",
+    	"font-size": "20px"
+    });
     button.innerText = "返回";
     $(td).append(button);
     $(tr).append(td);

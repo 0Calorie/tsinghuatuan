@@ -137,14 +137,15 @@ function createTable(num,columnNum,seatDetail,maxColumn,floor){
 				tr = alignRight(tr,i,j,seatDetail,maxColumn,i+num,0,floor);
 				var b = document.createElement('td');
                         $(b).addClass("colNum");
-                        $(b).attr({
-                        	state: 0,
-                        	onclick: "selectOneRow()",
-                        	onmouseover: "showButton()",
-                        	onmouseout: "showNum("+(i+num)+")",
-                        	id: floor+"-"+(i+num),
-                        	floor: floor
-                        });
+                        if(modify != 0)
+                            $(b).attr({
+                            	state: 0,
+                            	onclick: "selectOneRow()",
+                            	onmouseover: "showButton()",
+                            	onmouseout: "showNum("+(i+num)+")",
+                            	id: floor+"-"+(i+num),
+                            	floor: floor
+                            });
                         b.innerText = i+num;
                         $(tr).append(b);
 			}
