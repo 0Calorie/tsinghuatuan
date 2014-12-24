@@ -481,7 +481,7 @@ function confirmIsHit_dual(){
     var dualOneFloor = chosenDualOne.getAttribute('floor');
     var dualTwoRow = chosenDualTwo.getAttribute('row');
     var dualTwoColumn = chosenDualTwo.getAttribute('column');
-    var dualTwoFloor = chosenDualTwo.getAttribute('column');
+    var dualTwoFloor = chosenDualTwo.getAttribute('floor');
     var url = 'http://wx3.igeek.asia/u/chooseSeatDual/try/' + weixinOpenID + '/' + ticketPack.ticketID + '/' + dualOneFloor + '/'
      + dualOneColumn + '/' + dualOneRow + '/' + ticketPack.additionalTicketID + '/' + dualTwoFloor + '/' + dualTwoColumn + '/' + dualTwoRow;
      sender = new XMLHttpRequest();
