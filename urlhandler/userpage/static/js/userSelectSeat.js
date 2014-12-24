@@ -586,6 +586,7 @@ function chooseSeat_dualOne_newDualOne_cleanUpNeighbor(){
         }
         chosenDualOneLeftNeighbor = null;
     }
+    chosenDualTwo = null;
 }
 
 function chooseSeat_dualOne_newDualOne_newNeighbor(){
@@ -607,7 +608,7 @@ function chooseSeat_dualOne_newDualOne_newNeighbor(){
 
 function chooseSeat_dualTwo(theChosen){
     if(chosenDualTwo != undefined && chosenDualTwo != null){
-        chooseSeat_setSeatToUnchosenDualTwo(chosenDualTwo);
+        chooseSeat_interfaceProcess(2, chosenDualTwo);
         chosenDualTwo = null;
     }
     chooseSeat_interfaceProcess(1, theChosen);
@@ -743,6 +744,9 @@ function chooseSeat_interfaceProcess(toChosenOrUnchosen, theChosen){
     }
     else if(toChosenOrUnchosen == 0){
         chooseSeat_setSeatToUnchosen(theChosen);
+    }
+    else if(toChosenOrUnchosen == 2){
+        chooseSeat_setSeatToUnchosenDualTwo(theChosen);
     }
 }
 
