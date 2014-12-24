@@ -55,12 +55,12 @@
     </div>
     {% elif ticket1.seat_status == 1%}
         <div class="ticket-wrapper">
-            您的座位在<b>{{seat1.floor}}层{{seat1.seat_column}}排{{seat1.seat_row}}列</b>
+            您的座位在<b>{{seat1.seat_floor}}层{{seat1.seat_column}}排{{seat1.seat_row}}列</b>
         </div>
     {% endif %}
     {% if ticket1.additional_ticket_id > 0 %}
         <div class="ticket-wrapper">
-             您的小伙伴的座位在<b>{{seat2.floor}}层{{seat2.seat_column}}排{{seat2.seat_row}}列</b>
+             您的小伙伴的座位在<b>{{seat2.seat_floor}}层{{seat2.seat_column}}排{{seat2.seat_row}}列</b>
         </div>
     {% endif %}
 
