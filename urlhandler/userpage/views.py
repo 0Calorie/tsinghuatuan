@@ -333,12 +333,14 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
     except:
         print 'ex1'
         return HttpResponse('No_Such_Ticket')
-    if (long(sideID) != theTicket.additional_ticket_id)) or (sideID <= 0):
+    if sideID != theTicket.additional_ticket_id) or (sideID <= 0):
         print 'Side:'
         print type(sideID)
         print type(theTicket.additional_ticket_id)
         print type(weixinOpenID)
         print type(oneRow)
+        print (str(theTicket.additional_ticket_id) == sideID)
+        print (unicode(str(theTicket.additional_ticket_id), "utf-8") == sideID)
         print '----------'
         return HttpResponse('No_Such_Side_Ticket')
 
