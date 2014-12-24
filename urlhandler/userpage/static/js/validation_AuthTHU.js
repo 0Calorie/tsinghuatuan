@@ -223,7 +223,8 @@ function showValidation(isValidated) {
         document.getElementById('inputUsername').focus();
     } else {
         showElem('successHolder');
-        document.getElementById('response').innerText='“约约约”成功，“约约约”将在10天后自动失效';
+        var dom = document.getElementById('response');
+        dom.innerText = '“约约约”成功，“约约约”将在10天后自动失效';
         hideElem('validationHolder');
     }
 }
@@ -233,7 +234,8 @@ function showhasAuthorization(hasAuthorization) {
         document.getElementById('inputUsername').focus();
     } else {
         showElem('successHolder');
-        document.getElementById('response').innerText='对方已经有“约约约”了';
+        var dom = document.getElementById('response');
+        dom.innerText = '对方已经有“约约约”了';
         hideElem('validationHolder');
     }
 }
