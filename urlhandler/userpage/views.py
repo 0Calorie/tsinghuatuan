@@ -617,11 +617,13 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
         currentAuthorizations = Authorization.objects.filter(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
         if currentAuthorizations.exists():
+            print 'debug auth exists'
             currentAuthorization = currentAuthorizations
             currentAuthorization.apply_time = now
             currentAuthorization.status = 1
-            User.objects.filter(stu_id=authorizerID).update(authorization=currentAuthorization)
-            User.objects.filter(stu_id=authorizedID).update(authorization=currentAuthorization)
+            try:
+                User.objects.filter(stu_id=authorizerID).update(authorization=currentAuthorization)
+                User.objects.filter(stu_id=authorizedID).update(authorization=currentAuthorization)
             print 'debug 3'
             try:
                 currentAuthorization.save()
