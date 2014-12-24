@@ -22,7 +22,14 @@
     <div class="Info_Activity" id="head_info_activity" style="display:block">
         <div class = "activity" style="float:left">
             <h3>{{activityPack.name}}</h3>
-            <h6>{{activityPack.place}}</h6>
+            <h6>
+                {{activityPack.place}}
+                {% if ticketPack.additionalTicketID > 0 %}
+                    (双人票)
+                            {% else %}
+                    (单人票）
+                    {% endif %}
+            </h6>
             <h6>{{activityPack.startTime}}</h6>
         </div>
         <hr style="FILTER: progid:DXImageTransform.Microsoft.Glow(color=#987cb9,strength=10)"
@@ -44,7 +51,11 @@
                   <div class="Info_Activity">
                     <div class = "activity" style="float:left">
                         <h3>{{activityPack.name}}</h3>
-                        <h6>{{activityPack.place}}</h6>
+                        <h6>{{activityPack.place}}{% if ticketPack.additionalTicketID > 0 %}
+                    (双人票)
+                            {% else %}
+                    (单人票）
+                    {% endif %}</h6>
                         <h6>{{activityPack.startTime}}</h6>
                     </div>
                       <div id = "confirmer" class="confirm" onclick="confirmIsHit()">确认</div>

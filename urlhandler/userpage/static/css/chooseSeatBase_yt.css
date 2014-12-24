@@ -224,9 +224,7 @@ hr{
 }
 .illu_wrap{
     float: left;
-
-    width: px;
-    margin-right: 10px;
+    margin-left: 5px;
 }
 .illu_word{
     margin: 0;
