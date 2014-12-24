@@ -562,18 +562,37 @@ function chooseSeat_dualOne(){
     chooseSeat_dualOne_restrictChoices();
 }
 
+function touchOff(target, func){
+    touch.off(target, 'tap', function(ev){
+        func;
+    })
+}
+
+function touchOn(target, func){
+    touch.on(target, 'tap', function(ev){
+        func;
+    })
+}
+
 function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     // set chosenDualOne's neighbors' onclick to chooseSeat, and set chosenDualTwo to null
 
     var dualOneRow = chosenDualOne.getAttribute('row');
     var dualOneColumn = chosenDualOne.getAttribute('column');
     var dualOneFloor = chosenDualOne.getAttribute('floor');
-    var rightNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow+1);
-    var leftNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow-1);
+    var rightNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (Number(dualOneColumn)+1);
+    var leftNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (Number(dualOneColumn)-1);
 
     var rightNeighbor = document.getElementById(rightNeighborID);
     var leftNeighbor = document.getElementById(leftNeighborID);
     if(rightNeighbor != undefined){
+        rightNeighbor.removeAttribute('onclick');
+        touch.off(rightNeighbor, 'tap', function(ev){
+            chooseSeat_dualTwo();
+        })
+        touch.on(rightNeighbor, 'tap', function(ev){
+            chooseSeat();
+        })
         rightNeighbor.setAttribute('onclick', 'chooseSeat();');
         chooseSeat_setSeatToUnchosen(rightNeighbor);
         if(chosenDualTwo == rightNeighbor){
@@ -581,7 +600,10 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
         }
     }
     if(leftNeighbor != undefined){
+        leftNeighbor.removeAttribute('onclick');
         leftNeighbor.setAttribute('onclick', 'chooseSeat();');
+        touchOff(leftNeighbor, chooseSeat_dualTwo());
+        touchOn(leftNeighbor, chooseSeat());
         chooseSeat_setSeatToUnchosen(leftNeighbor);
         if(chosenDualTwo == leftNeighbor){
             addToBottom(chosenDualTwo);
@@ -597,17 +619,23 @@ function chooseSeat_dualOne_restrictChoices(){
     var dualOneRow = chosenDualOne.getAttribute('row');
     var dualOneColumn = chosenDualOne.getAttribute('column');
     var dualOneFloor = chosenDualOne.getAttribute('floor');
-    var rightNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow+1);
-    var leftNeighborID = dualOneFloor + '-' + dualOneColumn + '-' + (dualOneRow-1);
+    var rightNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (Number(dualOneColumn)+1);
+    var leftNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (Number(dualOneColumn)-1);
 
     var rightNeighbor = document.getElementById(rightNeighborID);
-    var leftNeighbor = document.getClientWidth(leftNeighborID);
+    var leftNeighbor = document.getElementById(leftNeighborID);
     if(rightNeighbor != undefined){
+        rightNeighbor.removeAttribute('onclick');
         rightNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
+        touchOff(rightNeighbor, chooseSeat());
+        touchOn(rightNeighbor, chooseSeat_dualTwo());
         chooseSeat_setSeatToUnchosenDualTwo(rightNeighbor);
     }
     if(leftNeighbor != undefined){
+        leftNeighbor.removeAttribute('onclick');
         leftNeighbor.setAttribute('onclick', 'chooseSeat_dualTwo();');
+        touchOff(leftNeighbor, chooseSeat());
+        touchOn(leftNeighbor, chooseSeat_dualTwo());
         chooseSeat_setSeatToUnchosenDualTwo(leftNeighbor);
     }
 }
@@ -796,9 +824,10 @@ function dualSeatChecker(floor, seats, numberOfColumn, numberOfRow){
             dualCounter = 0;
             for(sectorIndex = 1; sectorIndex <= seats[column][row]; sectorIndex++, seatIndex++){
                 var seatID = floor + "-" + column + "-" + seatIndex;
-                if($("#" + seatID) == undefined)
+                var seat = document.getElementById(seatID);
+                if(seat == null)
                     continue;
-                if($("#" + seatID)[0].getAttribute('status') == 0){
+                if(seat.getAttribute('status') == 0){
                     dualCounter++;
                     if(dualCounter == 2){
                         return true;
