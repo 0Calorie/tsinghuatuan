@@ -262,6 +262,7 @@ hr{
 .success{
     background-color: rgb(255, 184, 0);
 
+    font-size: 0.7em;
 }
 .failure{
     background-color: rgb(241, 96, 96);
