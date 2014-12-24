@@ -292,6 +292,8 @@ function showSeat_yt(place, sec)
     if(place == "XQ")
     {
         $(".XQ").css("display","none");
+        $("#head_info_activity").css("display","none");
+        $("#mainbody").css("margin-top","0px");
         switch(sec)
         {
             case "A":section = seatObj.A; break;
@@ -314,6 +316,8 @@ function showSeat_yt(place, sec)
 function back()
 {
     $(".XQ").css("display","block");
+    $("#head_info_activity").css("display","block");
+    $("#mainbody").css("margin-top","30%");
     $(".Information").css("display","none");
     $(".seat").empty();
     $(".seatSelectSeats").empty();
