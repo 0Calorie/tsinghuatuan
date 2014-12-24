@@ -372,6 +372,8 @@ function addIllustration(word, color)
     $(".illustration").append(div_illu);
 }
 
+target_width = $("table")[0].clientWidth;
+target_height = $("table")[0].clientHeight;
 
 //拖动
 function drag()
@@ -397,13 +399,10 @@ function drag()
 
         dx += ev.x;
         dy += ev.y;
-        console.log("dx"+dx + "dy" + dy);
-        target_width = $("table")[0].clientWidth;
-        target_height = $("table")[0].clientHeight;
-        width1 = $(".seat")[0].clientWidth;
+
         var backx;
         var backy;
-        console.log("w" + target_width + "h" + target_height);
+
         if( dx + target_width*19/20 < 0) {
             backx = 0- target_width*19/20;
             console.log("backx" + backx);
@@ -450,6 +449,7 @@ function scale()
 
     touch.on('#target', 'pinchend', function(ev){
         initialScale = currentScale;
+        target_width = $("table")[0].clientWidth * initialScale;
     });
 
 }
