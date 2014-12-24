@@ -334,7 +334,10 @@ def chooseSeat_dual(request, weixinOpenID, ticketID, oneFloor, oneColumn, oneRow
         print 'ex1'
         return HttpResponse('No_Such_Ticket')
     if (sideID != theTicket.additional_ticket_id) or (sideID <= 0):
-        print 'Side'
+        print 'Side:'
+        print sideID
+        print theTicket.additional_ticket_id
+        print '----------'
         return HttpResponse('No_Such_Side_Ticket')
 
     theActivity = theTicket.activity
