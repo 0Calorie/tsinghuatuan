@@ -408,12 +408,12 @@ function drag()
         var target_width = Number($("table")[0].clientWidth) * Number(INIT);
         var target_height = $("table")[0].clientHeight;
 
-        if( dx + target_width/2 < 0) {
-            backx = 0- target_width/2;
+        if( dx + target_width*9/10 < 0) {
+            backx = 0- target_width*9/10;
             console.log("backx" + backx);
         }
-        else if(dx> target_width/2)
-            backx = target_width/2;
+        else if(dx> target_width*4/5)
+            backx = target_width*4/5;
 
         if(dy + target_height *4/5 < 0)
             backy  = 0 - target_height *4/5;
@@ -449,6 +449,7 @@ function scale()
         currentScale = initialScale + currentScale;
         currentScale = currentScale > 8 ? 8 : currentScale;
         currentScale = currentScale < 1 ? 1 : currentScale;
+        INIT = currentScale;
         target.style.webkitTransform = 'scale(' + currentScale + ')';
     });
 
