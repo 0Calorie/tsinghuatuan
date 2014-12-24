@@ -408,12 +408,12 @@ function drag()
         var target_width = Number($("table")[0].clientWidth) * Number(INIT);
         var target_height = $("table")[0].clientHeight;
 
-        if( dx + target_width*9/10 < 0) {
-            backx = 0- target_width*9/10;
+        if( dx + target_width/2 < 0) {
+            backx = 0- target_width/2;
             console.log("backx" + backx);
         }
-        else if(dx> target_width*4/5)
-            backx = target_width*4/5;
+        else if(dx> target_width/2)
+            backx = target_width/2;
 
         if(dy + target_height *4/5 < 0)
             backy  = 0 - target_height *4/5;
