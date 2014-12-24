@@ -400,8 +400,8 @@ function drag()
         var backx;
         var backy;
         console.log("w" + target_width + "h" + target_height);
-        if( dx + target_width*9/10 < 0) {
-            backx = 0- target_width*9/10;
+        if( dx + target_width*19/20 < 0) {
+            backx = 0- target_width*19/20;
             console.log("backx" + backx);
         }
         else if(dx> clientWidth*9/10)
