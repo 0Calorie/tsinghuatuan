@@ -128,7 +128,10 @@ var clientWidth = document.documentElement.clientWidth;
 $("#selectRegion").css("width", clientWidth);
 $("#selectRegion").css("height", clientHeight);
 
+var INIT = 1;
+
 $(document).ready(function(){
+
     //检验用户的合法性
     switch(validity)
     {
@@ -372,8 +375,7 @@ function addIllustration(word, color)
     $(".illustration").append(div_illu);
 }
 
-target_width = $("table")[0].clientWidth;
-target_height = $("table")[0].clientHeight;
+
 
 //拖动
 function drag()
@@ -403,8 +405,11 @@ function drag()
         var backx;
         var backy;
 
-        if( dx + target_width*19/20 < 0) {
-            backx = 0- target_width*19/20;
+        var target_width = Number($("table")[0].clientWidth) * Number(INIT);
+        var target_height = $("table")[0].clientHeight;
+
+        if( dx + target_width*4/5 < 0) {
+            backx = 0- target_width*4/5;
             console.log("backx" + backx);
         }
         else if(dx> clientWidth*9/10)
@@ -422,7 +427,7 @@ function drag()
         target.style.webkitTransform = "translate3d(" + backx + "px," + backy + "px,0)";
         dx = backx;
         dy = backy;
-        $(".back").text("seat"+width1+ "backx"+backx + "backy" + backy + "h" + target_height + "w" + target_width);
+        $(".back").text("seat"+ target_width+ "backx"+backx + "backy" + backy + "h" + target_height + "w" + target_width);
         console.log("backx"+backx + "backy" + backy);
     });
 }
@@ -449,7 +454,7 @@ function scale()
 
     touch.on('#target', 'pinchend', function(ev){
         initialScale = currentScale;
-        target_width = $("table")[0].clientWidth * initialScale;
+        INIT = initialScale;
     });
 
 }
