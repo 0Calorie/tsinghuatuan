@@ -7,6 +7,8 @@ var seatPalette= ["#FFFF80", "#FF8080","#FF8040","#8080FF","#808000", "#FF0000",
 var chosenSeat = null;
 var chosenDualOne = null;
 var chosenDualTwo = null;
+var chosenDualOneLeftNeighbor = null;
+var chosenDualOneRightNeighbor = null;
 var totalPrice = activityPack.totalPrice.split(" ");
 var totalPriceLength = totalPrice.length;
 //新清华学堂座位图
@@ -319,9 +321,10 @@ function back()
     $(".failure").css("display","none");
     //$("#target_drag").css("-webkit-transform", "translate3d(0px, 0px, 0px)");
     chosenSeat = null;
-    chosenSeat = null;
     chosenDualOne = null;
     chosenDualTwo = null;
+    chosenDualOneLeftNeighbor = null;
+    chosenDualOneRightNeighbor = null;
 }
 //添加选中的座位到上方信息栏
 function addToBottom(elem)
@@ -549,7 +552,69 @@ function chooseSeat_single(){
     chooseSeat_interfaceProcess(1, theChosen);
     chosenSeat = theChosen;
 }
-/*选择双人座*/
+
+function chooseSeat_dualOne(){
+    var theChosen = $(this.event.srcElement)[0];
+    if(chosenDualOne != null){
+        if(theChosen == chosenDualOneLeftNeighbor || theChosen == chosenDualOneRightNeighbor){
+            chooseSeat_dualTwo(theChosen);
+        }
+        else{
+            chooseSeat_interfaceProcess(0, chosenDualOne);
+            chosenDualOne = null;
+            chooseSeat_dualOne_newDualOne_cleanUpNeighbor();
+        }
+    }
+    chooseSeat_interfaceProcess(1, theChosen);
+    chosenDualOne = theChosen;
+    chooseSeat_dualOne_newDualOne_newNeighbor();
+}
+
+function chooseSeat_dualOne_newDualOne_cleanUpNeighbor(){
+    if(chosenDualOneRightNeighbor != undefined && chosenDualOneRightNeighbor != null){
+        chooseSeat_setSeatToUnchosen(chosenDualOneRightNeighbor);
+        if(chosenDualTwo == chosenDualOneRightNeighbor){
+            addToBottom(chosenDualTwo);
+        }
+        chosenDualOneRightNeighbor = null;
+    }
+    if(chosenDualOneLeftNeighbor != undefined && chosenDualOneLeftNeighbor != null){
+        chooseSeat_setSeatToUnchosen(chosenDualOneLeftNeighbor);
+        if(chosenDualTwo == chosenDualOneLeftNeighbor){
+            addToBottom(chosenDualTwo);
+        }
+        chosenDualOneLeftNeighbor = null;
+    }
+}
+
+function chooseSeat_dualOne_newDualOne_newNeighbor(){
+    var dualOneRow = chosenDualOne.getAttribute('row');
+    var dualOneColumn = chosenDualOne.getAttribute('column');
+    var dualOneFloor = chosenDualOne.getAttribute('floor');
+    var rightNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (Number(dualOneColumn)+1);
+    var leftNeighborID = dualOneFloor + '-' + dualOneRow + '-' + (Number(dualOneColumn)-1);
+
+    chosenDualOneRightNeighbor = document.getElementById(rightNeighborID);
+    chosenDualOneLeftNeighbor = document.getElementById(leftNeighborID);
+    if(chosenDualOneRightNeighbor != undefined && chosenDualOneRightNeighbor != null){
+        chooseSeat_setSeatToUnchosenDualTwo(chosenDualOneRightNeighbor);
+    }
+    if(chosenDualOneLeftNeighbor != undefined && chosenDualOneLeftNeighbor != null){
+        chooseSeat_setSeatToUnchosenDualTwo(chosenDualOneLeftNeighbor);
+    }
+}
+
+function chooseSeat_dualTwo(theChosen){
+    if(chosenDualTwo != undefined && chosenDualTwo != null){
+        chooseSeat_setSeatToUnchosenDualTwo(chosenDualTwo);
+        chosenDualTwo = null;
+    }
+    chooseSeat_interfaceProcess(1, theChosen);
+    chosenDualTwo = theChosen;
+}
+
+/*
+//选择双人座
 function chooseSeat_dualOne(){
     var theChosen = $(this.event.srcElement)[0];
     if(chosenDualOne != null){
@@ -560,18 +625,6 @@ function chooseSeat_dualOne(){
     chooseSeat_interfaceProcess(1, theChosen);
     chosenDualOne = theChosen;
     chooseSeat_dualOne_restrictChoices();
-}
-
-function touchOff(target, func){
-    touch.off(target, 'tap', function(ev){
-        func;
-    })
-}
-
-function touchOn(target, func){
-    touch.on(target, 'tap', function(ev){
-        func;
-    })
 }
 
 function chooseSeat_dualOne_chosenDualOneIsNotNull(){
@@ -601,13 +654,11 @@ function chooseSeat_dualOne_chosenDualOneIsNotNull(){
     if(leftNeighbor != undefined){
         leftNeighbor.removeAttribute('onclick');
         leftNeighbor.setAttribute('onclick', 'chooseSeat();');
+
         //重新设置点击事件
         touch.off(rightNeighbor, 'tap',chooseSeat_dualTwo());
         touch.on(rightNeighbor, 'tap', chooseSeat());
-        /*
-        touchOff(leftNeighbor, chooseSeat_dualTwo());
-        touchOn(leftNeighbor, chooseSeat());
-        */
+
         chooseSeat_setSeatToUnchosen(leftNeighbor);
         if(chosenDualTwo == leftNeighbor){
             addToBottom(chosenDualTwo);
@@ -643,10 +694,7 @@ function chooseSeat_dualOne_restrictChoices(){
 
         touch.off(rightNeighbor, 'tap',chooseSeat());
         touch.on(rightNeighbor, 'tap', chooseSeat_dualTwo());
-        /*
-        touchOff(leftNeighbor, chooseSeat());
-        touchOn(leftNeighbor, chooseSeat_dualTwo());
-        */
+
         chooseSeat_setSeatToUnchosenDualTwo(leftNeighbor);
     }
 }
@@ -660,6 +708,7 @@ function chooseSeat_dualTwo(){
     chooseSeat_interfaceProcess(1, theChosen);
     chosenDualTwo = theChosen;
 }
+*/
 
 function chooseSeat_dualSingle(){
     var theChosen = $(this.event.srcElement)[0];
