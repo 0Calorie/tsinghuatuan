@@ -95,7 +95,7 @@ function readyStateChanged() {
                     showError('submitGroup', 'helpSubmit', '你或者对方已经有过“约约约”了，不能同时约多个人')
                     break;
                 default:
-                    showError('submitGroup', 'helpSubmit', '出现了奇怪的错误，我们已经记录下来了，请稍后重试。')
+                    showError('submitGroup', 'helpSubmit', '出现了很奇怪的错误，我们已经记录下来了，请稍后重试。')
                     break;
             }
         }

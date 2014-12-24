@@ -573,6 +573,7 @@ def authorize_through_AuthTHU(request):
         if (responseData_json["code"] == 0):
             validationResult = 'Accepted'
             validationResult = authorize_addNewbieToDataBase(authorizerID, authorizedID)
+            print add_db
         else:
             validationResult = 'Rejected'
     except:
