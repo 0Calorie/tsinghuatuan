@@ -267,7 +267,11 @@ hr{
 }
 .failure{
     background-color: rgb(241, 96, 96);
-
+    font-size:0.7em;
+}
+.exception{
+    background-color: rgb(119, 201, 255);
+    font-size:0.7em;
 }
 
 .tryAgain{
@@ -289,3 +293,4 @@ hr{
     text-overflow:ellipsis;
 
 }
+

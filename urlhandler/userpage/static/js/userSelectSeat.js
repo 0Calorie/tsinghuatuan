@@ -419,6 +419,7 @@ function drag()
         target.style.webkitTransform = "translate3d(" + backx + "px," + backy + "px,0)";
         dx = backx;
         dy = backy;
+        $(".back").text("backx"+backx + "backy" + backy + "h" + target_height + "w" + target_width);
         console.log("backx"+backx + "backy" + backy);
     });
 }
