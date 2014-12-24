@@ -281,10 +281,11 @@ hr{
     position:absolute;
     height: 100%;
     width:100%;
+    draggable : false;
     /* padding-top: 20%; */
     padding-bottom: 50%;
     background-color: rgba(238, 238, 238, 0.59);
     overflow: hidden;
     text-overflow:ellipsis;
-    draggable:false;
+
 }
