@@ -585,6 +585,7 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
     now = datetime.datetime.now()
     able_to_authorize = True
     users = User.objects.filter(stu_id=authorizerID)
+    print 'debug 1'
     if users.exists:
         authorization = users[0].authorization
         if not authorization is None:
@@ -602,6 +603,7 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
             able_to_authorize = False
     if not able_to_authorize:
         return 'Already'
+    print 'debug 2'
     try:
         currentAuthorizations = Authorization.objects.filter(authorizer_stu_id=authorizerID,
                                                          authorized_person_stu_id=authorizedID)
@@ -611,14 +613,15 @@ def authorize_addNewbieToDataBase(authorizerID, authorizedID):
             currentAuthorization.status = 1
             User.objects.filter(stu_id=authorizerID).update(authorization=currentAuthorization)
             User.objects.filter(stu_id=authorizedID).update(authorization=currentAuthorization)
+            print 'debug 3'
             try:
                 currentAuthorization.save()
             except:
                 return 'Error_DB2'
+
         else:
             try:
-
-
+                print 'debug 4'
                 newAuthorization = Authorization.objects.create(
                     authorizer_stu_id=authorizerID,
                     authorized_person_stu_id=authorizedID,
